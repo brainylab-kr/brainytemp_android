@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="45dp"
+            android:fontFamily="@font/notosanskrregular"
+            android:text="@string/alert_music"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textStyle="italic" />
+
+        <ListView
+            android:id="@+id/lsv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/tv_alert_remove"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginTop="45dp"
+            android:layout_marginBottom="20dp"
+            android:clipToPadding="false"
+            android:divider="@android:color/transparent"
+            android:scrollbars="none" />
+
+        <TextView
+            android:id="@+id/tv_alert_remove"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/xml_color_cc0000_round10"
+            android:fontFamily="@font/notosanskrregular"
+            android:gravity="center"
+            android:text="@string/alert_music_delete"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+</layout>
