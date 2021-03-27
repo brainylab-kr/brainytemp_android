@@ -31,7 +31,9 @@ import kr.brainylab.adapter.SenserAddAdapter;
 import kr.brainylab.common.HttpService;
 import kr.brainylab.databinding.FragmentSearchBinding;
 import kr.brainylab.model.SensorAddInfo;
+import kr.brainylab.model.SensorListInfo;
 import kr.brainylab.utils.Util;
+import kr.brainylab.view.dailog.OneBtnDialog;
 import pl.efento.sdk.Efento;
 import pl.efento.sdk.api.measurement.Measurement;
 import pl.efento.sdk.api.scan.Device;
@@ -147,8 +149,26 @@ public class SearchFragment extends Fragment {
 
     //센서 추가
     public void addSensor(final int postion) {
+
+        ArrayList<SensorListInfo> sensorList = Util.getSensorList();
+        if(sensorList.size() >= 3) {
+            showMaxSensor();
+            return;
+        }
+
         Device info = arrSearchList.get(postion);
         reqDeviceAuth(info);
+    }
+
+    private void showMaxSensor() {
+        String content = getResources().getString(R.string.max_sensor_number);
+        String button = getResources().getString(R.string.confirm);
+
+        OneBtnDialog.init(getActivity(), content, button, new OneBtnDialog.OnClickListener() {
+            @Override
+            public void onConfirm() {
+            }
+        }).show();
     }
 
     public static void showProgress(Context _context, boolean cancelable) {

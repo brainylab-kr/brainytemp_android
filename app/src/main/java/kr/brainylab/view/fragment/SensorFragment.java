@@ -102,7 +102,8 @@ public class SensorFragment extends Fragment {
 
     void registerReceiver() {
         IntentFilter f = new IntentFilter();
-        f.addAction(Common.ACT_SCREEN_UPDATE);
+        f.addAction(Common.ACT_SENSOR_VALUE_UPDATE);
+        f.addAction(Common.ACT_SENSOR_LIST_UPDATE);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(f));
     }
 
@@ -111,10 +112,12 @@ public class SensorFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(Common.ACT_SCREEN_UPDATE)) {
-
+            if (action.equals(Common.ACT_SENSOR_VALUE_UPDATE)) {
                 String data = intent.getStringExtra("data");
                 updateSensorValue(data);
+                loadData();
+            }
+            else if(action.equals(Common.ACT_SENSOR_LIST_UPDATE)) {
                 loadData();
             }
         }

@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import kr.brainylab.R;
 import kr.brainylab.databinding.FragmentSettingBinding;

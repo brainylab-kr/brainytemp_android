@@ -97,12 +97,12 @@ public class TempLimitDialog extends BaseDialog implements View.OnClickListener 
                 try {
                     double fTemp = Double.parseDouble(content);
                     if (mType == 0) { //max
-                        if (fTemp < -30 || fTemp > 100) {
+                        if (fTemp < -35 || fTemp > 70) {
                             Util.showToast(context, context.getString(R.string.temp_limit_hint_max));
                             return;
                         }
                     } else {
-                        if (fTemp < -30 || fTemp > 100) {
+                        if (fTemp < -35 || fTemp > 70) {
                             Util.showToast(context, context.getString(R.string.temp_limit_hint_min));
                             return;
                         }

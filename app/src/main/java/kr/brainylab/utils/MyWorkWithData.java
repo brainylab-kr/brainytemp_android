@@ -53,7 +53,7 @@ public class MyWorkWithData extends Worker {
         }
         BrainyTempApp.setScheduleTime("" + System.currentTimeMillis());
 
-        Intent sendIntent = new Intent(Common.ACT_SENSOR_VALUE_UPDATE);
+        Intent sendIntent = new Intent(Common.ACT_SENSOR_RESCAN);
         LocalBroadcastManager.getInstance(context).sendBroadcast(sendIntent);
 
         // Sending Data to MainActivity.

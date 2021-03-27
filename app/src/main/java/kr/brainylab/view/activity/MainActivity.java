@@ -179,17 +179,37 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void changeTitle() {
-        if (bEdit) {
-            ivMenu.setBackground(getDrawable(R.drawable.ic_back));
-            rlyDelete.setVisibility(View.VISIBLE);
-            rlyEdit.setVisibility(View.VISIBLE);
-            txvTitle.setText(getResources().getString(R.string.sensor_edit));
-        } else {
-            ivMenu.setBackground(getDrawable(R.drawable.ic_menu_left));
-            rlyDelete.setVisibility(View.GONE);
-            rlyEdit.setVisibility(View.GONE);
-            txvTitle.setText(getResources().getString(R.string.sensor));
+        if (nTabIndex == PAGE_SENSOR) {
+            if (bEdit) {
+                ivMenu.setBackground(getDrawable(R.drawable.ic_back));
+                rlyDelete.setVisibility(View.VISIBLE);
+                rlyEdit.setVisibility(View.VISIBLE);
+                txvTitle.setText(getResources().getString(R.string.sensor_edit));
+            } else {
+                ivMenu.setBackground(getDrawable(R.drawable.ic_menu_left));
+                rlyDelete.setVisibility(View.GONE);
+                rlyEdit.setVisibility(View.GONE);
+                txvTitle.setText(getResources().getString(R.string.sensor));
+            }
+        } else if (nTabIndex == PAGE_SEARCH) {
+            txvTitle.setText(getResources().getString(R.string.search));
+        } else if (nTabIndex == PAGE_ALARM) {
+            if (bEdit) {
+                ivMenu.setBackground(getDrawable(R.drawable.ic_back));
+                rlyDelete.setVisibility(View.VISIBLE);
+                rlyEdit.setVisibility(View.VISIBLE);
+                txvTitle.setText(getResources().getString(R.string.alarm_edit));
+            } else {
+                ivMenu.setBackground(getDrawable(R.drawable.ic_menu_left));
+                rlyDelete.setVisibility(View.GONE);
+                rlyEdit.setVisibility(View.GONE);
+                txvTitle.setText(getResources().getString(R.string.alarm));
+            }
+
+        } else if (nTabIndex == PAGE_SETTING) {
+            txvTitle.setText(getResources().getString(R.string.setting));
         }
+
     }
 
     public void changePage() {
@@ -441,7 +461,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                             BrainyTempApp.setSensorName(Common.gSelDevice, content);
 
-                            Intent sendIntent = new Intent(Common.ACT_SENSOR_UPDATE);
+                            Intent sendIntent = new Intent(Common.ACT_SENSOR_LIST_UPDATE);
                             LocalBroadcastManager.getInstance(BrainyTempApp.getInstance()).sendBroadcast(sendIntent);
                         }
                     }).show();
@@ -459,7 +479,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         return;
                     }
                     if (Util.deleteAlarm(Common.gAlarmInfo.getPhone())) {
-                        Intent sendIntent = new Intent(Common.ACT_ALARM_UPDATE);
+                        Intent sendIntent = new Intent(Common.ACT_ALARM_LIST_UPDATE);
                         sendBroadcast(sendIntent);
                     }
 
@@ -475,7 +495,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             }
                             if (Util.deleteSensor(Common.gSelDevice)) {
                                 Util.deleteTemp(Common.gSelDevice);
-                                Intent sendIntent = new Intent(Common.ACT_SENSOR_UPDATE);
+                                Intent sendIntent = new Intent(Common.ACT_SENSOR_LIST_UPDATE);
                                 LocalBroadcastManager.getInstance(BrainyTempApp.getInstance()).sendBroadcast(sendIntent);
                             }
                         }
@@ -598,7 +618,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(Common.ACT_ALARM_UPDATE)) {
-                Log.d("BrainyTemp", "ACT_ALARM_UPDATE");
+
                 String data = intent.getStringExtra("data");
 
                 try {

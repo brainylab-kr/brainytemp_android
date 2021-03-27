@@ -37,7 +37,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="56dp"
                         android:fontFamily="@font/notosanskrregular"
-                        android:text="@string/alert_alarm"
+                        android:text="@string/alert_alarm_interval"
                         android:textColor="@color/color_171717"
                         android:textSize="15sp" />
 

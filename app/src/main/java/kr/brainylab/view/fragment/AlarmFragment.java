@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -23,7 +25,9 @@ import kr.brainylab.common.Common;
 import kr.brainylab.databinding.FragmentAlarmBinding;
 import kr.brainylab.model.AlarmListInfo;
 import kr.brainylab.utils.Util;
+import kr.brainylab.view.dailog.OneBtnDialog;
 import kr.brainylab.view.dailog.ReceiveUserDialog;
+import kr.brainylab.view.dailog.TwoBtnDialog;
 
 public class AlarmFragment extends Fragment {
 
@@ -67,7 +71,7 @@ public class AlarmFragment extends Fragment {
 
     private void loadLayout() {
         IntentFilter f = new IntentFilter();
-        f.addAction(Common.ACT_ALARM_UPDATE);
+        f.addAction(Common.ACT_ALARM_LIST_UPDATE);
         getActivity().registerReceiver(mBroadcastReceiver, new IntentFilter(f));
 
         binding.rlyNoData.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +96,12 @@ public class AlarmFragment extends Fragment {
         binding.ivAlarmAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ArrayList<AlarmListInfo> list = Util.getAlarmList();
+                if(list.size() >= 3) {
+                    showMaxAlert();
+                    return;
+                }
+
                 ReceiveUserDialog.init(getActivity(), null, new ReceiveUserDialog.OnClickListener() {
                     @Override
                     public void onConfirm(String type, String content) {
@@ -131,9 +141,20 @@ public class AlarmFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
-            if (action.equals(Common.ACT_ALARM_UPDATE)) {
+            if (action.equals(Common.ACT_ALARM_LIST_UPDATE)) {
                 loadData();
             }
         }
     };
+
+    public void showMaxAlert() {
+        String content = getResources().getString(R.string.max_alarm_number);
+        String button = getResources().getString(R.string.confirm);
+
+        OneBtnDialog.init(getActivity(), content, button, new OneBtnDialog.OnClickListener() {
+            @Override
+            public void onConfirm() {
+            }
+        }).show();
+    }
 }

@@ -6,11 +6,11 @@ public class Common {
     public static final Boolean DEBUG_MODE = false;
     public static final String WEEKS[] = {"일","월","화", "수","목","금", "토"};
 
-    public static final String ACT_SENSOR_UPDATE = "ACT_SENSOR_UPDATE";
-    public static final String ACT_SENSOR_VALUE_UPDATE = "ACT_SENSOR_VALUE_UPDATE";
-    public static final String ACT_SCREEN_UPDATE = "ACT_SCREEN_UODATE";
     public static final String ACT_SENSOR_RESCAN = "ACT_SENSOR_RESCAN";
+    public static final String ACT_SENSOR_LIST_UPDATE = "ACT_SENSOR_UPDATE";
+    public static final String ACT_SENSOR_VALUE_UPDATE = "ACT_SENSOR_VALUE_UPDATE";
     public static final String ACT_ALARM_UPDATE = "ACT_ALARM_UPDATE";
+    public static final String ACT_ALARM_LIST_UPDATE = "ACT_ALARM_LIST_UPDATE";
 
     /**
      * 이벤트 타입

@@ -63,7 +63,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:fontFamily="@font/notosanskrregular"
-                        android:text="@string/alarm_sing_none1"
+                        android:text="@string/alarm_sms_alarm_none"
                         android:textColor="@color/color_171717"
                         android:textSize="12sp" />
 
@@ -91,7 +91,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:fontFamily="@font/notosanskrregular"
-                        android:text="@string/minute1"
+                        android:text="@string/minute5"
                         android:textColor="@color/color_171717"
                         android:textSize="12sp" />
 
@@ -119,7 +119,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:fontFamily="@font/notosanskrregular"
-                        android:text="@string/minute2"
+                        android:text="@string/minute15"
                         android:textColor="@color/color_171717"
                         android:textSize="12sp" />
 
@@ -147,7 +147,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:fontFamily="@font/notosanskrregular"
-                        android:text="@string/minute13"
+                        android:text="@string/minute30"
                         android:textColor="@color/color_171717"
                         android:textSize="12sp" />
 

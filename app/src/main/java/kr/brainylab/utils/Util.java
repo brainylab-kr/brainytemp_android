@@ -223,7 +223,6 @@ public class Util {
      * 센서 갱신
      */
     public static void updateSensor(Device info) {
-        Log.d("BrainyTemp", "updateSensor");
         long storeTime = (long) Double.parseDouble(BrainyTempApp.getUpdateTime(info.getAddress()));
         long currentTime = System.currentTimeMillis();
         int dicSec = (int) ((currentTime - storeTime) / 1000);
@@ -427,7 +426,7 @@ public class Util {
         list.add(index, info);
         BrainyTempApp.mPref.put(PREF_ALARM_LIST, new Gson().toJson(list));
 
-        Intent sendIntent = new Intent(Common.ACT_ALARM_UPDATE);
+        Intent sendIntent = new Intent(Common.ACT_ALARM_LIST_UPDATE);
         context.sendBroadcast(sendIntent);
     }
 
@@ -468,12 +467,8 @@ public class Util {
     //디바이스 온도 서버에 업로드
     public static void uploadTemp(Device device) {
 
-        Log.d("BrainyTemp", "Util.java uploadTemp");
-
         Map<Integer, Measurement> map = device.getMeasurements();
         double temperature = Double.valueOf(map.get(1).get().toString());
-
-        Log.d("BrainyTemp", "@@@@@@@@@@@@@@@@@ upload Temp " + device.getAddress() + ", " + map.get(1).get().toString());
 
         HttpService httpService = new HttpService(BrainyTempApp.getInstance());
         httpService.uploadTemp(device.getAddress(), temperature, new HttpService.ResponseListener() {

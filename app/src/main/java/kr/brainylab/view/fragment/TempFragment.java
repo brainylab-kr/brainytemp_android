@@ -106,7 +106,7 @@ public class TempFragment extends Fragment implements View.OnClickListener {
                         Util.deleteMeasureTemp(device);
                         BrainyTempApp.setMaxTemp(device, temp);
                         binding.tvMax.setText(String.valueOf(temp) + "°C");
-                        Intent sendIntent = new Intent(Common.ACT_SENSOR_UPDATE);
+                        Intent sendIntent = new Intent(Common.ACT_SENSOR_LIST_UPDATE);
                         LocalBroadcastManager.getInstance(BrainyTempApp.getInstance()).sendBroadcast(sendIntent);
                     }
                 }).show();
@@ -118,7 +118,7 @@ public class TempFragment extends Fragment implements View.OnClickListener {
                         Util.deleteMeasureTemp(device);
                         BrainyTempApp.setMinTemp(device, temp);
                         binding.tvMin.setText(String.valueOf(temp) + "°C");
-                        Intent sendIntent = new Intent(Common.ACT_SENSOR_UPDATE);
+                        Intent sendIntent = new Intent(Common.ACT_SENSOR_LIST_UPDATE);
                         LocalBroadcastManager.getInstance(BrainyTempApp.getInstance()).sendBroadcast(sendIntent);
                     }
                 }).show();

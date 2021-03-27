@@ -203,7 +203,7 @@ public class BrainyTempApp extends Application {
      * 센싱 반복 주기
      */
     public static int getSensingRepeatCycle() {
-        return mPref.getValue(PREF_SENSING_REPEAT_CYCLE, 3);
+        return mPref.getValue(PREF_SENSING_REPEAT_CYCLE, 5);
     }
 
 

@@ -16,6 +16,7 @@ import kr.brainylab.R;
 import kr.brainylab.databinding.FragmentAlarmSettingBinding;
 import kr.brainylab.view.dailog.AlarmRepeatDialog;
 import kr.brainylab.view.dailog.AlertRepeatDialog;
+import kr.brainylab.view.dailog.SensingRepeatDialog;
 
 /**
  * 경보음 및 알림
@@ -56,6 +57,18 @@ public class AlarmSettingFragment extends Fragment {
     }
 
     private void loadLayout() {
+        binding.rlySensing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SensingRepeatDialog.init(getActivity(), new SensingRepeatDialog.OnClickListener() {
+                    @Override
+                    public void onConfirm(int minute) {
+                        BrainyTempApp.setSensingRepeatCycle(minute);
+                    }
+                }).show();
+            }
+        });
+
         binding.rlyAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
