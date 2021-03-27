@@ -62,8 +62,6 @@ public class MyWorkWithData extends Worker {
                 .putString("text", "BrainyT")
                 .build();
 
-        Log.d("BrainyTemp", "sesingCycle: " + sesingCycle);
-
         WorkManager.getInstance().cancelAllWork();
         OneTimeWorkRequest oneTimeWorkRequest =
                 new OneTimeWorkRequest.Builder(MyWorkWithData.class)

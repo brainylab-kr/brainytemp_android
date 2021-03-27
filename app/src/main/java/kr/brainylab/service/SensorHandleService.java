@@ -125,7 +125,7 @@ public class SensorHandleService extends Service {
     }
 
     private void loadService() {
-        WorkManager.getInstance().cancelAllWork();
+        updateSensorValue();
 
         int sesingCycle = Integer.valueOf(BrainyTempApp.getSensingRepeatCycle ()) * 60;
 
@@ -215,6 +215,8 @@ public class SensorHandleService extends Service {
                     Map<Integer, Measurement> map = device.getMeasurements();
                     double curTemp = Double.valueOf(map.get(1).get().toString());
 
+                    Log.d("BrainyTemp", device.getAddress() + ": " + curTemp);
+
                     updateSensor(device);    // 센서 정보 업데이트
                     addSensorTemp(device);    // 로컬DB에 온도 추가
                     uploadTemp(device);    //서버에 온도 전송
@@ -252,6 +254,8 @@ public class SensorHandleService extends Service {
                         } else {
                             prepareEventAlarm(device.getAddress(), Common.EVENT_HIGH_TEMP, curTemp);
                         }
+
+                        showAlarm(device.getAddress(), curTemp);
                     }
 
                     if (device.getBatteryStatus() == Device.BatteryStatus.LOW) {
@@ -411,7 +415,7 @@ public class SensorHandleService extends Service {
                                 @Override
                                 public void run() {
                                     // 사용하고자 하는 코드
-                                    Log.d("BrainyTemp", "################ upload Temp success ");
+                                    Log.d("BrainyTemp", "################ upload Temp success address: " + device.getAddress());
                                 }
                             }, 0);
                         }
@@ -440,7 +444,7 @@ public class SensorHandleService extends Service {
                             mHandler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Log.d("BrainyTemp", "################ upload Temp success ");
+                                    Log.d("BrainyTemp", "################ upload Temp success address: " + sensorInfo.getDevice());
                                 }
                             }, 0);
                         }
@@ -484,11 +488,11 @@ public class SensorHandleService extends Service {
     }
 
     /**
-     * 이벤트 알림
+     * 이벤트 SMS 알림
      */
     public void prepareEventAlarm(String device, String eventType, double curTemp) {
 
-        int alertCycle = Integer.valueOf(BrainyTempApp.getAlarmRepeatCycle());
+        int alertCycle = Integer.valueOf(BrainyTempApp.getAlertRepeatCycle());
         if (alertCycle == 0) //설정페이지에서 설정한 알림 반복주기가 -1이면 알림 사용안함으로 본다.
             return;
 
@@ -497,12 +501,10 @@ public class SensorHandleService extends Service {
         long currentTime = System.currentTimeMillis();
         int dicSec = (int) ((currentTime - storeTime) / 1000);
 
-        if (dicSec < alertCycle * 60) //알림 울리는 시간차가 알림반복주기시간보다 작으면 리턴
+        if (dicSec < (alertCycle * 60)-30) //알림 울리는 시간차가 알림반복주기시간보다 작으면 리턴
             return;
 
         BrainyTempApp.setAlertTime(key, "" + System.currentTimeMillis());
-
-        showAlarm(device, curTemp);
 
         ArrayList<AlarmListInfo> list = Util.getAlarmList();
 
@@ -541,13 +543,14 @@ public class SensorHandleService extends Service {
 
     //서버에 이벤트 알림 업로드
     private void reqEventAlarm(String device, String deviceName, String eventType, String alarmType, String phone, double curTemp, double minTemp, double maxTemp) {
+
+        Log.d("BrainyTemp", "Send SMS Alert: " + device);
         HttpService httpService = new HttpService(this);
         httpService.eventAlarm(device, deviceName, eventType, alarmType, phone, curTemp, minTemp, maxTemp, new HttpService.ResponseListener() {
             @Override
             public void onResponseResult(Boolean bSuccess, String res) {
                 if (bSuccess) {
                     try {
-
                         JSONObject jObj = new JSONObject(res);
                         String result = jObj.getString("ret");
                         if (result.equals("ok")) {

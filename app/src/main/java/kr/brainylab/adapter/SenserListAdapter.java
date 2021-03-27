@@ -3,6 +3,7 @@ package kr.brainylab.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,13 +80,24 @@ public class SenserListAdapter extends ArrayAdapter<SensorListInfo> {
             holder.tvTemp.setTextColor(mContext.getResources().getColor(R.color.color_171717));
         }
 
-        int nRssi =  Math.abs(info.getRssi());
+        int nRssi =  info.getRssi();
         float fRssi = 0;
-        if (nRssi > 35) {
+        if (nRssi > -35) {
             fRssi = 1;
-        } else {
-            fRssi = (float)nRssi / 35;
+        } else if (nRssi <= -35 && nRssi > -45) {
+            fRssi = (float)0.9;
+        } else if (nRssi <= -45 && nRssi > -55) {
+            fRssi = (float)0.8;
+        } else if (nRssi <= -55 && nRssi > -65) {
+            fRssi = (float)0.7;
+        } else if (nRssi <= -65 && nRssi > -75) {
+            fRssi = (float)0.6;
+        }else if (nRssi <= -75 && nRssi > -85) {
+            fRssi = (float)0.5;
+        } else if (nRssi < -85) {
+            fRssi = (float)0;
         }
+
         holder.ivSignal.setLevel(fRssi);
 
         holder.rlyBackground.setOnLongClickListener(new View.OnLongClickListener() {

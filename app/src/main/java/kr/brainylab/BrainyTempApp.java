@@ -175,21 +175,21 @@ public class BrainyTempApp extends Application {
      * 경보음 반복 주기
      */
     public static int getAlarmRepeatCycle() {
-        return mPref.getValue(PREF_ALARM_REPEAT_CYCLE, 15);
+        return mPref.getValue(PREF_ALARM_REPEAT_CYCLE, 5);
     }
 
     /**
-     * 알림 반복 주기
+     * SMS 알림 반복 주기
      */
     public static void setAlertRepeatCycle(int value) {
         mPref.put(PREF_ALERT_REPEAT_CYCLE, value);
     }
 
     /**
-     * 알림 반복 주기
+     * SMS 알림 반복 주기
      */
     public static int getAlertRepeatCycle() {
-        return mPref.getValue(PREF_ALERT_REPEAT_CYCLE, 5);
+        return mPref.getValue(PREF_ALERT_REPEAT_CYCLE, 15);
     }
 
     /**

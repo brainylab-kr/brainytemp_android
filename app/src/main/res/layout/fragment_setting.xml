@@ -20,7 +20,7 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/rly_alarm"
+                    android:id="@+id/rly_repeat_setting"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 

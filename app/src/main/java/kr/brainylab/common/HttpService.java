@@ -26,7 +26,6 @@ public class HttpService {
             = MediaType.parse("application/json; charset=utf-8");
     public static String HTP_DOMAIN() {
         return "https://brainytemp.appspot.com/t1/";
-        //return "https://jerry-firesotre.du.r.appspot.com/t1/";
     }
 
     private Context mContext;
@@ -49,9 +48,6 @@ public class HttpService {
 
     private void post(String url2, RequestBody params, final ResponseListener resListner) {
         String url = getAbsoluteUrl(url2);
-        Log.d("BrainyTemp", "Post URL: " + url);
-        Log.d("BrainyTemp", "Post params: " + params.toString());
-
         Request request = new Request.Builder()
                 .url(url)
                 .post(params)

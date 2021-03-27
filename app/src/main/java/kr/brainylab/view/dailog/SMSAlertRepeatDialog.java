@@ -1,7 +1,9 @@
 package kr.brainylab.view.dailog;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -9,36 +11,35 @@ import androidx.databinding.DataBindingUtil;
 
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
-import kr.brainylab.databinding.DialogAlarmRepeatBinding;
+import kr.brainylab.databinding.DialogSmsAlertRepeatBinding;
 
 /**
- * 알림 반복주기
+ * SMS 알림 반복주기
  */
-public class AlarmRepeatDialog extends BaseDialog implements View.OnClickListener {
+public class SMSAlertRepeatDialog extends BaseDialog implements View.OnClickListener {
 
-    private DialogAlarmRepeatBinding binding;
-    private AlarmRepeatDialog.OnClickListener mListener;
+    private DialogSmsAlertRepeatBinding binding;
+    private SMSAlertRepeatDialog.OnClickListener mListener;
 
     private static int mMinute = 0;
 
     public interface OnClickListener {
-
         void onConfirm(int minute);
     }
 
-    AlarmRepeatDialog(Context context) {
+    SMSAlertRepeatDialog(Context context) {
         super(context);
     }
 
-    public static AlarmRepeatDialog init(Context context, AlarmRepeatDialog.OnClickListener listener) {
-        AlarmRepeatDialog dialog = new AlarmRepeatDialog(context);
+    public static SMSAlertRepeatDialog init(Context context, SMSAlertRepeatDialog.OnClickListener listener) {
+        SMSAlertRepeatDialog dialog = new SMSAlertRepeatDialog(context);
         dialog.mListener = listener;
         return dialog;
     }
 
     @Override
     public void initUI() {
-        this.binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_alarm_repeat, null, false);
+        this.binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_sms_alert_repeat, null, false);
         this.binding.setDialog(this);
         setContentView(binding.getRoot());
 
@@ -50,10 +51,11 @@ public class AlarmRepeatDialog extends BaseDialog implements View.OnClickListene
         binding.lly15Minute.setOnClickListener(this);
         binding.lly30Minute.setOnClickListener(this);
 
-        mMinute = BrainyTempApp.getAlarmRepeatCycle();
+        mMinute = BrainyTempApp.getAlertRepeatCycle();
         changeKind();
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void changeKind() {
         binding.iv0Min.setBackground(context.getDrawable(R.drawable.ic_option_off1));
         binding.iv5Min.setBackground(context.getDrawable(R.drawable.ic_option_off1));
@@ -99,9 +101,8 @@ public class AlarmRepeatDialog extends BaseDialog implements View.OnClickListene
                 dismiss();
                 break;
             case R.id.btn_confirm:
-
                 dismiss();
-                mListener.onConfirm(mMinute);
+                mListener.onConfirm(this.mMinute);
                 break;
 
         }

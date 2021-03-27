@@ -7,7 +7,7 @@
 
         <variable
             name="dialog"
-            type="kr.brainylab.view.dailog.AlertRepeatDialog" />
+            type="kr.brainylab.view.dailog.DeviceAlarmRepeatDialog" />
     </data>
 
     <RelativeLayout

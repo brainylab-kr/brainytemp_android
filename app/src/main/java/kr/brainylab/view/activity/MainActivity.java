@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public static final int PAGE_SEARCH = 1;  //검색
     public static final int PAGE_ALARM = 2;  //알림
     public static final int PAGE_SETTING = 3;  //설정
-    public static final int PAGE_ALARM_SETTING = 4;  //경보음 및 알림
+    public static final int PAGE_REPEAT_SETTING = 4;  //경보음 및 알림
     public static final int PAGE_INFO = 5;  //정보
     public static final int PAGE_ABOUT = 6;  //About
 
@@ -274,7 +274,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
 
             navController.navigate(R.id.settingFragment);
-        } else if (nTabIndex == PAGE_ALARM_SETTING) {
+        } else if (nTabIndex == PAGE_REPEAT_SETTING) {
             txvTitle.setText(getResources().getString(R.string.setting));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 rlySetting.setBackgroundColor(getColor(R.color.color_156aee));
@@ -552,7 +552,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 온도 경보음 울리기
      */
     public void showAlarm(String device, double curTemp) {
-        Log.d("BrainyTemp", "showAlarm: " + device);
+
         //알림 지연시간 먼저 체크
         int dealyTime = Integer.valueOf(BrainyTempApp.getDelayTime(device));
         if (dealyTime > 0) {//온도설정페이지에서 설정한 지연시간
@@ -571,7 +571,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         }
 
-        int alarmCycle = Integer.valueOf(BrainyTempApp.getAlertRepeatCycle ());
+        int alarmCycle = Integer.valueOf(BrainyTempApp.getAlarmRepeatCycle ());
+
         if (alarmCycle == 0) { //설정페이지에서 설정한 경보음 반복주기가 0이면 알림 사용안함으로 본다.
             return;
         }
@@ -581,7 +582,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         int dicSec = (int) ((currentTime - storeTime) / 1000);
 
 
-        if (dicSec < alarmCycle * 60) { //경보음 울리는 시간차가 알림반복주기시간보다 작으면 리턴
+        if (dicSec < ((alarmCycle * 60)-30)) { //경보음 울리는 시간차가 알림반복주기시간보다 작으면 리턴(30초 여유시간을 둔다)
             return;
         }
 

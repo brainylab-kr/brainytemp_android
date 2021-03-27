@@ -16,7 +16,7 @@ import kr.brainylab.databinding.FragmentSettingBinding;
 import kr.brainylab.view.activity.MainActivity;
 
 import static kr.brainylab.view.activity.MainActivity.PAGE_ABOUT;
-import static kr.brainylab.view.activity.MainActivity.PAGE_ALARM_SETTING;
+import static kr.brainylab.view.activity.MainActivity.PAGE_REPEAT_SETTING;
 import static kr.brainylab.view.activity.MainActivity.PAGE_INFO;
 import static kr.brainylab.view.activity.MainActivity.PAGE_SEARCH;
 
@@ -55,11 +55,11 @@ public class SettingFragment extends Fragment {
     }
 
     private void loadLayout() {
-        binding.rlyAlarm.setOnClickListener(new View.OnClickListener() {
+        binding.rlyRepeatSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.nTabIndex = PAGE_ALARM_SETTING;
+                mainActivity.nTabIndex = PAGE_REPEAT_SETTING;
                 mainActivity.changePage();
             }
         });

@@ -14,8 +14,8 @@ import androidx.fragment.app.Fragment;
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
 import kr.brainylab.databinding.FragmentAlarmSettingBinding;
-import kr.brainylab.view.dailog.AlarmRepeatDialog;
-import kr.brainylab.view.dailog.AlertRepeatDialog;
+import kr.brainylab.view.dailog.DeviceAlarmRepeatDialog;
+import kr.brainylab.view.dailog.SMSAlertRepeatDialog;
 import kr.brainylab.view.dailog.SensingRepeatDialog;
 
 /**
@@ -69,10 +69,11 @@ public class AlarmSettingFragment extends Fragment {
             }
         });
 
-        binding.rlyAlert.setOnClickListener(new View.OnClickListener() {
+        // SMS 알림
+        binding.rlySmsAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertRepeatDialog.init(getActivity(), new AlertRepeatDialog.OnClickListener() {
+                SMSAlertRepeatDialog.init(getActivity(), new SMSAlertRepeatDialog.OnClickListener() {
                     @Override
                     public void onConfirm(int minute) {
                         BrainyTempApp.setAlertRepeatCycle(minute);
@@ -81,10 +82,11 @@ public class AlarmSettingFragment extends Fragment {
             }
         });
 
-        binding.rlyAlarm.setOnClickListener(new View.OnClickListener() {
+        // 경보음
+        binding.rlyDeviceAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmRepeatDialog.init(getActivity(), new AlarmRepeatDialog.OnClickListener() {
+                DeviceAlarmRepeatDialog.init(getActivity(), new DeviceAlarmRepeatDialog.OnClickListener() {
                     @Override
                     public void onConfirm(int minute) {
                         BrainyTempApp.setAlarmRepeatCycle(minute);
