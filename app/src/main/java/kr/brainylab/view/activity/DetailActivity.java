@@ -15,7 +15,7 @@ import androidx.viewpager.widget.ViewPager;
 import kr.brainylab.R;
 import kr.brainylab.databinding.ActivityDetailBinding;
 import kr.brainylab.view.fragment.ChartFragment;
-import kr.brainylab.view.fragment.TempFragment;
+import kr.brainylab.view.fragment.LimitSettingFragment;
 
 /**
  * 센서 상세
@@ -36,7 +36,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     public static final int PAGE_TAB_CHART = 1;
 
     int nTabIndex = PAGE_TAB_ALARM;
-    private TempFragment fragmentTemp = null;
+    private LimitSettingFragment fragmentTemp = null;
     //    private OutFragment fragmentOut = null;
     public static  ChartFragment fragmentchart = null;
 
@@ -97,7 +97,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
      */
     private void initFragment() {
         if (fragmentTemp == null)
-            fragmentTemp = new TempFragment();
+            fragmentTemp = new LimitSettingFragment();
 //        if (fragmentOut == null)
 //            fragmentOut = new OutFragment();
         if (fragmentchart == null)

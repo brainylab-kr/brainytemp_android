@@ -65,7 +65,7 @@ public class SensingRepeatDialog extends BaseDialog implements View.OnClickListe
             binding.iv1Min.setBackground(context.getDrawable(R.drawable.ic_option_on1));
         } else if (mMinute == 5) {
             binding.iv5Min.setBackground(context.getDrawable(R.drawable.ic_option_on1));
-        } else if (mMinute == 10) {
+        } else if (mMinute == 15) {
             binding.iv15Min.setBackground(context.getDrawable(R.drawable.ic_option_on1));
         } else if (mMinute == 30) {
             binding.iv30Min.setBackground(context.getDrawable(R.drawable.ic_option_on1));

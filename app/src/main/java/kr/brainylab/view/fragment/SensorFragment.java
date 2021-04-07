@@ -17,17 +17,13 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import kr.brainylab.R;
-import kr.brainylab.adapter.SenserListAdapter;
+import kr.brainylab.adapter.SensorListAdapter;
 import kr.brainylab.common.Common;
 import kr.brainylab.databinding.FragmentSensorBinding;
-import kr.brainylab.model.SensorListInfo;
+import kr.brainylab.model.SensorInfo;
 import kr.brainylab.utils.Util;
 import kr.brainylab.view.activity.MainActivity;
 
@@ -38,8 +34,8 @@ public class SensorFragment extends Fragment {
     View rootView;
     FragmentSensorBinding binding;
 
-    private SenserListAdapter m_dadapter;
-    private ArrayList<SensorListInfo> arrSensorList = new ArrayList<SensorListInfo>();
+    private SensorListAdapter m_dadapter;
+    private ArrayList<SensorInfo> arrSensorList = new ArrayList<SensorInfo>();
 
     public SensorFragment() {
         // Required empty public constructor
@@ -87,7 +83,7 @@ public class SensorFragment extends Fragment {
 
     private void loadData() {
         arrSensorList = Util.getSensorList();
-        m_dadapter = new SenserListAdapter(getActivity(), this, arrSensorList);
+        m_dadapter = new SensorListAdapter(getActivity(), this, arrSensorList);
         binding.lsvContent.setAdapter(m_dadapter);
         m_dadapter.notifyDataSetChanged();
 
@@ -113,8 +109,6 @@ public class SensorFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(Common.ACT_SENSOR_VALUE_UPDATE)) {
-                String data = intent.getStringExtra("data");
-                updateSensorValue(data);
                 loadData();
             }
             else if(action.equals(Common.ACT_SENSOR_LIST_UPDATE)) {
@@ -122,19 +116,4 @@ public class SensorFragment extends Fragment {
             }
         }
     };
-
-    public void updateSensorValue(String data) {
-
-        try {
-            JSONObject tempData = new JSONObject(data);
-            Iterator<String> keys = tempData.keys();
-
-            while( keys.hasNext() ){
-                String key = keys.next();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

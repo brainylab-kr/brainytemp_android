@@ -7,17 +7,10 @@ import android.view.View;
 import android.view.WindowManager;
 
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import kr.brainylab.R;
 import kr.brainylab.common.Common;
-import kr.brainylab.databinding.ActivityDetailBinding;
 import kr.brainylab.databinding.ActivityTermsBinding;
-import kr.brainylab.view.fragment.ChartFragment;
-import kr.brainylab.view.fragment.TempFragment;
 
 /**
  * 센서 상세

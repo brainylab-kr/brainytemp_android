@@ -77,12 +77,16 @@
     <string name="sensor_correction_alert">센서가 교정되었습니까?</string>
     <string name="temperature">온도</string>
     <string name="temp_limit_title">온도 제한</string>
+    <string name="humidity">습도</string>
+    <string name="humi_limit_title">습도 제한</string>
     <string name="max_temp">상한값</string>
     <string name="min_temp">하한값</string>
     <string name="current_temp">현재 온도</string>
     <string name="temp_limit_hint_min">-35.0°C ~ 70.0°C사이의 값을 입력하세요.</string>
     <string name="temp_limit_hint_max">-35.0°C ~ 70.0°C사이의 값을 입력하세요.</string>
     <string name="temp_limit_hint_incorrect">정확한 온도값을 입력해주세요.</string>
+    <string name="humi_limit_hint">0% ~ 100%사이의 값을 입력하세요.</string>
+    <string name="humi_limit_hint_incorrect">정확한 습도값을 입력해주세요.</string>
     <string name="alarm_delay">SMS 알림 지연</string>
     <string name="alarm_delay_content">위 제한 초과 시 전송될 SMS 알림을 지연합니다.</string>
     <string name="email_address">이메일 주소</string>
@@ -104,4 +108,9 @@
     <string name="connect_fail">서버 연결이 실패했습니다. 네트워크 상태를 확인해주세요. </string>
     <string name="device_auth_fail">디바이스 인증 실패했습니다.</string>
     <string name="not_find_device">서버에서 디바이스를 찾을 수 없습니다.</string>
+    <string name="scanning_biggest_circle">M 4.5 8.8 C 5.638 8.798 6.73 8.343 7.535 7.537 C 8.339 6.731 8.791 5.638 8.791 4.5 C 8.791 3.362 8.339 2.269 7.535 1.463 C 6.73 0.657 5.638 0.202 4.5 0.2 C 3.362 0.202 2.27 0.657 1.465 1.463 C 0.661 2.269 0.209 3.362 0.209 4.5 C 0.209 5.638 0.661 6.731 1.465 7.537 C 2.27 8.343 3.362 8.798 4.5 8.8 Z</string>
+    <string name="scanning_hidden_circle">M 4.5 5 C 4.632 4.999 4.758 4.946 4.852 4.852 C 4.945 4.759 4.997 4.632 4.997 4.5 C 4.997 4.368 4.945 4.241 4.852 4.148 C 4.758 4.054 4.632 4.001 4.5 4 C 4.368 4.001 4.242 4.054 4.148 4.148 C 4.055 4.241 4.003 4.368 4.003 4.5 C 4.003 4.632 4.055 4.759 4.148 4.852 C 4.242 4.946 4.368 4.999 4.5 5 Z</string>
+    <string name="scanning_middle_circle">M 4.5 7.7 C 5.347 7.698 6.159 7.36 6.758 6.76 C 7.356 6.16 7.692 5.347 7.692 4.5 C 7.692 3.653 7.356 2.84 6.758 2.24 C 6.159 1.64 5.347 1.302 4.5 1.3 C 3.653 1.302 2.841 1.64 2.242 2.24 C 1.644 2.84 1.308 3.653 1.308 4.5 C 1.308 5.347 1.644 6.16 2.242 6.76 C 2.841 7.36 3.653 7.698 4.5 7.7 Z</string>
+    <string name="scanning_smallest_circle">M 4.5 6.5 C 5.029 6.498 5.537 6.287 5.91 5.912 C 6.284 5.537 6.494 5.029 6.494 4.5 C 6.494 3.971 6.284 3.463 5.91 3.088 C 5.537 2.713 5.029 2.502 4.5 2.5 C 3.971 2.502 3.463 2.713 3.09 3.088 C 2.716 3.463 2.506 3.971 2.506 4.5 C 2.506 5.029 2.716 5.537 3.09 5.912 C 3.463 6.287 3.971 6.498 4.5 6.5 Z</string>
+
 </resources>

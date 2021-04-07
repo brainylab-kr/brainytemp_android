@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="24.0dip" android:width="20.0dip" android:viewportWidth="800.0" android:viewportHeight="960.0"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#ff000000" android:pathData="M100,0 v960 h80 v-880 h440 v880 h80 v-960 z" />
+    <path android:name="door" android:fillColor="#ff000000" android:pathData="M420,470 a15,25 0 1,0 1,0 h-1 h-55 v-350 l235,-20 v110 h20 v100 h-20 v500 h20 v100 h-20 v50 l-235,-55 v-435z" />
+</vector>

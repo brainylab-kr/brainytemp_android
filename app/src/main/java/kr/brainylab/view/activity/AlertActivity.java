@@ -54,28 +54,24 @@ public class AlertActivity extends BaseActivity implements View.OnClickListener 
         Intent intent = getIntent();
         String device = intent.getStringExtra("device");
         String temp = intent.getStringExtra("temp");
+        String humi = intent.getStringExtra("humi");
 
-
-        Log.d("BrainyTemp", "AlertActivity start device: " + device);
-        setData(device, temp);
+        setData(device, temp, humi);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("BrainyTemp", "AlertActivity onPause");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d("BrainyTemp", "AlertActivity onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("BrainyTemp", "AlertActivity onDestroy");
     }
 
     private void LoadLayout() {
@@ -86,8 +82,7 @@ public class AlertActivity extends BaseActivity implements View.OnClickListener 
         mPlayer.start();
     }
 
-    public void setData(String device, String temp) {
-        Log.d("BrainyTemp", "setData device " + device);
+    public void setData(String device, String temp, String humi) {
 
         for(int i = 0; i < arrSensorList.size(); i++) {
             if(device == arrSensorList.get(i).getDevice()) {
@@ -96,7 +91,7 @@ public class AlertActivity extends BaseActivity implements View.OnClickListener 
         }
 
         String name = BrainyTempApp.getSensorName(device);
-        RingtoneListInfo info = new RingtoneListInfo(device, name, temp, Util.getCurDate());
+        RingtoneListInfo info = new RingtoneListInfo(device, name, temp, humi, Util.getCurDate());
 
         arrSensorList.add(info);
 

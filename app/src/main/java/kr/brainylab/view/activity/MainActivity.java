@@ -551,7 +551,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     /**
      * 온도 경보음 울리기
      */
-    public void showAlarm(String device, double curTemp) {
+    public void showAlarm(String device, double curTemp, int curHumi) {
 
         //알림 지연시간 먼저 체크
         int dealyTime = Integer.valueOf(BrainyTempApp.getDelayTime(device));
@@ -587,7 +587,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
 
         if (AlertActivity.getInstance() != null) {
-            AlertActivity.getInstance().setData(device, String.valueOf(curTemp));
+            AlertActivity.getInstance().setData(device, String.valueOf(curTemp), String.valueOf(curHumi));
             return;
         }
 
@@ -596,6 +596,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("device", device);
         intent.putExtra("temp", String.valueOf(curTemp));
+        intent.putExtra("humi", String.valueOf(curHumi));
 
         startActivity(intent.setAction(Intent.ACTION_MAIN));
     }
@@ -627,7 +628,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                     String device = (String)jsonData.get("device");
                     double curTemp = (double)jsonData.getDouble("curTemp");
-                    showAlarm(device, curTemp);
+                    int curHumi = (int)jsonData.getDouble("curHumi");
+                    showAlarm(device, curTemp, curHumi);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -8,8 +8,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
@@ -21,9 +19,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,9 +37,8 @@ import java.util.Map;
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
 import kr.brainylab.common.Common;
-import kr.brainylab.common.HttpService;
 import kr.brainylab.model.AlarmListInfo;
-import kr.brainylab.model.SensorListInfo;
+import kr.brainylab.model.SensorInfo;
 import kr.brainylab.model.TempListInfo;
 import pl.efento.sdk.api.measurement.Measurement;
 import pl.efento.sdk.api.scan.Device;
@@ -199,82 +193,51 @@ public class Util {
      * 센서 추가
      */
     public static void addSensor(Device info) {
-        ArrayList<SensorListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
-                new TypeToken<ArrayList<SensorListInfo>>() {
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+                new TypeToken<ArrayList<SensorInfo>>() {
                 }.getType());
         if (list == null) {
-            list = new ArrayList<SensorListInfo>();
+            list = new ArrayList<SensorInfo>();
         }
+        String type = "";
 
         Map<Integer, Measurement> map = info.getMeasurements();
         double temperature = Double.valueOf(map.get(1).get().toString());
-        SensorListInfo item = new SensorListInfo(info.getName(), info.getAddress(), getCurDate(), temperature, info.getRssi());
+
+        int humidity = 0;
+        if(map.get(2) != null && map.get(2).isValid()) {
+            humidity = Integer.valueOf(map.get(2).get().toString());
+            type = Common.SENSOR_TYPE_TH;
+        }
+        else {
+            type = Common.SENSOR_TYPE_T1;
+        }
+
+        SensorInfo item = new SensorInfo(type, info.getName(), info.getAddress(), getCurDate(), temperature, humidity, info.getRssi());
         list.add(item);
         BrainyTempApp.mPref.put(PREF_SENSOR_LIST, new Gson().toJson(list));
 
-        //센서 닉네임 추가
         BrainyTempApp.setSensorName(info.getAddress(), info.getName());
         BrainyTempApp.setMaxTemp(info.getAddress(), 8.0);
         BrainyTempApp.setMinTemp(info.getAddress(), 2.0);
+        BrainyTempApp.setMaxHumi(info.getAddress(), 80);
+        BrainyTempApp.setMinHumi(info.getAddress(), 20);
         BrainyTempApp.setDelayTime(info.getAddress(), 0);
-    }
-
-    /**
-     * 센서 갱신
-     */
-    public static void updateSensor(Device info) {
-        long storeTime = (long) Double.parseDouble(BrainyTempApp.getUpdateTime(info.getAddress()));
-        long currentTime = System.currentTimeMillis();
-        int dicSec = (int) ((currentTime - storeTime) / 1000);
-
-        //if (dicSec < Common.gSearchTime)
-        //    return;
-
-        ArrayList<SensorListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
-                new TypeToken<ArrayList<SensorListInfo>>() {
-                }.getType());
-        if (list == null) {
-            list = new ArrayList<SensorListInfo>();
-        }
-
-        int index = -1;
-        for (int i = 0; i < list.size(); i++) {
-            SensorListInfo item = list.get(i);
-            if (item.getDevice().equals(info.getAddress())) {
-                index = i;
-                break;
-            }
-        }
-
-        if (index > -1) {
-            list.remove(index);
-        }
-
-        if (index == -1) {
-            index = 0;
-        }
-
-        Map<Integer, Measurement> map = info.getMeasurements();
-        double temperature = Double.valueOf(map.get(1).get().toString());
-
-        SensorListInfo dic = new SensorListInfo(info.getName(), info.getAddress(), getCurDate(), temperature, info.getRssi());
-        list.add(index, dic);
-        BrainyTempApp.mPref.put(PREF_SENSOR_LIST, new Gson().toJson(list));
     }
 
     /**
      * 센서 삭제
      */
     public static boolean deleteSensor(String idx) {
-        ArrayList<SensorListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
-                new TypeToken<ArrayList<SensorListInfo>>() {
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+                new TypeToken<ArrayList<SensorInfo>>() {
                 }.getType());
 
 
         int index = -1;
         for (int i = 0; i < list.size(); i++) {
-            SensorListInfo info = list.get(i);
-            if (info.getDevice().equals(idx)) {
+            SensorInfo info = list.get(i);
+            if (info.getAddress().equals(idx)) {
                 index = i;
                 break;
             }
@@ -292,16 +255,16 @@ public class Util {
      * 등록된 센서인지 체크
      */
     public static boolean isExistSensor(String idx) {
-        ArrayList<SensorListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
-                new TypeToken<ArrayList<SensorListInfo>>() {
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+                new TypeToken<ArrayList<SensorInfo>>() {
                 }.getType());
         if (list == null) {
             return false;
         }
 
         for (int i = 0; i < list.size(); i++) {
-            SensorListInfo inf0 = list.get(i);
-            if (inf0.getDevice().equals(idx))
+            SensorInfo info = list.get(i);
+            if (info.getAddress().equals(idx))
                 return true;
         }
 
@@ -311,17 +274,63 @@ public class Util {
     /**
      * 센서목록 얻기
      */
-    public static ArrayList<SensorListInfo> getSensorList() {
-        ArrayList<SensorListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
-                new TypeToken<ArrayList<SensorListInfo>>() {
+    public static ArrayList<SensorInfo> getSensorList() {
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+                new TypeToken<ArrayList<SensorInfo>>() {
                 }.getType());
         if (list == null) {
-            list = new ArrayList<SensorListInfo>();
+            list = new ArrayList<SensorInfo>();
         }
 
         return list;
     }
 
+    public static SensorInfo getSensorInfo(String address) {
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+                new TypeToken<ArrayList<SensorInfo>>() {
+                }.getType());
+
+        if (list == null) {
+            return null;
+        }
+
+        for(int i = 0; i < list.size(); i++) {
+            SensorInfo sensor = list.get(i);
+            if(sensor.getAddress().equals(address)) {
+                return sensor;
+            }
+        }
+        return null;
+    }
+
+    public static SensorInfo getSensorInfo(int index) {
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+                new TypeToken<ArrayList<SensorInfo>>() {
+                }.getType());
+
+        return list.get(index);
+    }
+
+    public static int getSensorIndex(String address) {
+
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+                new TypeToken<ArrayList<SensorInfo>>() {
+                }.getType());
+        if (list == null) {
+            list = new ArrayList<SensorInfo>();
+        }
+
+        int index = -1;
+        for (int i = 0; i < list.size(); i++) {
+            SensorInfo sensorInfo = list.get(i);
+            if (sensorInfo.getAddress().equals(address)) {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
+    }
 
     /**
      * 알림 추가
@@ -431,25 +440,6 @@ public class Util {
     }
 
     /**
-     * 온도 추가
-     */
-    public static void addSensorTemp(Device info) {
-        ArrayList<TempListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(info.getAddress() + "temp", ""),
-                new TypeToken<ArrayList<TempListInfo>>() {
-                }.getType());
-        if (list == null) {
-            list = new ArrayList<TempListInfo>();
-        }
-
-        Map<Integer, Measurement> map = info.getMeasurements();
-        double temperature = Double.valueOf(map.get(1).get().toString());
-
-        TempListInfo dic = new TempListInfo(System.currentTimeMillis(), temperature);
-        list.add(dic);
-        BrainyTempApp.mPref.put(info.getAddress() + "temp", new Gson().toJson(list));
-    }
-
-    /**
      * 온도 리스트 삭제
      */
     public static void deleteTemp(String idx) {
@@ -462,41 +452,6 @@ public class Util {
         }
         list.clear();
         BrainyTempApp.mPref.put(idx + "temp", new Gson().toJson(list));
-    }
-
-    //디바이스 온도 서버에 업로드
-    public static void uploadTemp(Device device) {
-
-        Map<Integer, Measurement> map = device.getMeasurements();
-        double temperature = Double.valueOf(map.get(1).get().toString());
-
-        HttpService httpService = new HttpService(BrainyTempApp.getInstance());
-        httpService.uploadTemp(device.getAddress(), temperature, new HttpService.ResponseListener() {
-            @Override
-            public void onResponseResult(Boolean bSuccess, String res) {
-                closeProgress();
-                if (bSuccess) {
-                    try {
-                        JSONObject jObj = new JSONObject(res);
-                        String result = jObj.getString("ret");
-                        if (result.equals("ok")) {
-                            Handler mHandler = new Handler(Looper.getMainLooper());
-                            mHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // 사용하고자 하는 코드
-                                    Log.d("BrainyTemp", "@@@@@@@@@@@@@@@@@ upload Temp success ");
-                                }
-                            }, 0);
-                        }
-                    } catch (JSONException e) {
-                        Log.d("BrainyTemp", "err.. : " + e.toString());
-                    }
-                } else {
-					Log.d("BrainyTemp", "err.. : " + BrainyTempApp.getInstance().getResources().getString(R.string.connect_fail));
-                }
-            }
-        });
     }
 
     /**
@@ -562,5 +517,85 @@ public class Util {
 
         list.clear();
         BrainyTempApp.mPref.put(device + "templist", new Gson().toJson(list));
+    }
+
+    /**
+     * 습도 리스트 삭제
+     */
+    public static void deleteHumi(String idx) {
+        ArrayList<TempListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(idx + "humi", ""),
+                new TypeToken<ArrayList<TempListInfo>>() {
+                }.getType());
+
+        if (list == null) {
+            return;
+        }
+        list.clear();
+        BrainyTempApp.mPref.put(idx + "humi", new Gson().toJson(list));
+    }
+
+    /**
+     * 저장하였던 습도리스트 얻기
+     */
+    public static ArrayList<TempListInfo> getSensorHumiList(String device) {
+        ArrayList<TempListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "humi", ""),
+                new TypeToken<ArrayList<TempListInfo>>() {
+                }.getType());
+        if (list == null) {
+            list = new ArrayList<TempListInfo>();
+        }
+
+        return list;
+    }
+
+    /**
+     * 현재 습도 측정 리스트
+     */
+    public static ArrayList<String> getHumiMeasureList(String device) {
+        ArrayList<String> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "humilist", ""),
+                new TypeToken<ArrayList<String>>() {
+                }.getType());
+        if (list == null) {
+            list = new ArrayList<String>();
+        }
+
+        return list;
+    }
+
+    /**
+     * 측정 습도 추가
+     */
+    public static void addMeasureHumi(String device, double temp) {
+
+        ArrayList<String> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "humilist", ""),
+                new TypeToken<ArrayList<String>>() {
+                }.getType());
+        if (list == null) {
+            list = new ArrayList<String>();
+        }
+
+        int dealyTime = Integer.valueOf(BrainyTempApp.getDelayTime(device));
+        if (list.size() >= dealyTime) {
+            list.remove(0);
+        }
+        list.add(String.valueOf(temp));
+        BrainyTempApp.mPref.put(device + "templist", new Gson().toJson(list));
+
+        BrainyTempApp.setMeasureTime(device, "" + System.currentTimeMillis());
+    }
+
+    /**
+     * 측정 습도 삭제
+     */
+    public static void deleteMeasureHumi(String device) {
+        ArrayList<String> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "humilist", ""),
+                new TypeToken<ArrayList<String>>() {
+                }.getType());
+        if (list == null) {
+            list = new ArrayList<String>();
+        }
+
+        list.clear();
+        BrainyTempApp.mPref.put(device + "humilist", new Gson().toJson(list));
     }
 }

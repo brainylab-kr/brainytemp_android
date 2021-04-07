@@ -3,27 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_event"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:visibility="visible">
 
     <RelativeLayout
         android:id="@+id/rly_background"
         android:layout_width="match_parent"
         android:layout_height="120dp">
 
-        <at.robhor.wifisignalstrength.WifiSignalStrengthView
-            android:id="@+id/iv_signal"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+        <ImageView
+            android:id="@+id/iv_wifi_signal"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            app:autoUpdating="false"
-            app:backgroundColor="#49156aee"
-            app:fill="50%"
-            app:fillColor="@color/color_156aee"
-            app:wifiOff="false" />
+            android:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/rly_content1"
@@ -33,7 +29,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/rly_content2"
-            android:layout_toRightOf="@+id/iv_signal"
+            android:layout_toRightOf="@+id/iv_wifi_signal"
             android:orientation="vertical">
 
             <TextView
@@ -67,35 +63,71 @@
 
 
             <LinearLayout
+                android:id="@+id/rly_contents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/iv_temperature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@drawable/ic_temperature" />
 
-                <TextView
-                    android:id="@+id/tv_temp"
+                <LinearLayout
+                    android:id="@+id/rly_temp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="10dp"
-                    android:fontFamily="@font/notosanskrregular"
-                    android:text="24.6°C"
-                    android:textColor="@color/color_171717"
-                    android:textSize="36sp" />
+                    android:layout_gravity="right"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_temperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/vd_temperature" />
+
+                    <TextView
+                        android:id="@+id/tv_temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/notosanskrregular"
+                        android:text="24.6°C"
+                        android:textColor="@color/color_171717"
+                        android:textSize="36sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rly_humi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="20dp"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/iv_humi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/vd_humidity" />
+
+                    <TextView
+                        android:id="@+id/tv_humi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/notosanskrregular"
+                        android:text="51%"
+                        android:textColor="@color/color_171717"
+                        android:textSize="36sp" />
+                </LinearLayout>
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="right"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/notosanskrregular"
                 android:gravity="right"

@@ -121,16 +121,19 @@ public class HttpService {
         postenc(url, body, resListner);
     }
 
-    /**
-     * 온도 수집
-     */
-    public void uploadTemp(String device, double temp, ResponseListener resListner) {
+    public void uploadData(String device, double temp, int humi, int rssi, ResponseListener resListner) {
         String url = "temp";
 
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("mac", device);
         hashMap.put("val", String.valueOf(temp));
-        RequestBody body = RequestBody.create(CONTENT_TYPE, new Gson().toJson(hashMap)); // new
+        hashMap.put("hmd", String.valueOf(humi));
+        hashMap.put("rssi", String.valueOf(rssi));
+
+        String postBody = new Gson().toJson(hashMap);
+        RequestBody body = RequestBody.create(CONTENT_TYPE, postBody);
+
+        Log.d("BrainyTemp", "POST body: " + postBody);
 
         postenc(url, body, resListner);
     }

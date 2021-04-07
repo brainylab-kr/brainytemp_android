@@ -12,7 +12,7 @@ android {
         targetSdkVersion 29
         multiDexEnabled true
         versionCode 1
-        versionName 'v1.1'
+        versionName 'v1.1.1'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -57,8 +57,6 @@ dependencies {
 
     //Gson
     implementation "com.google.code.gson:gson:2.8.6"
-
-    implementation project(':wifi-signal-strength-view')
 
     implementation "androidx.work:work-runtime:2.5.0"
     implementation 'androidx.concurrent:concurrent-futures:1.1.0'

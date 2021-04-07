@@ -109,31 +109,59 @@ public class BrainyTempApp extends Application {
     }
 
     /**
-     * 센서 최대 값
+     * 센서 온도 최대 값
      */
     public static void setMaxTemp(String key, double value) {
-        mPref.put(key + "max", (float) value);
+        mPref.put(key + "maxTemp", (float) value);
     }
 
     /**
-     * 센서 최대 값
+     * 센서 온도 최대 값
      */
     public static double getMaxTemp(String key) {
-        return mPref.getValue(key + "max", 30.0f);
+        return mPref.getValue(key + "maxTemp", 30.0f);
     }
 
     /**
-     * 센서 최소 값
+     * 센서 온도 최소 값
      */
     public static void setMinTemp(String key, double value) {
-        mPref.put(key + "min", (float) value);
+        mPref.put(key + "minTemp", (float) value);
     }
 
     /**
-     * 센서 최소 값
+     * 센서 온도 최소 값
      */
     public static double getMinTemp(String key) {
-        return mPref.getValue(key + "min", -10.0f);
+        return mPref.getValue(key + "minTemp", -10.0f);
+    }
+
+    /**
+     * 센서 습도 최대 값
+     */
+    public static void setMaxHumi(String key, int value) {
+        mPref.put(key + "maxHumi", (int) value);
+    }
+
+    /**
+     * 센서 습도 최대 값
+     */
+    public static int getMaxHumi(String key) {
+        return mPref.getValue(key + "maxHumi", 80);
+    }
+
+    /**
+     * 센서 습도 최소 값
+     */
+    public static void setMinHumi(String key, int value) {
+        mPref.put(key + "minHumi", (int) value);
+    }
+
+    /**
+     * 센서 습도 최소 값
+     */
+    public static int getMinHumi(String key) {
+        return mPref.getValue(key + "minHumi", 20);
     }
 
     /**

@@ -13,10 +13,18 @@ public class Common {
     public static final String ACT_ALARM_LIST_UPDATE = "ACT_ALARM_LIST_UPDATE";
 
     /**
+     * 센서 타입
+     */
+    public static final String SENSOR_TYPE_T1 = "T1";
+    public static final String SENSOR_TYPE_TH = "TH";
+
+    /**
      * 이벤트 타입
      */
     public static final String EVENT_LOW_TEMP = "LOW_TEMP";
     public static final String EVENT_HIGH_TEMP = "HIGH_TEMP";
+    public static final String EVENT_LOW_HUMI = "LOW_HUMI";
+    public static final String EVENT_HIGH_HUMI = "HIGH_HUMI";
     public static final String EVENT_LOW_BT = "LOW_BT";
     public static final String EVENT_APP_ERR = "APP_ERR";
     public static final String EVENT_ONNECT_ERROR = "SS_OUT";

@@ -1,3 +1,2 @@
-include ':wifi-signal-strength-view'
 include ':app'
 rootProject.name = "BrainyTemp"

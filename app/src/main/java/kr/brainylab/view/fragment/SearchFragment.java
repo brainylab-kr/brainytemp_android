@@ -24,18 +24,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import kr.brainylab.R;
-import kr.brainylab.adapter.SenserAddAdapter;
+import kr.brainylab.adapter.SensorAddAdapter;
 import kr.brainylab.common.HttpService;
 import kr.brainylab.databinding.FragmentSearchBinding;
 import kr.brainylab.model.SensorAddInfo;
-import kr.brainylab.model.SensorListInfo;
+import kr.brainylab.model.SensorInfo;
 import kr.brainylab.utils.Util;
 import kr.brainylab.view.dailog.OneBtnDialog;
 import pl.efento.sdk.Efento;
-import pl.efento.sdk.api.measurement.Measurement;
 import pl.efento.sdk.api.scan.Device;
 import pl.efento.sdk.api.scan.OnScanResultCallback;
 import pl.efento.sdk.api.scan.Scanner;
@@ -45,7 +43,7 @@ public class SearchFragment extends Fragment {
     View rootView;
     FragmentSearchBinding binding;
     Scanner scanner;
-    private SenserAddAdapter m_dadapter;
+    private SensorAddAdapter m_dadapter;
     private ArrayList<SensorAddInfo> arrSensorList = new ArrayList<SensorAddInfo>();
     private ArrayList<Device> arrSearchList = new ArrayList<Device>();
     private static ProgressDialog _progressDlg = null;
@@ -90,22 +88,16 @@ public class SearchFragment extends Fragment {
         Util.showProgress(getContext(), true);
         checkPage();
 
-        m_dadapter = new SenserAddAdapter(getActivity(), this, arrSensorList);
+        m_dadapter = new SensorAddAdapter(getActivity(), this, arrSensorList);
         binding.lsvContent.setAdapter(m_dadapter);
 
         scanner = Efento.scanner().setErrorCallback(null).build();
         scanner.scan(new OnScanResultCallback() {
             @Override
             public void onResult(@NonNull Device device) {
-                Log.d("BrainyTemp", "device: " + device.getAddress());
-                Device dev1 = device;
-                String name = dev1.getName();
-                String address = dev1.getAddress();
-                String EncryptionKey = dev1.getEncryptionKey();
-                Map<Integer, Measurement> map = dev1.getMeasurements();
-                double temp = Double.valueOf(map.get(1).get().toString());
+                Log.d("BrainyTemp", "Find device: " + device.getAddress());
 
-                if (!isExistDevice(address)) {
+                if (!isExistDevice(device.getAddress())) {
                     SensorAddInfo item = new SensorAddInfo(device.getAddress());
                     arrSensorList.add(item);
                     arrSearchList.add(device);
@@ -150,7 +142,7 @@ public class SearchFragment extends Fragment {
     //센서 추가
     public void addSensor(final int postion) {
 
-        ArrayList<SensorListInfo> sensorList = Util.getSensorList();
+        ArrayList<SensorInfo> sensorList = Util.getSensorList();
         if(sensorList.size() >= 3) {
             showMaxSensor();
             return;
@@ -220,7 +212,6 @@ public class SearchFragment extends Fragment {
         httpService.deviceAuth(device.getAddress(), new HttpService.ResponseListener() {
             @Override
             public void onResponseResult(Boolean bSuccess, String res) {
-                Log.d("BrainyTemp", "authSensor: " + res);
                 closeProgress();
                 if (bSuccess) {
                     try {

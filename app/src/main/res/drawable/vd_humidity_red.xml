@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:height="35dp" android:width="35dp" android:viewportWidth="80" android:viewportHeight="80">
+    <group android:name="big_drop">
+        <clip-path android:pathData="M 80 0 L 0 0 L 0 38 L 25 38 L 30 43 L 30 51 L 0 51 L 0 80 L 80 80 Z"/>
+        <path android:pathData="M 20 52 C 20 46 26 36 39 19 C 52 36 58 46 58 52 C 58 76 20 76 20 52 Z" android:strokeColor="@color/color_c2185b" android:strokeWidth="3"/>
+    </group>
+    <group android:name="medium_drop">
+        <clip-path android:pathData="M 0 0 L 45 28 L 55 28 L 55 48 L 80 48 L 80 0 Z"/>
+        <path android:pathData="M 55.5 11.5 C 63.3 21.7 66.9 27.7 66.9 31.3 C 66.9 45.7 44.1 45.7 44.1 31.3 C 44.1 27.7 47.7 21.7 55.5 11.5 Z" android:strokeColor="@color/color_c2185b" android:strokeWidth="3"/>
+    </group>
+    <path android:name="small_drop" android:pathData="M 14 45 C 14 42.6 16.4 38.6 21.6 31.8 C 26.8 38.6 29.2 42.6 29.2 45 C 29.2 54.6 14 54.6 14 45 Z" android:strokeColor="@color/color_c2185b" android:strokeWidth="3"/>
+    <group android:name="big_drop_light">
+        <clip-path android:pathData="M 39 52 L 59 42 L 59 72 L 39 52 L 39 92 L 59 92 Z"/>
+        <path android:pathData="M 39 32 C 46.8 42.2 50.4 48.2 50.4 51.8 C 50.4 66.2 27.6 66.2 27.6 51.8 Z" android:strokeColor="@color/color_c2185b" android:strokeWidth="3"/>
+    </group>
+    <group android:name="medium_drop_light">
+        <clip-path android:pathData="M 54 28 L 74 18 L 54 18 L 54 31 L 74 21 L 74 41 L 54 41 Z"/>
+        <path android:pathData="M 55 21 C 58.9 26.1 60.7 29.1 60.7 30.9 M 0 0 Z" android:strokeColor="@color/color_c2185b" android:strokeWidth="2"/>
+    </group>
+</vector>

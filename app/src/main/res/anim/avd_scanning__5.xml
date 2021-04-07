@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set android:ordering="sequentially"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
+    <objectAnimator android:interpolator="@anim/avd_scanning__5__0" android:duration="2000" android:valueFrom="@string/scanning_hidden_circle" android:valueTo="@string/scanning_smallest_circle" android:valueType="pathType" android:propertyName="pathData" />
+    <objectAnimator android:interpolator="@android:anim/linear_interpolator" android:duration="800" android:repeatCount="infinite" android:valueFrom="@string/scanning_smallest_circle" android:valueTo="@string/scanning_middle_circle" android:valueType="pathType" android:propertyName="pathData" />
+</set>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="80.0" android:viewportHeight="80.0"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:name="outerRing" android:fillColor="@color/gray" android:pathData="M40,76 a36,36 0,0 1 0,-72 v4 a32,32 0,0 0 0,64 32,32 0,0 0 0,-64 v-4 a36,36 0,0 1 0,72" />
+    <group android:name="inner_ring">
+        <clip-path android:pathData="M0,0 L80,0 L80,40 h-80 v4 h80 V80 H0" />
+        <path android:fillColor="@color/gray" android:pathData="M40,68 a28,28 0,0 1 0,-56 v4 a24,24 0,0 0 0,48 24,24 0,0 0 0,-48 v-4 a28,28 0,0 1 0,56" />
+        <path android:fillColor="@color/gray" android:pathData="M13,44 H36 v4 h-20z" />
+        <path android:fillColor="@color/gray" android:pathData="M67,44 H44 v4 h20z" />
+    </group>
+    <group android:name="lines">
+        <path android:fillColor="@color/gray" android:pathData="M40,14 h-2 v8 h4 v-8z" />
+        <group android:pivotX="40.0" android:pivotY="40.0" android:rotation="90.0" android:translateY="-2.0">
+            <path android:fillColor="@color/gray" android:pathData="M40,14 h-2 v8 h4 v-8z" />
+        </group>
+        <group android:pivotX="40.0" android:pivotY="40.0" android:rotation="-90.0" android:translateY="-2.0">
+            <path android:fillColor="@color/gray" android:pathData="M40,14 h-2 v8 h4 v-8z" />
+        </group>
+        <group android:pivotX="40.0" android:pivotY="40.0" android:rotation="-42.0">
+            <path android:fillColor="@color/gray" android:pathData="M40,14 h-2 v8 h4 v-8z" />
+        </group>
+        <group android:pivotX="40.0" android:pivotY="40.0" android:rotation="42.0">
+            <path android:fillColor="@color/gray" android:pathData="M40,14 h-2 v8 h4 v-8z" />
+        </group>
+    </group>
+    <group android:name="pointer" android:pivotX="40.0" android:pivotY="46.0" android:rotation="210.0">
+        <path android:fillColor="@color/gray" android:pathData="M40,53 a7,7 0,0 1 0,-14 v3 a4,4 0,0 0 0,8 4,4 0,0 0 0,-8 v-3 a7,7 0,0 1 0,14z" />
+        <path android:fillColor="@color/gray" android:pathData="M40,52 h-1.5 v10 a1.5,1.5 0,0 0 3,0 v-10z" />
+    </group>
+</vector>

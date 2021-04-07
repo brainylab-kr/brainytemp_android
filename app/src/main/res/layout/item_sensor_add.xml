@@ -13,11 +13,11 @@
 
         <ImageView
             android:id="@+id/iv_addd"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/ic_small_add" />
+            android:background="@drawable/vd_add_circle_primary" />
 
         <RelativeLayout
             android:id="@+id/rly_content1"

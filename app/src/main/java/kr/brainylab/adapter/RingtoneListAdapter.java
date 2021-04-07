@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,8 @@ public class RingtoneListAdapter extends ArrayAdapter<RingtoneListInfo> {
             holder.tvDevice = convertView.findViewById(R.id.tv_device);
             holder.tvName = convertView.findViewById(R.id.tv_name);
             holder.tvTemp = convertView.findViewById(R.id.tv_temperature);
+            holder.rlyHumi = convertView.findViewById(R.id.rly_humi);
+            holder.tvHumi = convertView.findViewById(R.id.tv_humi);
             holder.tvDate = convertView.findViewById(R.id.tv_date);
 
 
@@ -54,8 +57,12 @@ public class RingtoneListAdapter extends ArrayAdapter<RingtoneListInfo> {
         holder.tvName.setText(info.getName());
         holder.tvDevice.setText(info.getDevice());
         holder.tvTemp.setText(info.getTemp() + "°C");
+        holder.tvHumi.setText(info.getHumi() + "%");
         holder.tvDate.setText(info.getTime());
 
+        if(Integer.parseInt(info.getHumi()) <= 0) {
+            holder.rlyHumi.setVisibility(View.GONE);
+        }
         return convertView;
     }
 
@@ -63,6 +70,7 @@ public class RingtoneListAdapter extends ArrayAdapter<RingtoneListInfo> {
      * View holder for the views we need access to
      */
     private class Holder {
-        private TextView tvDevice, tvName, tvTemp, tvDate;
+        private TextView tvDevice, tvName, tvTemp, tvHumi, tvDate;
+        private LinearLayout rlyHumi;
     }
 }
