@@ -156,6 +156,7 @@ public class SensorHandleService extends Service {
             @Override
             public void run() {
                 mTimerCount++;
+                Log.d("BrainyTemp", "mTimerCount: " + mTimerCount);
                 if (mTimerCount == 15) {
                     ArrayList<SensorInfo> existedSensor = Util.getSensorList();
 
@@ -167,7 +168,6 @@ public class SensorHandleService extends Service {
                             SensorInfo currentSenser = currentSensingList.get(j);
                             if (currentSenser != null && sensorInfo.getAddress().equals(currentSenser.getAddress())) {
                                 isExisted = true;
-                                break;
                             }
                         }
 
@@ -180,16 +180,15 @@ public class SensorHandleService extends Service {
                             Intent screenUpdateIntent = new Intent(Common.ACT_SENSOR_VALUE_UPDATE);
                             LocalBroadcastManager.getInstance(BrainyTempApp.getInstance()).sendBroadcast(screenUpdateIntent);
                         }
+                    }
 
-                        mTimerCount = 0;
-                        if (mTimer != null) {
-                            mTimer.cancel();
-                            mTimer = null;
-                        }
-                        if (scanner != null) {
-                            scanner.stop();
-                        }
-
+                    mTimerCount = 0;
+                    if (mTimer != null) {
+                        mTimer.cancel();
+                        mTimer = null;
+                    }
+                    if (scanner != null) {
+                        scanner.stop();
                     }
                 }
             }

@@ -22,14 +22,14 @@
                 <RelativeLayout
                     android:id="@+id/rly_repeat_setting"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="70dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:background="@drawable/ic_alarm" />
+                        android:background="@drawable/vd_alarm_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
                         android:fontFamily="@font/notosanskrregular"
                         android:text="@string/alert_alarm_interval"
                         android:textColor="@color/color_171717"
-                        android:textSize="15sp" />
+                        android:textSize="24sp" />
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -51,14 +51,14 @@
                 <RelativeLayout
                     android:id="@+id/rly_info"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="70dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:background="@drawable/ic_about" />
+                        android:background="@drawable/vd_info_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -68,7 +68,7 @@
                         android:fontFamily="@font/notosanskrregular"
                         android:text="@string/info"
                         android:textColor="@color/color_171717"
-                        android:textSize="15sp" />
+                        android:textSize="24sp" />
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -80,14 +80,14 @@
                 <RelativeLayout
                     android:id="@+id/rly_about"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="70dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:background="@drawable/ic_about" />
+                        android:background="@drawable/vd_info_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
                         android:fontFamily="@font/notosanskrregular"
                         android:text="@string/about"
                         android:textColor="@color/color_171717"
-                        android:textSize="15sp" />
+                        android:textSize="24sp" />
 
                     <ImageView
                         android:layout_width="match_parent"

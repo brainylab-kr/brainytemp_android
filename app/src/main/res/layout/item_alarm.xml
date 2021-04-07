@@ -21,11 +21,11 @@
             android:background="@drawable/ic_arrow_down" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/ic_small_phone" />
+            android:background="@drawable/vd_mobile_primary" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                 android:fontFamily="@font/notosanskrregular"
                 android:text="BrainyT"
                 android:textColor="@color/color_171717"
-                android:textSize="14sp" />
+                android:textSize="28sp" />
 
             <TextView
                 android:id="@+id/tv_content"
@@ -52,7 +52,7 @@
                 android:fontFamily="@font/notosanskrregular"
                 android:text="28:2c:02:40:32:56"
                 android:textColor="@color/color_171717"
-                android:textSize="12sp" />
+                android:textSize="24sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -84,7 +84,7 @@
                 android:fontFamily="@font/notosanskrregular"
                 android:text="@string/alarm_check5"
                 android:textColor="@color/color_171717"
-                android:textSize="12sp" />
+                android:textSize="24sp" />
 
         </LinearLayout>
 
@@ -109,7 +109,7 @@
                 android:fontFamily="@font/notosanskrregular"
                 android:text="@string/alarm_check1"
                 android:textColor="@color/color_171717"
-                android:textSize="12sp" />
+                android:textSize="24sp" />
 
         </LinearLayout>
 
@@ -134,7 +134,7 @@
                 android:fontFamily="@font/notosanskrregular"
                 android:text="@string/alarm_check4"
                 android:textColor="@color/color_171717"
-                android:textSize="12sp" />
+                android:textSize="24sp" />
 
         </LinearLayout>
 
@@ -159,7 +159,7 @@
                 android:fontFamily="@font/notosanskrregular"
                 android:text="@string/alarm_check6"
                 android:textColor="@color/color_171717"
-                android:textSize="12sp" />
+                android:textSize="24sp" />
         </LinearLayout>
     </LinearLayout>
 

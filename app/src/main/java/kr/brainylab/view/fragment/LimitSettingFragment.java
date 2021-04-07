@@ -82,8 +82,8 @@ public class LimitSettingFragment extends Fragment implements View.OnClickListen
 
         if(sensor.getType().equals(Common.SENSOR_TYPE_TH)) {
             binding.rlyHumi.setVisibility(View.VISIBLE);
-            double maxHumi = BrainyTempApp.getMaxHumi(device);
-            double minHumi = BrainyTempApp.getMinHumi(device);
+            int maxHumi = BrainyTempApp.getMaxHumi(device);
+            int minHumi = BrainyTempApp.getMinHumi(device);
             binding.tvHumiMax.setText(String.valueOf(maxHumi) + "%");
             binding.tvHumiMin.setText(String.valueOf(minHumi) + "%");
         }
@@ -156,7 +156,7 @@ public class LimitSettingFragment extends Fragment implements View.OnClickListen
                     public void onConfirm(int humi) {
                         Util.deleteMeasureHumi(device);
                         BrainyTempApp.setMinHumi(device, humi);
-                        binding.tvHumiMin.setText(String.valueOf(humi) + "°C");
+                        binding.tvHumiMin.setText(String.valueOf(humi) + "%");
                         Intent sendIntent = new Intent(Common.ACT_SENSOR_LIST_UPDATE);
                         LocalBroadcastManager.getInstance(BrainyTempApp.getInstance()).sendBroadcast(sendIntent);
                     }

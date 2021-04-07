@@ -92,7 +92,8 @@ public class SensorListAdapter extends ArrayAdapter<SensorInfo> {
 
             int maxHumi = BrainyTempApp.getMaxHumi(info.getAddress());
             int minHumi = BrainyTempApp.getMinHumi(info.getAddress());
-            if (info.getTemp() < minHumi || info.getTemp() > maxHumi) {
+
+            if (info.getHumi() < minHumi || info.getHumi() > maxHumi) {
                 holder.ivHumi.setBackground(mContext.getDrawable(R.drawable.vd_humidity_red));
                 holder.tvHumi.setTextColor(mContext.getResources().getColor(R.color.color_c2185b));
             } else {

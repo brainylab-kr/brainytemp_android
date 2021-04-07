@@ -181,12 +181,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void changeTitle() {
         if (nTabIndex == PAGE_SENSOR) {
             if (bEdit) {
-                ivMenu.setBackground(getDrawable(R.drawable.ic_back));
+                ivMenu.setBackground(getDrawable(R.drawable.vd_back_white));
                 rlyDelete.setVisibility(View.VISIBLE);
                 rlyEdit.setVisibility(View.VISIBLE);
                 txvTitle.setText(getResources().getString(R.string.sensor_edit));
             } else {
-                ivMenu.setBackground(getDrawable(R.drawable.ic_menu_left));
+                ivMenu.setBackground(getDrawable(R.drawable.vd_menu_white));
                 rlyDelete.setVisibility(View.GONE);
                 rlyEdit.setVisibility(View.GONE);
                 txvTitle.setText(getResources().getString(R.string.sensor));
@@ -195,12 +195,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             txvTitle.setText(getResources().getString(R.string.search));
         } else if (nTabIndex == PAGE_ALARM) {
             if (bEdit) {
-                ivMenu.setBackground(getDrawable(R.drawable.ic_back));
+                ivMenu.setBackground(getDrawable(R.drawable.vd_back_white));
                 rlyDelete.setVisibility(View.VISIBLE);
                 rlyEdit.setVisibility(View.VISIBLE);
                 txvTitle.setText(getResources().getString(R.string.alarm_edit));
             } else {
-                ivMenu.setBackground(getDrawable(R.drawable.ic_menu_left));
+                ivMenu.setBackground(getDrawable(R.drawable.vd_menu_white));
                 rlyDelete.setVisibility(View.GONE);
                 rlyEdit.setVisibility(View.GONE);
                 txvTitle.setText(getResources().getString(R.string.alarm));
@@ -229,10 +229,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 txvAlarm.setTextColor(getColor(R.color.color_171717));
                 txvSetting.setTextColor(getColor(R.color.color_171717));
 
-                ivSensor.setBackground(getDrawable(R.drawable.ic_sendor_off));
-                ivSearch.setBackground(getDrawable(R.drawable.ic_search_off));
-                ivAlarm.setBackground(getDrawable(R.drawable.ic_alarm_off));
-                ivSetting.setBackground(getDrawable(R.drawable.ic_setting_off));
+                ivSensor.setBackground(getDrawable(R.drawable.vd_signal_wifi_menu));
+                ivSearch.setBackground(getDrawable(R.drawable.vd_search_menu));
+                ivAlarm.setBackground(getDrawable(R.drawable.vd_email_menu));
+                ivSetting.setBackground(getDrawable(R.drawable.vd_settings_menu));
             }
         }
 
@@ -243,7 +243,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 rlySensor.setBackgroundColor(getColor(R.color.color_156aee));
                 txvSensor.setTextColor(getColor(R.color.white));
-                ivSensor.setBackground(getDrawable(R.drawable.ic_sensor_on));
+                ivSensor.setBackground(getDrawable(R.drawable.vd_signal_wifi_menu_white));
             }
 
             navController.navigate(R.id.sensorFragment);
@@ -252,7 +252,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 rlySearch.setBackgroundColor(getColor(R.color.color_156aee));
                 txvSearch.setTextColor(getColor(R.color.white));
-                ivSearch.setBackground(getDrawable(R.drawable.ic_search_on));
+                ivSearch.setBackground(getDrawable(R.drawable.vd_search_menu_white));
             }
 
             navController.navigate(R.id.searchFragment);
@@ -261,7 +261,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 rlyAlarm.setBackgroundColor(getColor(R.color.color_156aee));
                 txvAlarm.setTextColor(getColor(R.color.white));
-                ivAlarm.setBackground(getDrawable(R.drawable.ic_alarm_on));
+                ivAlarm.setBackground(getDrawable(R.drawable.vd_email_white));
             }
 
             navController.navigate(R.id.alarmFragment);
@@ -270,7 +270,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 rlySetting.setBackgroundColor(getColor(R.color.color_156aee));
                 txvSetting.setTextColor(getColor(R.color.white));
-                ivSetting.setBackground(getDrawable(R.drawable.ic_setting_on));
+                ivSetting.setBackground(getDrawable(R.drawable.vd_settings_menu_white));
             }
 
             navController.navigate(R.id.settingFragment);
@@ -279,7 +279,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 rlySetting.setBackgroundColor(getColor(R.color.color_156aee));
                 txvSetting.setTextColor(getColor(R.color.white));
-                ivSetting.setBackground(getDrawable(R.drawable.ic_setting_on));
+                ivSetting.setBackground(getDrawable(R.drawable.vd_settings_menu_white));
             }
 
             navController.navigate(R.id.alarmrsettingFragment);
@@ -288,7 +288,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 rlySetting.setBackgroundColor(getColor(R.color.color_156aee));
                 txvSetting.setTextColor(getColor(R.color.white));
-                ivSetting.setBackground(getDrawable(R.drawable.ic_setting_on));
+                ivSetting.setBackground(getDrawable(R.drawable.vd_settings_menu_white));
             }
 
             navController.navigate(R.id.infomationFragment);
@@ -297,7 +297,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 rlySetting.setBackgroundColor(getColor(R.color.color_156aee));
                 txvSetting.setTextColor(getColor(R.color.white));
-                ivSetting.setBackground(getDrawable(R.drawable.ic_setting_on));
+                ivSetting.setBackground(getDrawable(R.drawable.vd_settings_menu_white));
             }
 
             navController.navigate(R.id.aboutFragment);

@@ -56,15 +56,15 @@
             <RelativeLayout
                 android:id="@+id/rly_sensor"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="70dp">
 
                 <ImageView
                     android:id="@+id/iv_sensor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
-                    android:background="@drawable/ic_sendor_off" />
+                    android:background="@drawable/vd_signal_wifi_menu" />
 
                 <TextView
                     android:id="@+id/tv_sensor"
@@ -75,7 +75,7 @@
                     android:fontFamily="@font/notosanskrregular"
                     android:text="@string/sensor"
                     android:textColor="@color/color_171717"
-                    android:textSize="15sp" />
+                    android:textSize="24sp" />
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -87,15 +87,15 @@
             <RelativeLayout
                 android:id="@+id/rly_search"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="70dp">
 
                 <ImageView
                     android:id="@+id/iv_search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
-                    android:background="@drawable/ic_search_off" />
+                    android:background="@drawable/vd_search_menu" />
 
                 <TextView
                     android:id="@+id/tv_search"
@@ -106,7 +106,7 @@
                     android:fontFamily="@font/notosanskrregular"
                     android:text="@string/search"
                     android:textColor="@color/color_171717"
-                    android:textSize="15sp" />
+                    android:textSize="24sp" />
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -118,15 +118,15 @@
             <RelativeLayout
                 android:id="@+id/rly_alarm"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="70dp">
 
                 <ImageView
                     android:id="@+id/iv_alarm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
-                    android:background="@drawable/ic_alarm_off" />
+                    android:background="@drawable/vd_email_menu" />
 
                 <TextView
                     android:id="@+id/tv_alarm"
@@ -137,7 +137,7 @@
                     android:fontFamily="@font/notosanskrregular"
                     android:text="@string/alarm"
                     android:textColor="@color/color_171717"
-                    android:textSize="15sp" />
+                    android:textSize="24sp" />
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -149,15 +149,15 @@
             <RelativeLayout
                 android:id="@+id/rly_setting"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="70dp">
 
                 <ImageView
                     android:id="@+id/iv_setting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
-                    android:background="@drawable/ic_setting_off" />
+                    android:background="@drawable/vd_settings_menu" />
 
                 <TextView
                     android:id="@+id/tv_setting"
@@ -168,7 +168,7 @@
                     android:fontFamily="@font/notosanskrregular"
                     android:text="@string/setting"
                     android:textColor="@color/color_171717"
-                    android:textSize="15sp" />
+                    android:textSize="24sp" />
 
                 <ImageView
                     android:layout_width="match_parent"

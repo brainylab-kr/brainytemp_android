@@ -1,10 +1,12 @@
 package kr.brainylab.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,6 +46,7 @@ public class SensorAddAdapter extends ArrayAdapter<SensorAddInfo> {
             holder = new Holder();
             holder.tvDevice = convertView.findViewById(R.id.tv_device);
             holder.rlyBackground = convertView.findViewById(R.id.rly_background);
+            holder.ivSignal = convertView.findViewById(R.id.iv_signal);
 
             convertView.setTag(holder);
         } else {
@@ -53,6 +56,18 @@ public class SensorAddAdapter extends ArrayAdapter<SensorAddInfo> {
         final SensorAddInfo info = getItem(position);
 
         holder.tvDevice.setText(info.getDevice());
+        int nRssi =  info.getRssi();
+        if (nRssi > -50) {
+            holder.ivSignal.setImageResource(R.drawable.vd_signal_wifi_4);
+        } else if (nRssi <= -50 && nRssi > -70) {
+            holder.ivSignal.setImageResource(R.drawable.vd_signal_wifi_3);
+        } else if (nRssi <= -70 && nRssi > -80) {
+            holder.ivSignal.setImageResource(R.drawable.vd_signal_wifi_2);
+        } else if (nRssi <= -80 && nRssi > -90) {
+            holder.ivSignal.setImageResource(R.drawable.vd_signal_wifi_1);
+        } else if (nRssi <= -90) {
+            holder.ivSignal.setImageResource(R.drawable.vd_signal_wifi_off);
+        }
 
         holder.rlyBackground.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +108,7 @@ public class SensorAddAdapter extends ArrayAdapter<SensorAddInfo> {
      */
     private class Holder {
         private TextView tvDevice;
+        private ImageView ivSignal;
         private RelativeLayout rlyBackground;
     }
 }

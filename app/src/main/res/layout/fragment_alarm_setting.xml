@@ -21,7 +21,7 @@
                 android:fontFamily="@font/notosanskrbold"
                 android:text="@string/alert_alarm_interval"
                 android:textColor="@color/color_002060"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,11 +35,11 @@
                     android:layout_height="90dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:background="@drawable/ic_clock" />
+                        android:background="@drawable/vd_measurement_frequency_primary" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                             android:fontFamily="@font/notosanskrbold"
                             android:text="@string/sensing_repeat"
                             android:textColor="@color/color_171717"
-                            android:textSize="16sp" />
+                            android:textSize="24sp" />
 
                         <TextView
                             android:id="@+id/sensing_repeat_hint"
@@ -83,11 +83,11 @@
                     android:layout_height="90dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:background="@drawable/ic_alarm" />
+                        android:background="@drawable/vd_alarm_primary" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -104,7 +104,7 @@
                             android:fontFamily="@font/notosanskrbold"
                             android:text="@string/alert_sing_repeat"
                             android:textColor="@color/color_171717"
-                            android:textSize="16sp" />
+                            android:textSize="24sp" />
 
                         <TextView
                             android:id="@+id/tv_version"
@@ -131,11 +131,11 @@
                     android:layout_height="90dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:background="@drawable/ic_clock" />
+                        android:background="@drawable/vd_measurement_frequency_primary" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -152,7 +152,7 @@
                             android:fontFamily="@font/notosanskrbold"
                             android:text="@string/alarm_repeat"
                             android:textColor="@color/color_171717"
-                            android:textSize="16sp" />
+                            android:textSize="24sp" />
 
                         <TextView
                             android:id="@+id/tv_user_id"

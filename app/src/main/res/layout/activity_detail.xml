@@ -18,10 +18,10 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/ic_back" />
+                    android:background="@drawable/vd_back_white" />
 
             </RelativeLayout>
 
@@ -34,7 +34,7 @@
                 android:fontFamily="@font/notosanskrregular"
                 android:text="센서"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="24sp" />
         </RelativeLayout>
 
         <LinearLayout
@@ -51,10 +51,10 @@
 
                 <ImageView
                     android:id="@+id/iv_alarm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/ic_white_alarm" />
+                    android:background="@drawable/vd_alarm_white" />
 
             </RelativeLayout>
 
@@ -67,7 +67,7 @@
 
                 <ImageView
                     android:id="@+id/iv_out"
-                    android:layout_width="wrap_content"
+                    android:layout_width="24dp"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:background="@drawable/ic_white_out" />
@@ -82,10 +82,10 @@
 
                 <ImageView
                     android:id="@+id/iv_chart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/ic_white_graph" />
+                    android:background="@drawable/vd_chart_white" />
             </RelativeLayout>
 
         </LinearLayout>

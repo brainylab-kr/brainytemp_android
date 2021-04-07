@@ -15,7 +15,7 @@
         <RelativeLayout
             android:id="@+id/rly_title"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="70dp"
             android:background="@color/color_156aee">
 
             <RelativeLayout
@@ -25,10 +25,10 @@
 
                 <ImageView
                     android:id="@+id/iv_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/ic_menu_left" />
+                    android:background="@drawable/vd_menu_white" />
 
             </RelativeLayout>
 
@@ -40,10 +40,10 @@
                 android:layout_marginRight="5dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/ic_delete" />
+                    android:background="@drawable/vd_delete_white" />
 
             </RelativeLayout>
 
@@ -54,10 +54,10 @@
                 android:layout_toLeftOf="@+id/rly_delete">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/ic_edit" />
+                    android:background="@drawable/vd_edit_white" />
 
             </RelativeLayout>
 
@@ -70,7 +70,7 @@
                 android:fontFamily="@font/notosanskrregular"
                 android:text="센서"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="24sp" />
         </RelativeLayout>
 
         <RelativeLayout

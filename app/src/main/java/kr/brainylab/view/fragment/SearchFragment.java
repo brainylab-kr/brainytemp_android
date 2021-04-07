@@ -95,10 +95,8 @@ public class SearchFragment extends Fragment {
         scanner.scan(new OnScanResultCallback() {
             @Override
             public void onResult(@NonNull Device device) {
-                Log.d("BrainyTemp", "Find device: " + device.getAddress());
-
                 if (!isExistDevice(device.getAddress())) {
-                    SensorAddInfo item = new SensorAddInfo(device.getAddress());
+                    SensorAddInfo item = new SensorAddInfo(device.getAddress(), device.getRssi());
                     arrSensorList.add(item);
                     arrSearchList.add(device);
                     m_dadapter.notifyDataSetChanged();
