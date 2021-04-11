@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -32,13 +31,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import kr.brainylab.BuildConfig;
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
 import kr.brainylab.common.Common;
-import kr.brainylab.common.HttpService;
 import kr.brainylab.model.AlarmListInfo;
 import kr.brainylab.service.SensorHandleService;
 import kr.brainylab.utils.GPSTracker;
@@ -440,7 +437,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         public void onConfirm(String type, String content) {
                             bEdit = false;
                             changeTitle();
-                            AlarmListInfo item = new AlarmListInfo(content, type, Common.gAlarmInfo.getTemp(), Common.gAlarmInfo.getBattery(), Common.gAlarmInfo.getConnect(), Common.gAlarmInfo.getError());
+                            AlarmListInfo item = new AlarmListInfo(content, type, Common.gAlarmInfo.getTemp(), Common.gAlarmInfo.getHumi(), Common.gAlarmInfo.getBattery(), Common.gAlarmInfo.getConnect(), Common.gAlarmInfo.getError());
                             Util.updateAlarm(MainActivity.this, Common.gAlarmInfo.getPhone(), item);
                         }
 
@@ -494,7 +491,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 return;
                             }
                             if (Util.deleteSensor(Common.gSelDevice)) {
-                                Util.deleteTemp(Common.gSelDevice);
+                                Util.deleteSensorValue(Common.gSelDevice);
                                 Intent sendIntent = new Intent(Common.ACT_SENSOR_LIST_UPDATE);
                                 LocalBroadcastManager.getInstance(BrainyTempApp.getInstance()).sendBroadcast(sendIntent);
                             }
@@ -552,24 +549,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 온도 경보음 울리기
      */
     public void showAlarm(String device, double curTemp, int curHumi) {
-
-        //알림 지연시간 먼저 체크
-        int dealyTime = Integer.valueOf(BrainyTempApp.getDelayTime(device));
-        if (dealyTime > 0) {//온도설정페이지에서 설정한 지연시간
-            ArrayList<String> lists = Util.getMeasureList(device);
-
-            if (lists.size() < dealyTime) {//측정한 데이터가 알림 지연시간보다 작으면
-                return;
-            }
-
-            double maxTemp = BrainyTempApp.getMaxTemp(device);
-            double minTemp = BrainyTempApp.getMinTemp(device);
-            for (int i = 0; i < lists.size(); i++) {
-                double temp = Double.parseDouble(lists.get(i));
-                if (temp > minTemp && temp < maxTemp)
-                    return;
-            }
-        }
 
         int alarmCycle = Integer.valueOf(BrainyTempApp.getAlarmRepeatCycle ());
 

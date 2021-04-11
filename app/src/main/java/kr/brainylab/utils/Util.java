@@ -39,7 +39,7 @@ import kr.brainylab.R;
 import kr.brainylab.common.Common;
 import kr.brainylab.model.AlarmListInfo;
 import kr.brainylab.model.SensorInfo;
-import kr.brainylab.model.TempListInfo;
+import kr.brainylab.model.ValueListInfo;
 import pl.efento.sdk.api.measurement.Measurement;
 import pl.efento.sdk.api.scan.Device;
 
@@ -192,7 +192,7 @@ public class Util {
     /**
      * 센서 추가
      */
-    public static void addSensor(Device info) {
+    public static void addSensor(Device device) {
         ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
                 new TypeToken<ArrayList<SensorInfo>>() {
                 }.getType());
@@ -201,7 +201,7 @@ public class Util {
         }
         String type = "";
 
-        Map<Integer, Measurement> map = info.getMeasurements();
+        Map<Integer, Measurement> map = device.getMeasurements();
         double temperature = Double.valueOf(map.get(1).get().toString());
 
         int humidity = 0;
@@ -213,16 +213,18 @@ public class Util {
             type = Common.SENSOR_TYPE_T1;
         }
 
-        SensorInfo item = new SensorInfo(type, info.getName(), info.getAddress(), getCurDate(), temperature, humidity, info.getRssi());
+        SensorInfo item = new SensorInfo(type, device.getName(), device.getAddress(), getCurDate(), temperature, humidity, device.getRssi(),
+                device.getBatteryStatus(), device.getCalibrationDate(), device.getCounter(), device.getEncryptionStatus(), device.getPeriod(),
+                device.getFeatures(), device.getConnectivityStatus(), device.getSoftwareVersion());
         list.add(item);
         BrainyTempApp.mPref.put(PREF_SENSOR_LIST, new Gson().toJson(list));
 
-        BrainyTempApp.setSensorName(info.getAddress(), info.getName());
-        BrainyTempApp.setMaxTemp(info.getAddress(), 8.0);
-        BrainyTempApp.setMinTemp(info.getAddress(), 2.0);
-        BrainyTempApp.setMaxHumi(info.getAddress(), 80);
-        BrainyTempApp.setMinHumi(info.getAddress(), 20);
-        BrainyTempApp.setDelayTime(info.getAddress(), 0);
+        BrainyTempApp.setSensorName(device.getAddress(), device.getName());
+        BrainyTempApp.setMaxTemp(device.getAddress(), 8.0);
+        BrainyTempApp.setMinTemp(device.getAddress(), 2.0);
+        BrainyTempApp.setMaxHumi(device.getAddress(), 80);
+        BrainyTempApp.setMinHumi(device.getAddress(), 20);
+        BrainyTempApp.setDelayTime(device.getAddress(), 0);
     }
 
     /**
@@ -412,9 +414,11 @@ public class Util {
      * 등록된 알림 변경
      */
     public static void updateAlarm(Context context, String oldPhone, AlarmListInfo info) {
+
         ArrayList<AlarmListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_ALARM_LIST, ""),
                 new TypeToken<ArrayList<AlarmListInfo>>() {
                 }.getType());
+
         if (list == null) {
             return;
         }
@@ -442,9 +446,10 @@ public class Util {
     /**
      * 온도 리스트 삭제
      */
-    public static void deleteTemp(String idx) {
-        ArrayList<TempListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(idx + "temp", ""),
-                new TypeToken<ArrayList<TempListInfo>>() {
+    public static void deleteSensorValue(String idx) {
+        Log.d("BrainyTemp", "deleteTemp: " + idx + "sensorValue");
+        ArrayList<ValueListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(idx + "sensorValue", ""),
+                new TypeToken<ArrayList<ValueListInfo>>() {
                 }.getType());
 
         if (list == null) {
@@ -457,12 +462,13 @@ public class Util {
     /**
      * 저장하였던 온도리스트 얻기
      */
-    public static ArrayList<TempListInfo> getSensorTempList(String device) {
-        ArrayList<TempListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "temp", ""),
-                new TypeToken<ArrayList<TempListInfo>>() {
+    public static ArrayList<ValueListInfo> getSensorValueList(String device) {
+        Log.d("BrainyTemp", "getSensorTempList: " + device + "sensorValue");
+        ArrayList<ValueListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "sensorValue", ""),
+                new TypeToken<ArrayList<ValueListInfo>>() {
                 }.getType());
         if (list == null) {
-            list = new ArrayList<TempListInfo>();
+            list = new ArrayList<ValueListInfo>();
         }
 
         return list;
@@ -472,6 +478,7 @@ public class Util {
      * 현재 온도 측정 리스트
      */
     public static ArrayList<String> getMeasureList(String device) {
+        Log.d("BrainyTemp", "getMeasureList: " + device + "templist");
         ArrayList<String> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "templist", ""),
                 new TypeToken<ArrayList<String>>() {
                 }.getType());
@@ -486,7 +493,7 @@ public class Util {
      * 측정 온도 추가
      */
     public static void addMeasureTemp(String device, double temp) {
-
+        Log.d("BrainyTemp", "addMeasureTemp: " + device + "templist" + "," + temp);
         ArrayList<String> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "templist", ""),
                 new TypeToken<ArrayList<String>>() {
                 }.getType());
@@ -494,10 +501,6 @@ public class Util {
             list = new ArrayList<String>();
         }
 
-        int dealyTime = Integer.valueOf(BrainyTempApp.getDelayTime(device));
-        if (list.size() >= dealyTime) {
-            list.remove(0);
-        }
         list.add(String.valueOf(temp));
         BrainyTempApp.mPref.put(device + "templist", new Gson().toJson(list));
 
@@ -508,6 +511,7 @@ public class Util {
      * 측정 온도 삭제
      */
     public static void deleteMeasureTemp(String device) {
+        Log.d("BrainyTemp", "deleteMeasureTemp: " + device + "templist");
         ArrayList<String> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "templist", ""),
                 new TypeToken<ArrayList<String>>() {
                 }.getType());
@@ -523,8 +527,8 @@ public class Util {
      * 습도 리스트 삭제
      */
     public static void deleteHumi(String idx) {
-        ArrayList<TempListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(idx + "humi", ""),
-                new TypeToken<ArrayList<TempListInfo>>() {
+        ArrayList<ValueListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(idx + "humi", ""),
+                new TypeToken<ArrayList<ValueListInfo>>() {
                 }.getType());
 
         if (list == null) {
@@ -537,12 +541,12 @@ public class Util {
     /**
      * 저장하였던 습도리스트 얻기
      */
-    public static ArrayList<TempListInfo> getSensorHumiList(String device) {
-        ArrayList<TempListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "humi", ""),
-                new TypeToken<ArrayList<TempListInfo>>() {
+    public static ArrayList<ValueListInfo> getSensorHumiList(String device) {
+        ArrayList<ValueListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "humi", ""),
+                new TypeToken<ArrayList<ValueListInfo>>() {
                 }.getType());
         if (list == null) {
-            list = new ArrayList<TempListInfo>();
+            list = new ArrayList<ValueListInfo>();
         }
 
         return list;
@@ -565,7 +569,7 @@ public class Util {
     /**
      * 측정 습도 추가
      */
-    public static void addMeasureHumi(String device, double temp) {
+    public static void addMeasureHumi(String device, int humi) {
 
         ArrayList<String> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "humilist", ""),
                 new TypeToken<ArrayList<String>>() {
@@ -574,11 +578,7 @@ public class Util {
             list = new ArrayList<String>();
         }
 
-        int dealyTime = Integer.valueOf(BrainyTempApp.getDelayTime(device));
-        if (list.size() >= dealyTime) {
-            list.remove(0);
-        }
-        list.add(String.valueOf(temp));
+        list.add(String.valueOf(humi));
         BrainyTempApp.mPref.put(device + "templist", new Gson().toJson(list));
 
         BrainyTempApp.setMeasureTime(device, "" + System.currentTimeMillis());

@@ -64,7 +64,7 @@ public class HumiLimitDialog extends BaseDialog implements View.OnClickListener 
             binding.tvSubTitle.setText(context.getString(R.string.min_temp));
             binding.tvAlert.setText(context.getString(R.string.humi_limit_hint));
 
-            double minHumi = BrainyTempApp.getMinHumi(mDevice);
+            int minHumi = BrainyTempApp.getMinHumi(mDevice);
             binding.edtHumi.setText(String.valueOf(minHumi));
         }
     }

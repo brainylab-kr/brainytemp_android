@@ -8,14 +8,16 @@ public class AlarmListInfo {
     private String mType; //{SMS, AlimTalk}
 
     private boolean mTemp; //온도이상 알림
+    private boolean mHumi; //습도이상 알림
     private boolean mBattery; //배터리 부족알림
     private boolean mConnect; //센서 연결없음 알림
     private boolean mError; //S/W 오류알림
 
-    public AlarmListInfo(String phone, String type, boolean temp, boolean battery, boolean connect, boolean error) {
+    public AlarmListInfo(String phone, String type, boolean temp, boolean humi, boolean battery, boolean connect, boolean error) {
         mPhone = phone;
         mType = type;
         mTemp = temp;
+        mHumi = humi;
         mBattery = battery;
         mConnect = connect;
         mError = error;
@@ -33,6 +35,10 @@ public class AlarmListInfo {
         return mTemp;
     }
 
+    public boolean getHumi() {
+        return mHumi;
+    }
+
     public boolean getBattery() {
         return mBattery;
     }
@@ -48,6 +54,10 @@ public class AlarmListInfo {
 
     public void setTemp(boolean status) {
         mTemp = status;
+    }
+
+    public void setHumi(boolean status) {
+        mHumi = status;
     }
 
     public void setBattery(boolean status) {

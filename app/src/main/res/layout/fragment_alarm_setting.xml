@@ -21,12 +21,12 @@
                 android:fontFamily="@font/notosanskrbold"
                 android:text="@string/alert_alarm_interval"
                 android:textColor="@color/color_002060"
-                android:textSize="24sp" />
+                android:textSize="26sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="24dp"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -53,7 +53,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/notosanskrbold"
+                            android:fontFamily="@font/notosanskrregular"
                             android:text="@string/sensing_repeat"
                             android:textColor="@color/color_171717"
                             android:textSize="24sp" />
@@ -101,7 +101,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/notosanskrbold"
+                            android:fontFamily="@font/notosanskrregular"
                             android:text="@string/alert_sing_repeat"
                             android:textColor="@color/color_171717"
                             android:textSize="24sp" />
@@ -149,7 +149,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/notosanskrbold"
+                            android:fontFamily="@font/notosanskrregular"
                             android:text="@string/alarm_repeat"
                             android:textColor="@color/color_171717"
                             android:textSize="24sp" />

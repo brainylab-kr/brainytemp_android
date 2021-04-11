@@ -1,9 +1,8 @@
 package kr.brainylab.view.fragment;
 
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,26 +14,23 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
 import kr.brainylab.common.Common;
-import kr.brainylab.databinding.FragmentLimitBinding;
+import kr.brainylab.databinding.FragmentSensorSettingBinding;
 import kr.brainylab.model.SensorInfo;
 import kr.brainylab.utils.Util;
 import kr.brainylab.view.activity.DetailActivity;
-import kr.brainylab.view.dailog.DelayTimeDialog;
 import kr.brainylab.view.dailog.HumiLimitDialog;
 import kr.brainylab.view.dailog.TempLimitDialog;
+import pl.efento.sdk.api.scan.Device;
 
-/**
- * 상,하한값 설정
- */
-public class LimitSettingFragment extends Fragment implements View.OnClickListener {
+public class SensorSettingFragment extends Fragment implements View.OnClickListener {
 
     View rootView;
-    FragmentLimitBinding binding;
+    FragmentSensorSettingBinding binding;
 
     private boolean bDelay = false;
     String device = "";
 
-    public LimitSettingFragment() {
+    public SensorSettingFragment() {
         // Required empty public constructor
     }
 
@@ -49,7 +45,7 @@ public class LimitSettingFragment extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_limit, container, false);
+        rootView = inflater.inflate(R.layout.fragment_sensor_setting, container, false);
         binding = DataBindingUtil.bind(rootView);
         loadLayout();
 
@@ -70,8 +66,6 @@ public class LimitSettingFragment extends Fragment implements View.OnClickListen
         binding.rlyTempMin.setOnClickListener(this);
         binding.rlyHumiMax.setOnClickListener(this);
         binding.rlyHumiMin.setOnClickListener(this);
-        binding.llyAlarmDelay.setOnClickListener(this);
-        binding.llyDelayTime.setOnClickListener(this);
 
         double maxTemp = BrainyTempApp.getMaxTemp(device);
         double minTemp = BrainyTempApp.getMinTemp(device);
@@ -91,21 +85,16 @@ public class LimitSettingFragment extends Fragment implements View.OnClickListen
             binding.rlyHumi.setVisibility(View.GONE);
         }
 
-        int delayTime = BrainyTempApp.getDelayTime(device);
-        bDelay = delayTime != 0;
-        showDelaytime();
-    }
-
-    private void showDelaytime() {
-        int delayTime = BrainyTempApp.getDelayTime(device);
-        if (bDelay) {
-            binding.ivCheck.setBackground(getActivity().getDrawable(R.drawable.ic_checkbox_on));
-            binding.llyDelayTime.setVisibility(View.VISIBLE);
-        } else {
-            binding.ivCheck.setBackground(getActivity().getDrawable(R.drawable.ic_checkbox_off));
-            binding.llyDelayTime.setVisibility(View.GONE);
+        if(sensor.getBatteryStatus() == Device.BatteryStatus.LOW) {
+            binding.tvBatteryStatus.setTextColor(Color.RED);
+            binding.tvBatteryStatus.setText("낮음");
         }
-        binding.tvDelayTime.setText(String.valueOf(delayTime));
+        else {
+            binding.tvBatteryStatus.setTextColor(getResources().getColor(R.color.color_171717));
+            binding.tvBatteryStatus.setText("정상");
+        }
+
+        binding.tvFirmwareVersion.setText(sensor.getSoftwareVersion().toString());
     }
 
     /**
@@ -162,28 +151,6 @@ public class LimitSettingFragment extends Fragment implements View.OnClickListen
                     }
                 }).show();
                 break;
-            case R.id.lly_alarm_delay:
-                bDelay = !bDelay;
-                if (bDelay) {
-                    BrainyTempApp.setDelayTime(device, 5);
-                    showDelaytime();
-                } else {
-                    BrainyTempApp.setDelayTime(device, 0);
-                    showDelaytime();
-                }
-                Util.deleteMeasureTemp(device);
-                break;
-            case R.id.lly_delay_time:
-                DelayTimeDialog.init(getActivity(), device, new DelayTimeDialog.OnClickListener() {
-                    @Override
-                    public void onConfirm(int minute) {
-                        Util.deleteMeasureTemp(device);
-                        BrainyTempApp.setDelayTime(device, minute);
-                        showDelaytime();
-                    }
-                }).show();
-                break;
-
         }
     }
 }

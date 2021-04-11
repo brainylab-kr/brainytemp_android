@@ -43,7 +43,7 @@ import kr.brainylab.common.Common;
 import kr.brainylab.common.HttpService;
 import kr.brainylab.model.AlarmListInfo;
 import kr.brainylab.model.SensorInfo;
-import kr.brainylab.model.TempListInfo;
+import kr.brainylab.model.ValueListInfo;
 import kr.brainylab.utils.MyWorkWithData;
 import kr.brainylab.utils.Util;
 import kr.brainylab.view.activity.MainActivity;
@@ -55,6 +55,7 @@ import pl.efento.sdk.api.measurement.Measurement;
 import pl.efento.sdk.api.scan.Device;
 import pl.efento.sdk.api.scan.OnScanResultCallback;
 import pl.efento.sdk.api.scan.Scanner;
+import pl.efento.sdk.api.scan.SoftwareVersion;
 
 import static kr.brainylab.utils.PreferenceMgr.PREF_SENSOR_LIST;
 
@@ -156,7 +157,6 @@ public class SensorHandleService extends Service {
             @Override
             public void run() {
                 mTimerCount++;
-                Log.d("BrainyTemp", "mTimerCount: " + mTimerCount);
                 if (mTimerCount == 15) {
                     ArrayList<SensorInfo> existedSensor = Util.getSensorList();
 
@@ -174,7 +174,7 @@ public class SensorHandleService extends Service {
                         if(isExisted == false) {
                             sensorInfo.setRssi(-100);
                             updateSensor(sensorInfo);
-                            addSensorTemp(sensorInfo);
+                            addSensorValue(sensorInfo);
                             uploadData(sensorInfo);
 
                             Intent screenUpdateIntent = new Intent(Common.ACT_SENSOR_VALUE_UPDATE);
@@ -217,7 +217,7 @@ public class SensorHandleService extends Service {
                     }
 
                     updateSensor(device);    // 센서 정보 업데이트
-                    addSensorTemp(device);    // 로컬DB에 온도 추가
+                    addSensorValue(device);    // 로컬DB에 온도 추가
                     uploadData(device);    //서버에 온도 전송
 
                     BrainyTempApp.setUpdateTime(device.getAddress(), "" + System.currentTimeMillis());
@@ -227,17 +227,6 @@ public class SensorHandleService extends Service {
 
                     double maxTemp = BrainyTempApp.getMaxTemp(device.getAddress());
                     double minTemp = BrainyTempApp.getMinTemp(device.getAddress());
-
-                    int dealyTime = Integer.valueOf(BrainyTempApp.getDelayTime(device.getAddress()));
-
-                    if (dealyTime > 0) {
-                        long storeDealyTime = (long) Double.parseDouble(BrainyTempApp.getMeasureTime(device.getAddress()));
-                        long currentDelayTime = System.currentTimeMillis();
-                        int dicSec = (int) ((currentDelayTime - storeDealyTime) / 1000);
-                        if (dicSec > 15) {
-                            Util.addMeasureTemp(device.getAddress(), curTemp);
-                        }
-                    }
 
                     if (curTemp < minTemp || curTemp > maxTemp) {
                         if (curTemp < minTemp) {
@@ -251,15 +240,6 @@ public class SensorHandleService extends Service {
 
                     int maxHumi = BrainyTempApp.getMaxHumi(device.getAddress());
                     int minHumi = BrainyTempApp.getMinHumi(device.getAddress());
-
-                    if (dealyTime > 0) {
-                        long storeDealyTime = (long) Double.parseDouble(BrainyTempApp.getMeasureTime(device.getAddress()));
-                        long currentDelayTime = System.currentTimeMillis();
-                        int dicSec = (int) ((currentDelayTime - storeDealyTime) / 1000);
-                        if (dicSec > 15) {
-                            Util.addMeasureHumi(device.getAddress(), curHumi);
-                        }
-                    }
 
                     if (sensor.getType().equals(Common.SENSOR_TYPE_TH) && (curHumi < minHumi || curHumi > maxHumi)) {
                         if (curHumi < minHumi) {
@@ -306,7 +286,16 @@ public class SensorHandleService extends Service {
                             df.format(c),
                             curTemp,
                             curHumi,
-                            device.getRssi()));
+                            device.getRssi(),
+                            device.getBatteryStatus(),
+                            device.getCalibrationDate(),
+                            device.getCounter(),
+                            device.getEncryptionStatus(),
+                            device.getPeriod(),
+                            device.getFeatures(),
+                            device.getConnectivityStatus(),
+                            device.getSoftwareVersion()
+                    ));
 
                     if(currentSensingList.size() ==  Util.getSensorList().size()){
                         currentSensingList.clear();
@@ -325,20 +314,20 @@ public class SensorHandleService extends Service {
         });
     }
 
-    public void updateSensor(Device info) {
-        long storeTime = (long) Double.parseDouble(BrainyTempApp.getUpdateTime(info.getAddress()));
+    public void updateSensor(Device device) {
+        long storeTime = (long) Double.parseDouble(BrainyTempApp.getUpdateTime(device.getAddress()));
         long currentTime = System.currentTimeMillis();
         int dicSec = (int) ((currentTime - storeTime) / 1000);
 
         ArrayList<SensorInfo> sensorList = Util.getSensorList();
-        SensorInfo sensorInfo = Util.getSensorInfo(info.getAddress());
-        int index = Util.getSensorIndex(info.getAddress());
+        SensorInfo sensorInfo = Util.getSensorInfo(device.getAddress());
+        int index = Util.getSensorIndex(device.getAddress());
 
         if(sensorInfo == null || index < 0) {
             return;
         }
 
-        Map<Integer, Measurement> map = info.getMeasurements();
+        Map<Integer, Measurement> map = device.getMeasurements();
         double curTemp = 0;
 
         if(map.get(1) != null && map.get(1).isValid()) {
@@ -357,7 +346,9 @@ public class SensorHandleService extends Service {
         date = df.format(c);
 
         sensorList.remove(index);
-        SensorInfo dic = new SensorInfo(sensorInfo.getType(), info.getName(), info.getAddress(), date, curTemp, curHumi, info.getRssi());
+        SensorInfo dic = new SensorInfo(sensorInfo.getType(), device.getName(), device.getAddress(), date, curTemp, curHumi, device.getRssi(),
+                device.getBatteryStatus(), device.getCalibrationDate(), device.getCounter(), device.getEncryptionStatus(), device.getPeriod(),
+                device.getFeatures(), device.getConnectivityStatus(), device.getSoftwareVersion());
         sensorList.add(index, dic);
         BrainyTempApp.mPref.put(PREF_SENSOR_LIST, new Gson().toJson(sensorList));
     }
@@ -383,8 +374,7 @@ public class SensorHandleService extends Service {
         date = df.format(c);
 
         sensorList.remove(index);
-        SensorInfo dic = new SensorInfo(sensorInfo.getType(), sensorInfo.getName(), sensorInfo.getAddress(), date, sensorInfo.getTemp(), sensorInfo.getHumi(), sensorInfo.getRssi());
-        sensorList.add(index, dic);
+        sensorList.add(index, sensorInfo);
         BrainyTempApp.mPref.put(PREF_SENSOR_LIST, new Gson().toJson(sensorList));
     }
 
@@ -476,41 +466,48 @@ public class SensorHandleService extends Service {
         httpService = null;
     }
 
-    public void addSensorTemp(Device info) {
+    public void addSensorValue(Device info) {
 
-        ArrayList<TempListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(info.getAddress() + "temp", ""),
-                new TypeToken<ArrayList<TempListInfo>>() {
+        ArrayList<ValueListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(info.getAddress() + "sensorValue", ""),
+                new TypeToken<ArrayList<ValueListInfo>>() {
                 }.getType());
         if (list == null) {
-            list = new ArrayList<TempListInfo>();
+            list = new ArrayList<ValueListInfo>();
         }
 
         Map<Integer, Measurement> map = info.getMeasurements();
         double temperature = Double.valueOf(map.get(1).get().toString());
 
-        TempListInfo dic = new TempListInfo(System.currentTimeMillis(), temperature);
+        SensorInfo sensorInfo = Util.getSensorInfo(info.getAddress());
+        int humidity = 0;
+        if(sensorInfo.getType().equals(Common.SENSOR_TYPE_TH)
+                && map.get(2) != null && map.get(2).isValid()) {
+            humidity = Integer.valueOf(map.get(2).get().toString());
+        }
+
+        ValueListInfo dic = new ValueListInfo(System.currentTimeMillis(), temperature, humidity);
         list.add(dic);
-        BrainyTempApp.mPref.put(info.getAddress() + "temp", new Gson().toJson(list));
+        BrainyTempApp.mPref.put(info.getAddress() + "sensorValue", new Gson().toJson(list));
 
     }
 
-    public void addSensorTemp(SensorInfo sensorInfo) {
-        ArrayList<TempListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(sensorInfo.getAddress() + "temp", ""),
-                new TypeToken<ArrayList<TempListInfo>>() {
+    public void addSensorValue(SensorInfo sensorInfo) {
+        ArrayList<ValueListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(sensorInfo.getAddress() + "sensorValue", ""),
+                new TypeToken<ArrayList<ValueListInfo>>() {
                 }.getType());
         if (list == null) {
-            list = new ArrayList<TempListInfo>();
+            list = new ArrayList<ValueListInfo>();
         }
 
-        TempListInfo dic = new TempListInfo(System.currentTimeMillis(), sensorInfo.getTemp());
+        ValueListInfo dic = new ValueListInfo(System.currentTimeMillis(), sensorInfo.getTemp(), sensorInfo.getHumi());
         list.add(dic);
-        BrainyTempApp.mPref.put(sensorInfo.getAddress() + "temp", new Gson().toJson(list));
+        BrainyTempApp.mPref.put(sensorInfo.getAddress() + "sensorValue", new Gson().toJson(list));
     }
 
     /**
      * 이벤트 SMS 알림
      */
-    public void prepareEventAlarm(String device, String eventType, double curTemp) {
+    public void prepareEventAlarm(String device, String eventType, double curVal) {
 
         int alertCycle = Integer.valueOf(BrainyTempApp.getAlertRepeatCycle());
         if (alertCycle == 0) //설정페이지에서 설정한 알림 반복주기가 -1이면 알림 사용안함으로 본다.
@@ -533,14 +530,24 @@ public class SensorHandleService extends Service {
             AlarmListInfo info = list.get(i);
 
             if ((eventType.equals(Common.EVENT_LOW_TEMP) && info.getTemp())
-                    || (eventType.equals(Common.EVENT_HIGH_TEMP) && info.getTemp())
-                    || (eventType.equals(Common.EVENT_LOW_BT) && info.getBattery())
-                    || (eventType.equals(Common.EVENT_APP_ERR) && info.getError())
-                    || (eventType.equals(Common.EVENT_ONNECT_ERROR) && info.getConnect())) {
+                || (eventType.equals(Common.EVENT_HIGH_TEMP) && info.getTemp())) {
                 double maxTemp = BrainyTempApp.getMaxTemp(device);
                 double minTemp = BrainyTempApp.getMinTemp(device);
                 String deviceName = BrainyTempApp.getSensorName(device);
-                reqEventAlarm(device, deviceName, eventType, info.getType(), info.getPhone(), curTemp, minTemp, maxTemp);
+                reqEventAlarm(device, deviceName, eventType, info.getType(), info.getPhone(), curVal, minTemp, maxTemp);
+            }
+            else if ((eventType.equals(Common.EVENT_LOW_HUMI) && info.getHumi())
+                || (eventType.equals(Common.EVENT_HIGH_HUMI) && info.getHumi())) {
+                int maxHumi = BrainyTempApp.getMaxHumi(device);
+                int minHumi = BrainyTempApp.getMinHumi(device);
+                String deviceName = BrainyTempApp.getSensorName(device);
+                reqEventAlarm(device, deviceName, eventType, info.getType(), info.getPhone(), curVal, maxHumi, minHumi);
+            }
+            else if (eventType.equals(Common.EVENT_LOW_BT) && info.getBattery()
+                || eventType.equals(Common.EVENT_APP_ERR) && info.getError()
+                || eventType.equals(Common.EVENT_ONNECT_ERROR) && info.getConnect()) {
+                String deviceName = BrainyTempApp.getSensorName(device);
+                reqEventAlarm(device, deviceName, eventType, info.getType(), info.getPhone(), 0, 0, 0);
             }
         }
     }
@@ -563,11 +570,11 @@ public class SensorHandleService extends Service {
     }
 
     //서버에 이벤트 알림 업로드
-    private void reqEventAlarm(String device, String deviceName, String eventType, String alarmType, String phone, double curTemp, double minTemp, double maxTemp) {
+    private void reqEventAlarm(String device, String deviceName, String eventType, String alarmType, String phone, double curVal, double minVal, double maxVal) {
 
         Log.d("BrainyTemp", "Send SMS Alert: " + device);
         HttpService httpService = new HttpService(this);
-        httpService.eventAlarm(device, deviceName, eventType, alarmType, phone, curTemp, minTemp, maxTemp, new HttpService.ResponseListener() {
+        httpService.eventAlarm(device, deviceName, eventType, alarmType, phone, curVal, minVal, maxVal, new HttpService.ResponseListener() {
             @Override
             public void onResponseResult(Boolean bSuccess, String res) {
                 if (bSuccess) {

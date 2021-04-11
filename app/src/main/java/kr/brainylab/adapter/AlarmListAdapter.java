@@ -1,7 +1,7 @@
 package kr.brainylab.adapter;
 
 import android.content.Context;
-import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +21,6 @@ import kr.brainylab.model.AlarmListInfo;
 import kr.brainylab.utils.Util;
 import kr.brainylab.view.activity.MainActivity;
 import kr.brainylab.view.fragment.AlarmFragment;
-import kr.brainylab.view.fragment.SearchFragment;
 
 public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
     private LayoutInflater mInflater;
@@ -50,18 +49,20 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
             holder.llyDetail = convertView.findViewById(R.id.lly_detail);
             holder.llyContent = convertView.findViewById(R.id.lly_content);
 
-            holder.llyCheck1 = convertView.findViewById(R.id.lly_check1);
-            holder.llyCheck2 = convertView.findViewById(R.id.lly_check2);
-            holder.llyCheck3 = convertView.findViewById(R.id.lly_check3);
-            holder.llyCheck4 = convertView.findViewById(R.id.lly_check4);
+            holder.llyCheckTemp = convertView.findViewById(R.id.lly_check_temp);
+            holder.llyCheckBattery = convertView.findViewById(R.id.lly_check_battery);
+            holder.llyCheckCommunication = convertView.findViewById(R.id.lly_check_communication);
+            holder.llyCheckSW = convertView.findViewById(R.id.lly_check_sw);
+            holder.llyCheckHumi = convertView.findViewById(R.id.lly_check_humi);
 
             holder.tvTitle = convertView.findViewById(R.id.tv_title);
             holder.tvContent = convertView.findViewById(R.id.tv_content);
             holder.ivArrow = convertView.findViewById(R.id.iv_arrow);
-            holder.ivCheck1 = convertView.findViewById(R.id.iv_check1);
-            holder.ivCheck2 = convertView.findViewById(R.id.iv_check2);
-            holder.ivCheck3 = convertView.findViewById(R.id.iv_check3);
-            holder.ivCheck4 = convertView.findViewById(R.id.iv_check4);
+            holder.ivCheckTemp = convertView.findViewById(R.id.iv_check_temp);
+            holder.ivCheckBattery = convertView.findViewById(R.id.iv_check_battery);
+            holder.ivCheckCommunication = convertView.findViewById(R.id.iv_check_communication);
+            holder.ivCheckSW = convertView.findViewById(R.id.iv_check_sw);
+            holder.ivCheckHumi = convertView.findViewById(R.id.iv_check_humi);
 
             convertView.setTag(holder);
         } else {
@@ -75,6 +76,10 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
         String content = "";
         if (info.getTemp()) {
             content = content + "," + "온도";
+        }
+
+        if (info.getHumi()) {
+            content = content + "," + "습도";
         }
 
         if (info.getBattery()) {
@@ -105,27 +110,33 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
         }
 
         if (info.getTemp()) {
-            holder.ivCheck1.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_on));
+            holder.ivCheckTemp.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_on));
         } else {
-            holder.ivCheck1.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_off));
+            holder.ivCheckTemp.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_off));
+        }
+
+        if (info.getHumi()) {
+            holder.ivCheckHumi.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_on));
+        } else {
+            holder.ivCheckHumi.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_off));
         }
 
         if (info.getBattery()) {
-            holder.ivCheck2.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_on));
+            holder.ivCheckBattery.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_on));
         } else {
-            holder.ivCheck2.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_off));
+            holder.ivCheckBattery.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_off));
         }
 
         if (info.getConnect()) {
-            holder.ivCheck3.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_on));
+            holder.ivCheckCommunication.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_on));
         } else {
-            holder.ivCheck3.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_off));
+            holder.ivCheckCommunication.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_off));
         }
 
         if (info.getError()) {
-            holder.ivCheck4.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_on));
+            holder.ivCheckSW.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_on));
         } else {
-            holder.ivCheck4.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_off));
+            holder.ivCheckSW.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_off));
         }
 
         holder.llyContent.setOnClickListener(new View.OnClickListener() {
@@ -152,35 +163,43 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
             }
         });
 
-        holder.llyCheck1.setOnClickListener(new View.OnClickListener() {
+        holder.llyCheckTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), !info.getTemp(), info.getBattery(), info.getConnect(), info.getError());
-                Util.updateAlarm(mContext, info.getPhone(),item);
+                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), !info.getTemp(), info.getHumi(), info.getBattery(), info.getConnect(), info.getError());
+                Util.updateAlarm(mContext, info.getPhone(), item);
             }
         });
 
-        holder.llyCheck2.setOnClickListener(new View.OnClickListener() {
+        holder.llyCheckHumi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), !info.getBattery(), info.getConnect(), info.getError());
-                Util.updateAlarm(mContext, info.getPhone(),item);
+                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), !info.getHumi(), info.getBattery(), info.getConnect(), info.getError());
+                Util.updateAlarm(mContext, info.getPhone(), item);
             }
         });
 
-        holder.llyCheck3.setOnClickListener(new View.OnClickListener() {
+        holder.llyCheckBattery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), info.getBattery(), !info.getConnect(), info.getError());
-                Util.updateAlarm(mContext, info.getPhone(),item);
+                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), info.getHumi(), !info.getBattery(), info.getConnect(), info.getError());
+                Util.updateAlarm(mContext, info.getPhone(), item);
             }
         });
 
-        holder.llyCheck4.setOnClickListener(new View.OnClickListener() {
+        holder.llyCheckCommunication.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), info.getBattery(), info.getConnect(), !info.getError());
-                Util.updateAlarm(mContext, info.getPhone(),item);
+                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), info.getHumi(), info.getBattery(), !info.getConnect(), info.getError());
+                Util.updateAlarm(mContext, info.getPhone(), item);
+            }
+        });
+
+        holder.llyCheckSW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), info.getHumi(), info.getBattery(), info.getConnect(), !info.getError());
+                Util.updateAlarm(mContext, info.getPhone(), item);
             }
         });
 
@@ -191,8 +210,8 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
      * View holder for the views we need access to
      */
     private class Holder {
-        private LinearLayout llyDetail, llyContent, llyCheck1, llyCheck2, llyCheck3, llyCheck4;
+        private LinearLayout llyDetail, llyContent, llyCheckTemp, llyCheckBattery, llyCheckCommunication, llyCheckSW, llyCheckHumi;
         private TextView tvTitle, tvContent;
-        private ImageView ivArrow, ivCheck1, ivCheck2, ivCheck3, ivCheck4, ivCheck5;
+        private ImageView ivArrow, ivCheckTemp, ivCheckBattery, ivCheckCommunication, ivCheckSW, ivCheckHumi;
     }
 }

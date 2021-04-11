@@ -1,10 +1,6 @@
-/**
- * 홈
- */
 package kr.brainylab.view.fragment;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +10,6 @@ import android.view.ViewGroup;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -30,20 +25,16 @@ import java.util.TimerTask;
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
 import kr.brainylab.databinding.FragmentChartBinding;
-import kr.brainylab.model.TempListInfo;
+import kr.brainylab.model.ValueListInfo;
 import kr.brainylab.utils.Util;
 import kr.brainylab.view.activity.DetailActivity;
-
-/**
- * 센서 상세에서 그래프
- */
 
 public class ChartFragment extends Fragment {
 
     View rootView;
     FragmentChartBinding binding;
     private Timer mTimer;
-    private ArrayList<TempListInfo> arrTempList = new ArrayList<TempListInfo>();
+    private ArrayList<ValueListInfo> arrTempList = new ArrayList<ValueListInfo>();
 
     public ChartFragment() {
         // Required empty public constructor
@@ -149,13 +140,13 @@ public class ChartFragment extends Fragment {
 
         String device = ((DetailActivity) getActivity()).deviceID;
 
-        ArrayList<TempListInfo> lists = Util.getSensorTempList(device);
+        ArrayList<ValueListInfo> lists = Util.getSensorValueList(device);
 
         long currentTime = System.currentTimeMillis();
         //현재 시간으로부터 24시간데이터만 얻기
 
         for (int i = 0; i < lists.size(); i++) {
-            TempListInfo info = lists.get(i);
+            ValueListInfo info = lists.get(i);
             int dicSec = (int) ((currentTime - info.getTime()) / 1000);
             if (dicSec < 86400)
                 arrTempList.add(info);
@@ -193,7 +184,7 @@ public class ChartFragment extends Fragment {
         ArrayList<Entry> minValues = new ArrayList<>();
         ArrayList<Entry> maxValues = new ArrayList<>();
         for (int i = 0; i < arrTempList.size(); i++) {
-            TempListInfo info = arrTempList.get(i);
+            ValueListInfo info = arrTempList.get(i);
             double temp = info.getTemp();
             long time = info.getTime();
             float val = (float) (temp);

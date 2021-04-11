@@ -21,7 +21,7 @@
                 android:fontFamily="@font/notosanskrbold"
                 android:text="@string/about"
                 android:textColor="@color/color_002060"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,10 +53,10 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/notosanskrbold"
+                            android:fontFamily="@font/notosanskrregular"
                             android:text="@string/version"
                             android:textColor="@color/color_171717"
-                            android:textSize="16sp" />
+                            android:textSize="24sp" />
 
                         <TextView
                             android:id="@+id/tv_version"
@@ -66,7 +66,7 @@
                             android:fontFamily="@font/notosanskrregular"
                             android:text="1.0.0"
                             android:textColor="@color/color_171717"
-                            android:textSize="14sp" />
+                            android:textSize="20sp" />
                     </LinearLayout>
 
                     <ImageView

@@ -64,12 +64,12 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/lly_check1"
+            android:id="@+id/lly_check_temp"
             android:layout_width="match_parent"
             android:layout_height="40dp">
 
             <ImageView
-                android:id="@+id/iv_check1"
+                android:id="@+id/iv_check_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -89,12 +89,37 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/lly_check2"
+            android:id="@+id/lly_check_humi"
             android:layout_width="match_parent"
             android:layout_height="40dp">
 
             <ImageView
-                android:id="@+id/iv_check2"
+                android:id="@+id/iv_check_humi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="25dp"
+                android:background="@drawable/ic_checkbox_off" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="@font/notosanskrregular"
+                android:text="@string/alarm_check7"
+                android:textColor="@color/color_171717"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lly_check_battery"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <ImageView
+                android:id="@+id/iv_check_battery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -114,12 +139,12 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/lly_check3"
+            android:id="@+id/lly_check_communication"
             android:layout_width="match_parent"
             android:layout_height="40dp">
 
             <ImageView
-                android:id="@+id/iv_check3"
+                android:id="@+id/iv_check_communication"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -139,12 +164,12 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/lly_check4"
+            android:id="@+id/lly_check_sw"
             android:layout_width="match_parent"
             android:layout_height="40dp">
 
             <ImageView
-                android:id="@+id/iv_check4"
+                android:id="@+id/iv_check_sw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

@@ -41,6 +41,7 @@
     <string name="alarm_check4">센서 통신 오류</string>
     <string name="alarm_check5">온도 제한 초과</string>
     <string name="alarm_check6">S/W 오류</string>
+    <string name="alarm_check7">습도 제한 초과</string>
     <string name="error_log">에러 로그</string>
     <string name="error_log_hint">개발팀에 에러 로그 전송</string>
     <string name="user_id">사용자 ID</string>
@@ -82,6 +83,9 @@
     <string name="max_temp">상한값</string>
     <string name="min_temp">하한값</string>
     <string name="current_temp">현재 온도</string>
+    <string name="sensor_info">센서정보</string>
+    <string name="battery_status">배터리 상태</string>
+    <string name="firmware_version">펌웨어 버전</string>
     <string name="temp_limit_hint_min">-35.0°C ~ 70.0°C사이의 값을 입력하세요.</string>
     <string name="temp_limit_hint_max">-35.0°C ~ 70.0°C사이의 값을 입력하세요.</string>
     <string name="temp_limit_hint_incorrect">정확한 온도값을 입력해주세요.</string>

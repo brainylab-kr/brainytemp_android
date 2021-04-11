@@ -63,9 +63,9 @@ public class SensorAddAdapter extends ArrayAdapter<SensorAddInfo> {
             holder.ivSignal.setImageResource(R.drawable.vd_signal_wifi_3);
         } else if (nRssi <= -70 && nRssi > -80) {
             holder.ivSignal.setImageResource(R.drawable.vd_signal_wifi_2);
-        } else if (nRssi <= -80 && nRssi > -90) {
+        } else if (nRssi <= -80 && nRssi > -100) {
             holder.ivSignal.setImageResource(R.drawable.vd_signal_wifi_1);
-        } else if (nRssi <= -90) {
+        } else if (nRssi <= -100) {
             holder.ivSignal.setImageResource(R.drawable.vd_signal_wifi_off);
         }
 

@@ -33,7 +33,7 @@
                 android:fontFamily="@font/notosanskrbold"
                 android:text="@string/alarm_repeat1"
                 android:textColor="@color/color_002060"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                         android:fontFamily="@font/notosanskrregular"
                         android:text="@string/alarm_sms_alarm_none"
                         android:textColor="@color/color_171717"
-                        android:textSize="12sp" />
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -93,7 +93,7 @@
                         android:fontFamily="@font/notosanskrregular"
                         android:text="@string/minute5"
                         android:textColor="@color/color_171717"
-                        android:textSize="12sp" />
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -121,7 +121,7 @@
                         android:fontFamily="@font/notosanskrregular"
                         android:text="@string/minute15"
                         android:textColor="@color/color_171717"
-                        android:textSize="12sp" />
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -149,7 +149,7 @@
                         android:fontFamily="@font/notosanskrregular"
                         android:text="@string/minute30"
                         android:textColor="@color/color_171717"
-                        android:textSize="12sp" />
+                        android:textSize="20sp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -175,7 +175,7 @@
                     android:gravity="center"
                     android:text="@string/cancel"
                     android:textColor="@color/color_171717"
-                    android:textSize="14sp" />
+                    android:textSize="24sp" />
 
                 <ImageView
                     android:layout_width="1dp"
@@ -191,7 +191,7 @@
                     android:gravity="center"
                     android:text="@string/setting"
                     android:textColor="@color/color_171717"
-                    android:textSize="14sp" />
+                    android:textSize="24sp" />
             </LinearLayout>
 
         </LinearLayout>
