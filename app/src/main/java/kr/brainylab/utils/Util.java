@@ -447,7 +447,6 @@ public class Util {
      * 온도 리스트 삭제
      */
     public static void deleteSensorValue(String idx) {
-        Log.d("BrainyTemp", "deleteTemp: " + idx + "sensorValue");
         ArrayList<ValueListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(idx + "sensorValue", ""),
                 new TypeToken<ArrayList<ValueListInfo>>() {
                 }.getType());
@@ -463,7 +462,6 @@ public class Util {
      * 저장하였던 온도리스트 얻기
      */
     public static ArrayList<ValueListInfo> getSensorValueList(String device) {
-        Log.d("BrainyTemp", "getSensorTempList: " + device + "sensorValue");
         ArrayList<ValueListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "sensorValue", ""),
                 new TypeToken<ArrayList<ValueListInfo>>() {
                 }.getType());
@@ -478,7 +476,6 @@ public class Util {
      * 현재 온도 측정 리스트
      */
     public static ArrayList<String> getMeasureList(String device) {
-        Log.d("BrainyTemp", "getMeasureList: " + device + "templist");
         ArrayList<String> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "templist", ""),
                 new TypeToken<ArrayList<String>>() {
                 }.getType());
@@ -493,7 +490,6 @@ public class Util {
      * 측정 온도 추가
      */
     public static void addMeasureTemp(String device, double temp) {
-        Log.d("BrainyTemp", "addMeasureTemp: " + device + "templist" + "," + temp);
         ArrayList<String> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "templist", ""),
                 new TypeToken<ArrayList<String>>() {
                 }.getType());
@@ -511,7 +507,6 @@ public class Util {
      * 측정 온도 삭제
      */
     public static void deleteMeasureTemp(String device) {
-        Log.d("BrainyTemp", "deleteMeasureTemp: " + device + "templist");
         ArrayList<String> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(device + "templist", ""),
                 new TypeToken<ArrayList<String>>() {
                 }.getType());

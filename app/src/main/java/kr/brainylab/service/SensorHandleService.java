@@ -394,8 +394,6 @@ public class SensorHandleService extends Service {
 
         int rssi = device.getRssi();
 
-        Log.d("BrainyTemp", "### 1 uploadData : "  + device.getAddress() + ", " + temperature + ", " + humidity + ", " + rssi);
-
         httpService = new HttpService(BrainyTempApp.getInstance());
         httpService.uploadData(device.getAddress(), temperature, humidity, rssi, new HttpService.ResponseListener() {
             @Override
@@ -428,9 +426,6 @@ public class SensorHandleService extends Service {
     }
 
     public void uploadData(SensorInfo sensorInfo) {
-        Log.d("BrainyTemp", "### 2 uploadData : "  + sensorInfo.getAddress() + ", " + sensorInfo.getTemp()
-                + ", " + sensorInfo.getHumi() + ", " + sensorInfo.getRssi());
-
         httpService = new HttpService(BrainyTempApp.getInstance());
         httpService.uploadData(sensorInfo.getAddress(), sensorInfo.getTemp(), sensorInfo.getHumi(), sensorInfo.getRssi(), new HttpService.ResponseListener() {
             @Override
@@ -446,7 +441,6 @@ public class SensorHandleService extends Service {
                             mHandler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Log.d("BrainyTemp", "# 2 upload Temp address: " + sensorInfo.getDevice());
                                 }
                             }, 0);
 
@@ -462,7 +456,6 @@ public class SensorHandleService extends Service {
         });
     }
     private void successUpload(String address) {
-        Log.d("BrainyTemp", "# upload Temp address: " + address);
         httpService = null;
     }
 

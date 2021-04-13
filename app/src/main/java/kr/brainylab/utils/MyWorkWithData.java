@@ -48,11 +48,6 @@ public class MyWorkWithData extends Worker {
         int dicSec = (int) ((currentTime - storeTime) / 1000);
         int sesingCycle = Integer.valueOf(BrainyTempApp.getSensingRepeatCycle ()) * 60;
 
-        Log.d("BrainyTemp", "@@@@@@@@@@@ doWork");
-        //if (dicSec < sesingCycle) {
-        //    return Result.failure();
-        //}
-
         BrainyTempApp.setScheduleTime("" + System.currentTimeMillis());
 
         Intent sendIntent = new Intent(Common.ACT_SENSOR_RESCAN);

@@ -44,6 +44,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 
     public static String deviceID = "";  //센서 식별자
     public double curTemp = 0;  //현재 온도
+    public int curHumi = 0;  //현재 습도
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +59,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         Intent intent = getIntent();
         deviceID = intent.getExtras().getString("device", "");
         curTemp = intent.getExtras().getDouble("temp");
+        curHumi = intent.getExtras().getInt("humi");
 
         LoadLayout();
         initFragment();
@@ -116,9 +118,9 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    public static void updateTemperature(double curTemp){
+    public static void updateData(double curTemp, int curHumi){
         if (fragmentchart != null) {
-            fragmentchart.updateCurrentTemp(curTemp);
+            fragmentchart.updateCurrentData(curTemp, curHumi);
         }
     }
 

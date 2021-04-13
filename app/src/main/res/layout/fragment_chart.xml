@@ -27,25 +27,55 @@
                     android:textColor="@color/color_171717"
                     android:textSize="30sp" />
 
-                <TextView
-                    android:id="@+id/tv_cur_temp"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp"
-                    android:fontFamily="@font/notosanskrbold"
-                    android:text="-10.0°C"
-                    android:textColor="@color/color_171717"
-                    android:textSize="30sp" />
+                    android:layout_marginRight="20dp">
+
+                    <TextView
+                        android:id="@+id/tv_cur_temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosanskrbold"
+                        android:text="3.0°C"
+                        android:textColor="@color/color_171717"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/tv_cur_humi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:fontFamily="@font/notosanskrbold"
+                        android:text="30%"
+                        android:textColor="@color/color_171717"
+                        android:textSize="30sp" />
+
+                </LinearLayout>
             </RelativeLayout>
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/lineChart"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="15dp" />
+                android:orientation="vertical">
 
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/temp_lineChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"/>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/humi_lineChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 </layout>

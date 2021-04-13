@@ -137,6 +137,7 @@ public class SensorListAdapter extends ArrayAdapter<SensorInfo> {
                 Intent intent = new Intent(mContext, DetailActivity.class);
                 intent.putExtra("device", info.getAddress());
                 intent.putExtra("temp", info.getTemp());
+                intent.putExtra("humi", info.getHumi());
                 mContext.startActivity(intent);
             }
         });
