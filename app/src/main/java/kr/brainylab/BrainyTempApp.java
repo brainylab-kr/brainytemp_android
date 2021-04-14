@@ -165,28 +165,14 @@ public class BrainyTempApp extends Application {
     }
 
     /**
-     * 지연 시간(분)
-     */
-    public static void setDelayTime(String key, int value) {
-        mPref.put(key + "delaytime", value);
-    }
-
-    /**
-     * 지연 시간(분)
-     */
-    public static int getDelayTime(String key) {
-        return mPref.getValue(key + "delaytime", 0);
-    }
-
-    /**
-     * 축정 시간
+     * 측정 시간
      */
     public static void setMeasureTime(String key, String value) {
         mPref.put(key + "measuretime", value);
     }
 
     /**
-     * 축정 시간
+     * 측정 시간
      */
     public static String getMeasureTime(String key) {
         return mPref.getValue(key + "measuretime", "0");

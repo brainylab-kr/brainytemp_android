@@ -36,6 +36,7 @@ import kr.brainylab.BuildConfig;
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
 import kr.brainylab.common.Common;
+import kr.brainylab.database.SensorDataRepository;
 import kr.brainylab.model.AlarmListInfo;
 import kr.brainylab.service.SensorHandleService;
 import kr.brainylab.utils.GPSTracker;
@@ -491,7 +492,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 return;
                             }
                             if (Util.deleteSensor(Common.gSelDevice)) {
-                                Util.deleteSensorValue(Common.gSelDevice);
+                                SensorDataRepository repository = new SensorDataRepository(getApplication());
+                                repository.deleteSensorData(Common.gSelDevice);
+
                                 Intent sendIntent = new Intent(Common.ACT_SENSOR_LIST_UPDATE);
                                 LocalBroadcastManager.getInstance(BrainyTempApp.getInstance()).sendBroadcast(sendIntent);
                             }

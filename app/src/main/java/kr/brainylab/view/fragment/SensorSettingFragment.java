@@ -107,7 +107,6 @@ public class SensorSettingFragment extends Fragment implements View.OnClickListe
                 TempLimitDialog.init(getActivity(), 0, device, new TempLimitDialog.OnClickListener() {
                     @Override
                     public void onConfirm(double temp) {
-                        Util.deleteMeasureTemp(device);
                         BrainyTempApp.setMaxTemp(device, temp);
                         binding.tvTempMax.setText(String.valueOf(temp) + "°C");
                         Intent sendIntent = new Intent(Common.ACT_SENSOR_LIST_UPDATE);
@@ -119,7 +118,6 @@ public class SensorSettingFragment extends Fragment implements View.OnClickListe
                 TempLimitDialog.init(getActivity(), 1, device, new TempLimitDialog.OnClickListener() {
                     @Override
                     public void onConfirm(double temp) {
-                        Util.deleteMeasureTemp(device);
                         BrainyTempApp.setMinTemp(device, temp);
                         binding.tvTempMin.setText(String.valueOf(temp) + "°C");
                         Intent sendIntent = new Intent(Common.ACT_SENSOR_LIST_UPDATE);
@@ -131,7 +129,6 @@ public class SensorSettingFragment extends Fragment implements View.OnClickListe
                 HumiLimitDialog.init(getActivity(), 0, device, new HumiLimitDialog.OnClickListener() {
                     @Override
                     public void onConfirm(int humi) {
-                        Util.deleteMeasureHumi(device);
                         BrainyTempApp.setMaxHumi(device, humi);
                         binding.tvHumiMax.setText(String.valueOf(humi) + "%");
                         Intent sendIntent = new Intent(Common.ACT_SENSOR_LIST_UPDATE);
@@ -143,7 +140,6 @@ public class SensorSettingFragment extends Fragment implements View.OnClickListe
                 HumiLimitDialog.init(getActivity(), 1, device, new HumiLimitDialog.OnClickListener() {
                     @Override
                     public void onConfirm(int humi) {
-                        Util.deleteMeasureHumi(device);
                         BrainyTempApp.setMinHumi(device, humi);
                         binding.tvHumiMin.setText(String.valueOf(humi) + "%");
                         Intent sendIntent = new Intent(Common.ACT_SENSOR_LIST_UPDATE);

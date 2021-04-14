@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
@@ -31,6 +32,8 @@ import java.util.concurrent.TimeUnit;
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
 import kr.brainylab.common.Common;
+import kr.brainylab.database.SensorData;
+import kr.brainylab.database.SensorDataRepository;
 import kr.brainylab.databinding.FragmentChartBinding;
 import kr.brainylab.model.SensorInfo;
 import kr.brainylab.model.ValueListInfo;
@@ -176,17 +179,16 @@ public class ChartFragment extends Fragment {
 
         String device = ((DetailActivity) getActivity()).deviceID;
 
-        ArrayList<ValueListInfo> lists = Util.getSensorValueList(device);
-
         long currentTime = System.currentTimeMillis();
-        //현재 시간으로부터 24시간데이터만 얻기
+        SensorDataRepository repository = new SensorDataRepository(getActivity().getApplication());
+        List<SensorData> sensorDatas = repository.getSensorDatas(device, currentTime - 86400000,currentTime);
 
-        for (int i = 0; i < lists.size(); i++) {
-            ValueListInfo info = lists.get(i);
-            int dicSec = (int) ((currentTime - info.getTime()) / 1000);
-            if (dicSec < 86400)
-                arrDataList.add(info);
+        for(int i = 0; i < sensorDatas.size(); i++) {
+            Log.d("BrainyTemp",sensorDatas.get(i).getTime() + ", " + sensorDatas.get(i).getTemp() +", " + sensorDatas.get(i).getHumi());
+            ValueListInfo value = new ValueListInfo(sensorDatas.get(i).getTime(), sensorDatas.get(i).getTemp(), sensorDatas.get(i).getHumi());
+            arrDataList.add(value);
         }
+
         drawTempChart(device);
 
         if(Util.getSensorInfo(device).getType().equals(Common.SENSOR_TYPE_TH)) {

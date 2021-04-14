@@ -11,7 +11,7 @@ public class SensorData {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     @NonNull
-    private int id;
+    private int mID;
 
     @ColumnInfo(name = "time")
     @NonNull
@@ -39,6 +39,15 @@ public class SensorData {
         this.mTemp = temp;
         this.mHumi = humi;
         this.mRssi = rssi;
+    }
+
+    @NonNull
+    public int getID() {
+        return mID;
+    }
+
+    public void setID(@NonNull int id) {
+        this.mID = id;
     }
 
     @NonNull

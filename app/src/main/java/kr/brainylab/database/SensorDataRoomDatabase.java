@@ -1,6 +1,7 @@
 package kr.brainylab.database;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -21,6 +22,9 @@ abstract class SensorDataRoomDatabase extends RoomDatabase {
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
+    static final ExecutorService databaseReadExecutor =
+            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+
     static SensorDataRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (SensorDataRoomDatabase.class) {
@@ -39,18 +43,7 @@ abstract class SensorDataRoomDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-
-            databaseWriteExecutor.execute(() -> {
-                /*
-                SensorDataDao dao = INSTANCE.sensorDataDao();
-                dao.deleteAll();
-
-                SensorData sensorData = new SensorData("");
-                dao.insert(sensorData);
-                sensorData = new SensorData("World");
-                dao.insert(sensorData);
-                 */
-            });
+            Log.d("BrainyTemp", "RoomDatabase.Callback");
         }
     };
 }

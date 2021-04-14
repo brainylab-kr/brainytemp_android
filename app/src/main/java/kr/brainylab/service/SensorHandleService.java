@@ -64,13 +64,13 @@ import static kr.brainylab.utils.PreferenceMgr.PREF_SENSOR_LIST;
 
 public class SensorHandleService extends Service {
     public static Intent serviceIntent = null;
-
-    Scanner scanner;
-
+    private Scanner scanner;
     private int mTimerCount = 0;
     private Timer mTimer;
 
     private SensorDataRepository mRepository;
+
+    private HttpService httpService;
 
     @Nullable
     @Override
@@ -80,13 +80,16 @@ public class SensorHandleService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        mRepository = new SensorDataRepository(getApplication());
         serviceIntent = intent;
+		
         initializeNotification();
 
         registerReceiver();
+
+        initRepository();
+
         loadService();
+
         return START_STICKY;
     }
 
@@ -205,10 +208,16 @@ public class SensorHandleService extends Service {
             @Override
             public void onResult(@NonNull Device device) {
                 if (Util.isExistSensor(device.getAddress())) {
-                    SensorInfo sensor = Util.getSensorInfo(device.getAddress());
+                    updateSensor(device);      // 화면 업데이트
+                    addSensorValue(device);    // 로컬DB에 온도 추가
+                    uploadData(device);        //서버에 온도 전송
+
+                    BrainyTempApp.setUpdateTime(device.getAddress(), "" + System.currentTimeMillis());
+
+                    Intent screenUpdateIntent = new Intent(Common.ACT_SENSOR_VALUE_UPDATE);
+                    LocalBroadcastManager.getInstance(BrainyTempApp.getInstance()).sendBroadcast(screenUpdateIntent);
 
                     Map<Integer, Measurement> map = device.getMeasurements();
-
                     double curTemp = 0;
                     int curHumi = 0;
 
@@ -216,19 +225,10 @@ public class SensorHandleService extends Service {
                         curTemp = Double.valueOf(map.get(1).get().toString());
                     }
 
-                    if((sensor.getType().equals(Common.SENSOR_TYPE_TH))
+                    if((Util.getSensorInfo(device.getAddress()).getType().equals(Common.SENSOR_TYPE_TH))
                             && (map.get(2) != null && map.get(2).isValid())) {
                         curHumi = Integer.valueOf(map.get(2).get().toString());
                     }
-
-                    updateSensor(device);    // 센서 정보 업데이트
-                    addSensorValue(device);    // 로컬DB에 온도 추가
-                    uploadData(device);    //서버에 온도 전송
-
-                    BrainyTempApp.setUpdateTime(device.getAddress(), "" + System.currentTimeMillis());
-
-                    Intent screenUpdateIntent = new Intent(Common.ACT_SENSOR_VALUE_UPDATE);
-                    LocalBroadcastManager.getInstance(BrainyTempApp.getInstance()).sendBroadcast(screenUpdateIntent);
 
                     double maxTemp = BrainyTempApp.getMaxTemp(device.getAddress());
                     double minTemp = BrainyTempApp.getMinTemp(device.getAddress());
@@ -246,7 +246,8 @@ public class SensorHandleService extends Service {
                     int maxHumi = BrainyTempApp.getMaxHumi(device.getAddress());
                     int minHumi = BrainyTempApp.getMinHumi(device.getAddress());
 
-                    if (sensor.getType().equals(Common.SENSOR_TYPE_TH) && (curHumi < minHumi || curHumi > maxHumi)) {
+                    if (Util.getSensorInfo(device.getAddress()).getType().equals(Common.SENSOR_TYPE_TH)
+                            && (curHumi < minHumi || curHumi > maxHumi)) {
                         if (curHumi < minHumi) {
                             prepareEventAlarm(device.getAddress(), Common.EVENT_LOW_HUMI, curHumi);
                         } else {
@@ -255,7 +256,6 @@ public class SensorHandleService extends Service {
 
                         showAlarm(device.getAddress(), curTemp, curHumi);
                     }
-
 
                     if (device.getBatteryStatus() == Device.BatteryStatus.LOW) {
                         //센서 배터리 부족 알림 준비
@@ -285,7 +285,7 @@ public class SensorHandleService extends Service {
                     Date c = Calendar.getInstance().getTime();
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     currentSensingList.add(new SensorInfo(
-                            sensor.getType(),
+                            Util.getSensorInfo(device.getAddress()).getType(),
                             device.getName(),
                             device.getAddress(),
                             df.format(c),
@@ -320,10 +320,6 @@ public class SensorHandleService extends Service {
     }
 
     public void updateSensor(Device device) {
-        long storeTime = (long) Double.parseDouble(BrainyTempApp.getUpdateTime(device.getAddress()));
-        long currentTime = System.currentTimeMillis();
-        int dicSec = (int) ((currentTime - storeTime) / 1000);
-
         ArrayList<SensorInfo> sensorList = Util.getSensorList();
         SensorInfo sensorInfo = Util.getSensorInfo(device.getAddress());
         int index = Util.getSensorIndex(device.getAddress());
@@ -359,13 +355,6 @@ public class SensorHandleService extends Service {
     }
 
     public void updateSensor(SensorInfo sensorInfo) {
-        long storeTime = (long) Double.parseDouble(BrainyTempApp.getUpdateTime(sensorInfo.getAddress()));
-        long currentTime = System.currentTimeMillis();
-        int dicSec = (int) ((currentTime - storeTime) / 1000);
-
-        //if (dicSec < Common.gSearchTime)
-        //    return;
-
         ArrayList<SensorInfo> sensorList = Util.getSensorList();
         int index = Util.getSensorIndex(sensorInfo.getAddress());
 
@@ -373,17 +362,10 @@ public class SensorHandleService extends Service {
             return;
         }
 
-        String date = "";
-        Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        date = df.format(c);
-
         sensorList.remove(index);
         sensorList.add(index, sensorInfo);
         BrainyTempApp.mPref.put(PREF_SENSOR_LIST, new Gson().toJson(sensorList));
     }
-
-    HttpService httpService;
 
     public void uploadData(Device device) {
         SensorInfo sensorInfo = Util.getSensorInfo(device.getAddress());
@@ -464,49 +446,30 @@ public class SensorHandleService extends Service {
         httpService = null;
     }
 
-    public void addSensorValue(Device info) {
+    public void initRepository() {
+        mRepository = new SensorDataRepository(getApplication());
+    }
 
-        ArrayList<ValueListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(info.getAddress() + "sensorValue", ""),
-                new TypeToken<ArrayList<ValueListInfo>>() {
-                }.getType());
-        if (list == null) {
-            list = new ArrayList<ValueListInfo>();
-        }
+    public void addSensorValue(Device device) {
+        Map<Integer, Measurement> map = device.getMeasurements();
+        double temp = Double.valueOf(map.get(1).get().toString());
 
-        Map<Integer, Measurement> map = info.getMeasurements();
-        double temperature = Double.valueOf(map.get(1).get().toString());
-
-        SensorInfo sensorInfo = Util.getSensorInfo(info.getAddress());
+        SensorInfo sensorInfo = Util.getSensorInfo(device.getAddress());
         int humidity = 0;
         if(sensorInfo.getType().equals(Common.SENSOR_TYPE_TH)
                 && map.get(2) != null && map.get(2).isValid()) {
             humidity = Integer.valueOf(map.get(2).get().toString());
         }
+        Log.d("BrainyTemp", "insert " + device.getAddress() + ", " + System.currentTimeMillis() + ", " + temp + ", " + humidity);
 
-        ValueListInfo dic = new ValueListInfo(System.currentTimeMillis(), temperature, humidity);
-        list.add(dic);
-        BrainyTempApp.mPref.put(info.getAddress() + "sensorValue", new Gson().toJson(list));
+        SensorData sensorData = new SensorData(device.getAddress(), System.currentTimeMillis(), temp, humidity, device.getRssi());
+        mRepository.insert(sensorData);
 
     }
 
     public void addSensorValue(SensorInfo sensorInfo) {
-        ArrayList<ValueListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(sensorInfo.getAddress() + "sensorValue", ""),
-                new TypeToken<ArrayList<ValueListInfo>>() {
-                }.getType());
-        if (list == null) {
-            list = new ArrayList<ValueListInfo>();
-        }
-
-        ValueListInfo dic = new ValueListInfo(System.currentTimeMillis(), sensorInfo.getTemp(), sensorInfo.getHumi());
-        list.add(dic);
-        BrainyTempApp.mPref.put(sensorInfo.getAddress() + "sensorValue", new Gson().toJson(list));
-
-
-        //public SensorData(@NonNull String addr, @NonNull long time, @NonNull double temp, @NonNull int humi, @NonNull int rssi)
         SensorData sensorData = new SensorData(sensorInfo.getAddress(), System.currentTimeMillis(), sensorInfo.getTemp(), sensorInfo.getHumi(), sensorInfo.getRssi());
         mRepository.insert(sensorData);
-
-
     }
 
     /**
