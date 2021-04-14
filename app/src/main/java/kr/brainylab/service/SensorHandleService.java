@@ -41,6 +41,8 @@ import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
 import kr.brainylab.common.Common;
 import kr.brainylab.common.HttpService;
+import kr.brainylab.database.SensorData;
+import kr.brainylab.database.SensorDataRepository;
 import kr.brainylab.model.AlarmListInfo;
 import kr.brainylab.model.SensorInfo;
 import kr.brainylab.model.ValueListInfo;
@@ -68,6 +70,7 @@ public class SensorHandleService extends Service {
     private int mTimerCount = 0;
     private Timer mTimer;
 
+    private SensorDataRepository mRepository;
 
     @Nullable
     @Override
@@ -77,6 +80,8 @@ public class SensorHandleService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        mRepository = new SensorDataRepository(getApplication());
         serviceIntent = intent;
         initializeNotification();
 
@@ -495,6 +500,13 @@ public class SensorHandleService extends Service {
         ValueListInfo dic = new ValueListInfo(System.currentTimeMillis(), sensorInfo.getTemp(), sensorInfo.getHumi());
         list.add(dic);
         BrainyTempApp.mPref.put(sensorInfo.getAddress() + "sensorValue", new Gson().toJson(list));
+
+
+        //public SensorData(@NonNull String addr, @NonNull long time, @NonNull double temp, @NonNull int humi, @NonNull int rssi)
+        SensorData sensorData = new SensorData(sensorInfo.getAddress(), System.currentTimeMillis(), sensorInfo.getTemp(), sensorInfo.getHumi(), sensorInfo.getRssi());
+        mRepository.insert(sensorData);
+
+
     }
 
     /**
