@@ -30,6 +30,7 @@ tools:context=".view.activity.IntroActivity">
             android:layout_weight="1">
 
             <ImageView
+                android:id="@+id/intro_ani"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"

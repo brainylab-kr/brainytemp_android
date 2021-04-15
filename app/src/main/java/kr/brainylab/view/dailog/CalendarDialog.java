@@ -56,7 +56,7 @@ public class CalendarDialog extends BaseDialog implements View.OnClickListener {
         binding.rlyBackground.setOnClickListener(this);
         binding.btnConfirm.setOnClickListener(this);
 
-        String title = "28:2C:02:40:32:56" + context.getString(R.string.calendar_title);
+        String title = "28:2C:02:40:32:56" + context.getString(R.string.calendar_title_start_date);
         binding.tvTitle.setText(title);
 
         Calendar c = Calendar.getInstance();

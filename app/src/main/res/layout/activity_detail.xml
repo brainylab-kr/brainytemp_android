@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@color/color_156aee"
-            android:weightSum="2">
+            android:weightSum="3">
 
             <RelativeLayout
                 android:id="@+id/rly_alarm"
@@ -62,7 +62,6 @@
                 android:id="@+id/rly_out"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:visibility="gone"
                 android:layout_weight="1">
 
                 <ImageView
@@ -70,7 +69,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/ic_white_out" />
+                    android:background="@drawable/vd_export_white" />
 
             </RelativeLayout>
 

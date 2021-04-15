@@ -28,7 +28,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
-                android:background="@color/color_8c0032"
+                android:background="@color/colorPrimary"
                 android:orientation="vertical">
 
                 <TextView
@@ -40,7 +40,7 @@
                     android:alpha="0.6"
                     android:text="2021"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/tv_date"
@@ -59,7 +59,10 @@
                 android:layout_height="300dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                app:mcv_selectionColor="@color/color_8c0032"
+                app:mcv_selectionColor="@color/colorPrimary"
+                app:mcv_headerTextAppearance="@style/CalendarWidgetHeader"
+                app:mcv_weekDayTextAppearance="@style/CalendarWidgetWeekDay"
+                app:mcv_dateTextAppearance="@style/CalendarWidgetDate"
                 app:mcv_showOtherDates="all" />
 
             <ImageView

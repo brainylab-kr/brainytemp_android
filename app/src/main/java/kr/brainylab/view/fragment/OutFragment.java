@@ -4,12 +4,19 @@
 package kr.brainylab.view.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import kr.brainylab.R;
 import kr.brainylab.databinding.FragmentOutBinding;
@@ -25,6 +32,9 @@ public class OutFragment extends Fragment implements View.OnClickListener {
 
     View rootView;
     FragmentOutBinding binding;
+
+    String startDate = "";
+    String endDate = "";
 
     private int mType = 0;
     private int mForm = 0;
@@ -106,8 +116,15 @@ public class OutFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initData() {
-        String startDate = "2021-01-02";
-        String endDate = "2021-02-28";
+
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        endDate = df.format(date);
+
+        cal.add(Calendar.MONTH, -1);
+        startDate = df.format(cal.getTime());
+
         binding.edtStartDate.setText(startDate);
         binding.edtEndDate.setText(endDate);
     }
@@ -127,21 +144,21 @@ public class OutFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.edt_start_date: //시작날짜
 
-                String startDate = "2021-01-02";
-
                 Calendar1Dialog.init(getContext(), startDate, new Calendar1Dialog.OnClickListener() {
                     @Override
                     public void onConfirm(String content) {
-
+                        startDate = content;
+                        binding.edtStartDate.setText(startDate);
                     }
                 }).show();
                 break;
             case R.id.edt_end_date: //완료날짜
-                String endDate = "2021-02-28";
+
                 Calendar1Dialog.init(getContext(), endDate, new Calendar1Dialog.OnClickListener() {
                     @Override
                     public void onConfirm(String content) {
-
+                        endDate = content;
+                        binding.edtEndDate.setText(endDate);
                     }
                 }).show();
                 break;

@@ -15,6 +15,7 @@ import androidx.viewpager.widget.ViewPager;
 import kr.brainylab.R;
 import kr.brainylab.databinding.ActivityDetailBinding;
 import kr.brainylab.view.fragment.ChartFragment;
+import kr.brainylab.view.fragment.OutFragment;
 import kr.brainylab.view.fragment.SensorSettingFragment;
 
 /**
@@ -29,15 +30,15 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     }
 
     ActivityDetailBinding binding;
-    private static final int TAB_MENU_CNT = 2;
+    private static final int TAB_MENU_CNT = 3;
 
     public static final int PAGE_TAB_ALARM = 0;
-    //    public static final int PAGE_TAB_OUT = 1;
-    public static final int PAGE_TAB_CHART = 1;
+    public static final int PAGE_TAB_OUT = 1;
+    public static final int PAGE_TAB_CHART = 2;
 
     int nTabIndex = PAGE_TAB_ALARM;
     private SensorSettingFragment fragmentTemp = null;
-    //    private OutFragment fragmentOut = null;
+    private OutFragment fragmentOut = null;
     public static  ChartFragment fragmentchart = null;
 
     public static DetailPagerAdapter pagerAdapter;
@@ -100,8 +101,8 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     private void initFragment() {
         if (fragmentTemp == null)
             fragmentTemp = new SensorSettingFragment();
-//        if (fragmentOut == null)
-//            fragmentOut = new OutFragment();
+        if (fragmentOut == null)
+            fragmentOut = new OutFragment();
         if (fragmentchart == null)
             fragmentchart = new ChartFragment();
     }
@@ -113,7 +114,17 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 
         if (nTabIndex == PAGE_TAB_ALARM) {
             binding.ivAlarm.setAlpha(1.0f);
-        } else {
+            binding.ivOut.setAlpha(0.5f);
+            binding.ivChart.setAlpha(0.5f);
+        }
+        else if (nTabIndex == PAGE_TAB_OUT) {
+            binding.ivAlarm.setAlpha(0.5f);
+            binding.ivOut.setAlpha(1.0f);
+            binding.ivChart.setAlpha(0.5f);
+        }
+        else if (nTabIndex == PAGE_TAB_CHART) {
+            binding.ivAlarm.setAlpha(0.5f);
+            binding.ivOut.setAlpha(0.5f);
             binding.ivChart.setAlpha(1.0f);
         }
     }
@@ -154,12 +165,12 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 binding.vpFragment.setCurrentItem(nTabIndex);
                 pagerAdapter.notifyDataSetChanged();
                 break;
-//            case R.id.rly_out:
-//                nTabIndex = PAGE_TAB_OUT;
-//                changeTab();
-//                binding.vpFragment.setCurrentItem(nTabIndex);
-//                pagerAdapter.notifyDataSetChanged();
-//                break;
+            case R.id.rly_out:
+                nTabIndex = PAGE_TAB_OUT;
+                changeTab();
+                binding.vpFragment.setCurrentItem(nTabIndex);
+                pagerAdapter.notifyDataSetChanged();
+                break;
             case R.id.rly_chart:
                 nTabIndex = PAGE_TAB_CHART;
                 changeTab();
@@ -182,9 +193,9 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 case PAGE_TAB_ALARM:
                     frag = fragmentTemp;
                     break;
-//                case PAGE_TAB_OUT:
-//                    frag = fragmentOut;
-//                    break;
+                case PAGE_TAB_OUT:
+                    frag = fragmentOut;
+                    break;
                 case PAGE_TAB_CHART:
                     frag = fragmentchart;
                     break;

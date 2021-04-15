@@ -30,17 +30,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@color/color_700028"
+                android:background="@color/colorPrimary"
                 android:fontFamily="@font/notosanskrbold"
                 android:gravity="center"
-                android:text="@string/calendar_title"
+                android:text="@string/calendar_title_start_date"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
-                android:background="@color/color_8c0032"
+                android:background="@color/colorPrimary"
                 android:orientation="vertical">
 
                 <TextView

@@ -1,6 +1,7 @@
 package kr.brainylab.view.dailog;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -108,7 +109,16 @@ public class Calendar1Dialog extends BaseDialog implements View.OnClickListener 
             case R.id.btn_confirm:
 
                 dismiss();
-                mListener.onConfirm("2021-02-25");
+                CalendarDay selectedDate = binding.calendarView.getSelectedDate();
+                String year = String.valueOf(selectedDate.getYear());
+                String month = String.valueOf(selectedDate.getMonth() + 1);
+                String day = String.valueOf(selectedDate.getDay());
+
+                if(month.length() == 1) {
+                    month = "0" + month;
+                }
+                String selectedDayStr = year + "-" + month +  "-" + day;
+                mListener.onConfirm(selectedDayStr);
                 break;
 
         }

@@ -75,7 +75,9 @@
     <string name="sensor_edit_duration2">2년 후(권장)</string>
     <string name="sensor_edit_duration3">3년 후</string>
     <string name="sensor_edit_duration4">안 함</string>
-    <string name="calendar_title">의 교정 날짜를 설정합니다.</string>
+    <string name="calendar_title">교정 날짜 선택</string>
+    <string name="calendar_title_start_date">시작 날짜 선택</string>
+    <string name="calendar_title_end_date">종료 날짜 선택</string>
     <string name="sensor_correction_alert">센서가 교정되었습니까?</string>
     <string name="temperature">온도</string>
     <string name="temp_limit_title">온도 제한</string>

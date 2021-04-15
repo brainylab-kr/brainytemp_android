@@ -24,12 +24,12 @@
                     android:fontFamily="@font/notosanskrregular"
                     android:text="@string/email_address"
                     android:textColor="@color/color_171717"
-                    android:textSize="14sp" />
+                    android:textSize="24sp" />
 
                 <EditText
                     android:id="@+id/edt_email"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="15dp"
@@ -39,7 +39,8 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:textColor="@color/color_171717"
-                    android:textSize="16sp" />
+                    android:inputType="textEmailAddress"
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -56,12 +57,12 @@
                     android:fontFamily="@font/notosanskrregular"
                     android:text="@string/start_date"
                     android:textColor="@color/color_171717"
-                    android:textSize="14sp" />
+                    android:textSize="24sp" />
 
                 <EditText
                     android:id="@+id/edt_start_date"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="15dp"
@@ -72,7 +73,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:textColor="@color/color_171717"
-                    android:textSize="16sp" />
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -89,12 +90,12 @@
                     android:fontFamily="@font/notosanskrregular"
                     android:text="@string/end_date"
                     android:textColor="@color/color_171717"
-                    android:textSize="14sp" />
+                    android:textSize="24sp" />
 
                 <EditText
                     android:id="@+id/edt_end_date"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="15dp"
@@ -105,7 +106,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:textColor="@color/color_171717"
-                    android:textSize="16sp" />
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -122,7 +123,7 @@
                     android:fontFamily="@font/notosanskrregular"
                     android:text="@string/type"
                     android:textColor="@color/color_171717"
-                    android:textSize="14sp" />
+                    android:textSize="24sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -222,7 +223,7 @@
                         android:fontFamily="@font/notosanskrregular"
                         android:text="@string/type1"
                         android:textColor="@color/color_171717"
-                        android:textSize="14sp" />
+                        android:textSize="24sp" />
 
 
                     <LinearLayout
@@ -286,7 +287,7 @@
 
                     <TextView
                         android:id="@+id/tv_out"
-                        android:layout_width="120dp"
+                        android:layout_width="150dp"
                         android:layout_height="45dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="20dp"
@@ -295,7 +296,7 @@
                         android:gravity="center"
                         android:text="@string/out"
                         android:textColor="@color/white"
-                        android:textSize="14sp" />
+                        android:textSize="24sp" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
