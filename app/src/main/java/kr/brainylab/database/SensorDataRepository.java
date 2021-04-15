@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+
 public class SensorDataRepository {
     private SensorDataDao mSensorDataDao;
 
@@ -15,21 +17,11 @@ public class SensorDataRepository {
         mSensorDataDao = db.sensorDataDao();
     }
 
-    List<SensorData> sensorDatas;
 
-    public List<SensorData> getSensorDatas(String addr, long startTime, long endTime) {
+    public Flowable<List<SensorData>> getSensorDatas(String addr, long startTime, long endTime) {
         Log.d("BrainyTemp", "get " + addr + ", " + startTime + ", " + endTime);
 
-        SensorDataRoomDatabase.databaseReadExecutor.execute(() -> {
-            sensorDatas = mSensorDataDao.getSensorDatas(addr, startTime, endTime);
-
-            for(int i = 0; i < sensorDatas.size(); i++) {
-
-                Log.d("BrainyTemp",sensorDatas.get(i).getTime() + ", " + sensorDatas.get(i).getTemp() +", " + sensorDatas.get(i).getHumi());
-            }
-        });
-
-        return sensorDatas;
+        return mSensorDataDao.getSensorDatas(addr, startTime, endTime);
     }
 
     public void insert(SensorData sensorData) {
@@ -41,6 +33,8 @@ public class SensorDataRepository {
 
     public void deleteSensorData(String addr) {
         Log.d("BrainyTemp", "deleteSensorData " + addr);
-        mSensorDataDao.deleteSensorData(addr);
+        SensorDataRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mSensorDataDao.deleteSensorData(addr);
+        });
     }
 }

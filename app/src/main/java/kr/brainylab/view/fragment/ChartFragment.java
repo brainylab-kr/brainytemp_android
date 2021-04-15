@@ -21,14 +21,23 @@ import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Flowable;
+import io.reactivex.schedulers.Schedulers;
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
 import kr.brainylab.common.Common;
@@ -181,10 +190,23 @@ public class ChartFragment extends Fragment {
 
         long currentTime = System.currentTimeMillis();
         SensorDataRepository repository = new SensorDataRepository(getActivity().getApplication());
-        List<SensorData> sensorDatas = repository.getSensorDatas(device, currentTime - 86400000,currentTime);
+        repository.getSensorDatas(device, currentTime - 86400000, currentTime)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(sensorDatas -> drawChart(sensorDatas),
+                        throwable -> Log.e("BrainyTemp", "SensorData read Failed!", throwable));
+    }
+
+    private void drawChart(List<SensorData> sensorDatas) {
+
+        if(arrDataList.size() >= sensorDatas.size()) {
+            return;
+        }
+
+        String device = ((DetailActivity) getActivity()).deviceID;
 
         for(int i = 0; i < sensorDatas.size(); i++) {
-            Log.d("BrainyTemp",sensorDatas.get(i).getTime() + ", " + sensorDatas.get(i).getTemp() +", " + sensorDatas.get(i).getHumi());
+            Log.d("BrainyTemp", i + ":" + sensorDatas.get(i).getAddr() + ", " + sensorDatas.get(i).getTemp() + ", " + sensorDatas.get(i).getHumi());
             ValueListInfo value = new ValueListInfo(sensorDatas.get(i).getTime(), sensorDatas.get(i).getTemp(), sensorDatas.get(i).getHumi());
             arrDataList.add(value);
         }

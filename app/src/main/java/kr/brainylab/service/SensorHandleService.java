@@ -460,7 +460,6 @@ public class SensorHandleService extends Service {
                 && map.get(2) != null && map.get(2).isValid()) {
             humidity = Integer.valueOf(map.get(2).get().toString());
         }
-        Log.d("BrainyTemp", "insert " + device.getAddress() + ", " + System.currentTimeMillis() + ", " + temp + ", " + humidity);
 
         SensorData sensorData = new SensorData(device.getAddress(), System.currentTimeMillis(), temp, humidity, device.getRssi());
         mRepository.insert(sensorData);
