@@ -156,6 +156,20 @@ public class HttpService {
         RequestBody body = RequestBody.create(CONTENT_TYPE, new Gson().toJson(hashMap)); // new
         postenc(url, body, resListner);
     }
+
+    public void requestReport(String device, String name, String mail, String startDate, String endDate, ResponseListener resListner) {
+        String url = "event";
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("mac", device);
+        hashMap.put("nm", name);
+        hashMap.put("start", startDate);
+        hashMap.put("end", endDate);
+        hashMap.put("mail", mail);
+
+        RequestBody body = RequestBody.create(CONTENT_TYPE, new Gson().toJson(hashMap)); // new
+        postenc(url, body, resListner);
+    }
+
 }
 
 

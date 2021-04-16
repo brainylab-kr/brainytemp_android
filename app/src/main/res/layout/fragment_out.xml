@@ -294,7 +294,7 @@
                         android:background="@color/color_156aee"
                         android:fontFamily="@font/notosanskrregular"
                         android:gravity="center"
-                        android:text="@string/out"
+                        android:text="@string/request_report"
                         android:textColor="@color/white"
                         android:textSize="24sp" />
                 </LinearLayout>

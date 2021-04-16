@@ -8,19 +8,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
+import kr.brainylab.common.Common;
+import kr.brainylab.common.HttpService;
 import kr.brainylab.databinding.FragmentOutBinding;
+import kr.brainylab.model.AlarmListInfo;
 import kr.brainylab.utils.Util;
+import kr.brainylab.view.activity.DetailActivity;
 import kr.brainylab.view.dailog.Calendar1Dialog;
 import kr.brainylab.view.dailog.NameEditDialog;
 import kr.brainylab.view.dailog.TempLimitDialog;
@@ -139,8 +149,8 @@ public class OutFragment extends Fragment implements View.OnClickListener {
                 Util.hideKeyboard(binding.edtEmail);
                 break;
 
-            case R.id.tv_out: //내보내기
-
+            case R.id.tv_out: //리포트 전송
+                requestReport();
                 break;
             case R.id.edt_start_date: //시작날짜
 
@@ -186,5 +196,39 @@ public class OutFragment extends Fragment implements View.OnClickListener {
                 break;
 
         }
+    }
+
+    private HttpService httpService;
+    public void requestReport() {
+        String device = ((DetailActivity) getActivity()).deviceID;
+        String name = Util.getSensorInfo(device).getName();
+        String mail = binding.edtEmail.getText().toString();
+        String start = startDate + " 00:00:00";
+        String end = endDate + " 23:59:59";
+
+        httpService = new HttpService(BrainyTempApp.getInstance());
+        httpService.requestReport(device, name, mail, start, end, new HttpService.ResponseListener() {
+            @Override
+            public void onResponseResult(Boolean bSuccess, String res) {
+                if (bSuccess) {
+                    try {
+                        JSONObject jObj = new JSONObject(res);
+                        String result = jObj.getString("ret");
+                        if (result.equals("ok")) {
+                            successUpload();
+                            Toast.makeText(getContext(), R.string.send_report, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        Log.d("BrainyTemp", "err.. : " + e.toString());
+                    }
+                } else {
+                    Log.d("BrainyTemp", "err.. : " + BrainyTempApp.getInstance().getResources().getString(R.string.connect_fail));
+                }
+            }
+        });
+    }
+
+    private void successUpload() {
+        httpService = null;
     }
 }

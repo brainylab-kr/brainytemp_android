@@ -104,6 +104,8 @@
     <string name="form1">전체</string>
     <string name="form2">요약</string>
     <string name="out">내보내기</string>
+    <string name="request_report">리포트 전송</string>
+    <string name="send_report">입력하신 메일주소로 리포트를 전송하였습니다.\n메일함을 확인하세요.</string>
     <string name="alert_music">경보음</string>
     <string name="alert_music_delete">눌러서 경보음 해제</string>
     <string name="gps_off">위치서비스가 꺼져있습니다.\n위치서비스를 활성화하겠습니까?</string>
