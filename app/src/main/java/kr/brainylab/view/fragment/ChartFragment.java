@@ -21,6 +21,8 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -52,6 +54,10 @@ public class ChartFragment extends Fragment {
     private boolean isStarted = false;
     private Timer mTimer;
     private ArrayList<ValueListInfo> arrDataList = new ArrayList<ValueListInfo>();
+
+    SensorDataRepository mRepository;
+    CompositeDisposable mDisposables;
+    Disposable mDisposable;
 
     public ChartFragment() {
         // Required empty public constructor
@@ -89,6 +95,10 @@ public class ChartFragment extends Fragment {
                 mTimer.cancel();
                 mTimer = null;
             }
+
+            if(mDisposables != null) {
+                mDisposables.clear();
+            }
             isStarted = false;
         }
     }
@@ -100,6 +110,10 @@ public class ChartFragment extends Fragment {
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
+        }
+
+        if(mDisposables != null) {
+            mDisposables.clear();
         }
         isStarted = false;
     }
@@ -127,8 +141,6 @@ public class ChartFragment extends Fragment {
             binding.tvCurHumi.setVisibility(View.GONE);
             binding.humiLineChart.setVisibility(View.GONE);
         }
-
-        Log.d("BrainyTemp", "sensorInfo address: " + sensorInfo.getAddress() + ", " + sensorInfo.getIsDisconnected());
 
         if(sensorInfo.getIsDisconnected() == true) {
             binding.tvSensorName.setTextColor(getResources().getColor(R.color.gray));
@@ -176,6 +188,8 @@ public class ChartFragment extends Fragment {
     }
 
     private void startTimer() {
+        mDisposables = new CompositeDisposable();
+
         mTimer = new Timer();
         //Set the schedule function and rate
         mTimer.scheduleAtFixedRate(new TimerTask() {
@@ -196,7 +210,6 @@ public class ChartFragment extends Fragment {
     }
 
     private void loadLayout() {
-
         if (arrDataList.size() > 0) {
             arrDataList.clear();
         }
@@ -204,12 +217,14 @@ public class ChartFragment extends Fragment {
         String device = ((DetailActivity) getActivity()).deviceID;
 
         long currentTime = Calendar.getInstance().getTime().getTime();
-        SensorDataRepository repository = new SensorDataRepository(getActivity().getApplication());
-        repository.getSensorDatas(device, currentTime - 86400000, currentTime)
+        mRepository = new SensorDataRepository(getActivity().getApplication());
+        mDisposable = mRepository.getSensorDatas(device, currentTime - 86400000, currentTime)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(sensorDatas -> drawChart(sensorDatas),
                         throwable -> Log.e("BrainyTemp", "SensorData read Failed!", throwable));
+
+        mDisposables.add(mDisposable);
     }
 
     private void drawChart(List<SensorData> sensorDatas) {

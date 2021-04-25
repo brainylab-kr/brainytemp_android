@@ -190,6 +190,7 @@ public class SensorHandleService extends Service {
                             if(sensor.getIsDisconnected() == false) {
                                 sensor.setIsDisconnected(true);
                                 sensor.setDisconnectedTime(Calendar.getInstance().getTime());
+                                prepareEventAlarm(sensor.getAddress(), Common.EVENT_CONNECT_ERROR, 0);
                             }
                             sensor.setRssi(-100);
                             sensor.setTemp(0);
@@ -319,8 +320,6 @@ public class SensorHandleService extends Service {
             if (curTemp < minTemp) {
                 prepareEventAlarm(device.getAddress(), Common.EVENT_LOW_TEMP, curTemp);
             } else {
-                Log.d("BrainyTemp", "prepareEventAlarm " + device.getAddress() + ", " +  Common.EVENT_HIGH_TEMP + ", " + curTemp);
-
                 prepareEventAlarm(device.getAddress(), Common.EVENT_HIGH_TEMP, curTemp);
             }
 
@@ -335,7 +334,6 @@ public class SensorHandleService extends Service {
             if (curHumi < minHumi) {
                 prepareEventAlarm(device.getAddress(), Common.EVENT_LOW_HUMI, curHumi);
             } else {
-                Log.d("BrainyTemp", "prepareEventAlarm " + device.getAddress() + ", " +  Common.EVENT_HIGH_HUMI + ", " + curTemp);
                 prepareEventAlarm(device.getAddress(), Common.EVENT_HIGH_HUMI, curHumi);
             }
 
@@ -349,7 +347,7 @@ public class SensorHandleService extends Service {
 
         if (device.getConnectivityStatus() != Device.ConnectivityStatus.CONNECTABLE) {
             //센서 통신 오류 알림 준비
-            prepareEventAlarm(device.getAddress(), Common.EVENT_ONNECT_ERROR, curTemp);
+            prepareEventAlarm(device.getAddress(), Common.EVENT_CONNECT_ERROR, curTemp);
         }
 
         Efento.connect(device.getAddress())
@@ -370,9 +368,7 @@ public class SensorHandleService extends Service {
     }
 
     public void recoveryDisconnectedTime(Device device) {
-        Log.d("BrainyTemp", "recoveryDisconnectedTime: " + device.getAddress());
-
-        Thread thread = new Thread() {
+         Thread thread = new Thread() {
             @Override
             public void run() {
             SensorInfo sensor = Util.getSensorInfo(device.getAddress());
@@ -381,21 +377,17 @@ public class SensorHandleService extends Service {
             connectionBuilder.setErrorCallback(new OnErrorCallback() {
                 @Override
                 public void onError(@NonNull Throwable throwable) {
-                    Log.d("BrainyTemp", device.getAddress() + " connect error! " + throwable.toString());
                 }
             });
             connectionBuilder.setProgressCallback(new OnProgressCallback() {
                 @Override
                 public void onProgress(int i) {
-                    Log.d("BrainyTemp", device.getAddress() + " onProgress " + i);
                 }
             });
 
             connectionBuilder.executeDownload(new OnDownloadResultCallback() {
                 @Override
                 public void onComplete(@NonNull DeviceDetails deviceDetails, @NonNull List<Record> lists) {
-                    Log.d("BrainyTemp", sensor.getAddress() + " onComplete " + lists.size());
-
                     mRepository.deleteSensorData(deviceDetails.getAddress(), sensor.getDisconnectedTime(), Calendar.getInstance().getTime());
 
                     JsonArray dataArray = new JsonArray();
@@ -421,7 +413,6 @@ public class SensorHandleService extends Service {
                                 && (map.get(2) != null && map.get(2).isValid())) {
                             curHumi = Integer.valueOf(map.get(2).get().toString());
                         }
-                        //Log.d("BrainyLogger", df.format(date) + ": " + curTemp + ", " + curHumi);
 
                         addSensorValue(sensor.getAddress(), record.getTimestamp(), curTemp, curHumi, 0);
 
@@ -646,7 +637,7 @@ public class SensorHandleService extends Service {
             }
             else if (eventType.equals(Common.EVENT_LOW_BT) && info.getBattery()
                 || eventType.equals(Common.EVENT_APP_ERR) && info.getError()
-                || eventType.equals(Common.EVENT_ONNECT_ERROR) && info.getConnect()) {
+                || eventType.equals(Common.EVENT_CONNECT_ERROR) && info.getConnect()) {
                 String deviceName = BrainyTempApp.getSensorName(device);
                 reqEventAlarm(device, deviceName, eventType, info.getType(), info.getPhone(), 0, 0, 0);
             }
@@ -672,8 +663,6 @@ public class SensorHandleService extends Service {
 
     //서버에 이벤트 알림 업로드
     private void reqEventAlarm(String device, String deviceName, String eventType, String alarmType, String phone, double curVal, double minVal, double maxVal) {
-
-        Log.d("BrainyTemp", "reqEventAlarm " + device + ", " + alarmType + ", " + phone);
 
         HttpService httpService = new HttpService(this);
         httpService.eventAlarm(device, deviceName, eventType, alarmType, phone, curVal, minVal, maxVal, new HttpService.ResponseListener() {
