@@ -73,31 +73,6 @@ public class SensorAddAdapter extends ArrayAdapter<SensorAddInfo> {
             @Override
             public void onClick(View view) {
                 ((SearchFragment) mFrag).addSensor(position);
-                /*
-                SensorCorrectionDialog.init(mContext, new SensorCorrectionDialog.OnClickListener() {
-                    @Override
-                    public void onConfirm() {
-                        CalendarDialog.init(mContext, new CalendarDialog.OnClickListener() {
-                            @Override
-                            public void onConfirm(String content) {
-
-                                SensorDurationDialog.init(mContext, new SensorDurationDialog.OnClickListener() {
-                                    @Override
-                                    public void onConfirm(int minute) {
-
-                                    }
-                                }).show();
-
-                            }
-                        }).show();
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        //
-                    }
-                }).show();
-                 */
             }
         });
         return convertView;

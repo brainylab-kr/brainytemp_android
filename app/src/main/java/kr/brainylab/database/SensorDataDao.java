@@ -1,6 +1,5 @@
 package kr.brainylab.database;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -27,4 +26,7 @@ public interface SensorDataDao {
 
     @Query("DELETE FROM sensordata_table WHERE addr = :addr")
     void deleteSensorData(String addr);
+
+    @Query("DELETE FROM sensordata_table WHERE addr = :addr AND time BETWEEN :startTime AND :endTime")
+    void deleteSensorData(String addr, long startTime, long endTime);
 }

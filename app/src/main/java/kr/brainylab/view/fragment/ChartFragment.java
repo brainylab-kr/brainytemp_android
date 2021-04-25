@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
@@ -22,7 +21,6 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -34,10 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Flowable;
-import io.reactivex.schedulers.Schedulers;
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
 import kr.brainylab.common.Common;
@@ -53,6 +48,8 @@ public class ChartFragment extends Fragment {
 
     View rootView;
     FragmentChartBinding binding;
+
+    private boolean isStarted = false;
     private Timer mTimer;
     private ArrayList<ValueListInfo> arrDataList = new ArrayList<ValueListInfo>();
 
@@ -73,7 +70,9 @@ public class ChartFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_chart, container, false);
         binding = DataBindingUtil.bind(rootView);
-        //loadLayout();
+
+        loadCurrentData();
+        startTimer();
 
         return rootView;
     }
@@ -81,10 +80,8 @@ public class ChartFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
 
-            loadCurrentData();
-
+        if (isVisibleToUser && isStarted == true) {
             startTimer();
         }
         else {
@@ -92,6 +89,7 @@ public class ChartFragment extends Fragment {
                 mTimer.cancel();
                 mTimer = null;
             }
+            isStarted = false;
         }
     }
 
@@ -103,14 +101,17 @@ public class ChartFragment extends Fragment {
             mTimer.cancel();
             mTimer = null;
         }
+        isStarted = false;
     }
 
     private void loadCurrentData() {
         String device = ((DetailActivity) getActivity()).deviceID;
 
+        //Log.d("BrainyTemp", "draw chart: " + device);
+
         SensorInfo sensorInfo = Util.getSensorInfo(device);
 
-        double temp = ((DetailActivity) getActivity()).curTemp;
+        double temp = sensorInfo.getTemp();
         double maxTemp = BrainyTempApp.getMaxTemp(device);
         double minTemp = BrainyTempApp.getMinTemp(device);
         int humi = 0;
@@ -118,7 +119,7 @@ public class ChartFragment extends Fragment {
         int minHumi = 0;
 
         if(sensorInfo.getType().equals(Common.SENSOR_TYPE_TH)) {
-            humi = ((DetailActivity) getActivity()).curHumi;
+            humi = sensorInfo.getHumi();
             maxHumi = BrainyTempApp.getMaxHumi(device);
             minHumi = BrainyTempApp.getMinHumi(device);
         }
@@ -127,38 +128,51 @@ public class ChartFragment extends Fragment {
             binding.humiLineChart.setVisibility(View.GONE);
         }
 
-        if((temp > maxTemp || temp < minTemp)
-        || (sensorInfo.getType().equals(Common.SENSOR_TYPE_TH) && (humi > maxHumi || humi < minHumi))){
-            binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_c2185b));
+        Log.d("BrainyTemp", "sensorInfo address: " + sensorInfo.getAddress() + ", " + sensorInfo.getIsDisconnected());
+
+        if(sensorInfo.getIsDisconnected() == true) {
+            binding.tvSensorName.setTextColor(getResources().getColor(R.color.gray));
         }
         else {
-            binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_171717));
+            if ((temp > maxTemp || temp < minTemp)
+                    || (sensorInfo.getType().equals(Common.SENSOR_TYPE_TH) && (humi > maxHumi || humi < minHumi))) {
+                binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_c2185b));
+            } else {
+                binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_171717));
+            }
         }
         binding.tvSensorName.setText(BrainyTempApp.getSensorName(device));
 
-        if(temp > maxTemp || temp < minTemp) {
-            binding.tvCurTemp.setTextColor(getResources().getColor(R.color.color_c2185b));
+        if(sensorInfo.getIsDisconnected() == true) {
+            binding.tvCurTemp.setTextColor(getResources().getColor(R.color.gray));
         }
         else {
-            binding.tvCurTemp.setTextColor(getResources().getColor(R.color.color_171717));
-        }
-        binding.tvCurTemp.setText(String.valueOf(temp) + "°C");
-
-        if(sensorInfo.getType().equals(Common.SENSOR_TYPE_TH)) {
-            if(humi > maxHumi || humi < minHumi) {
+            if (temp > maxTemp || temp < minTemp) {
                 binding.tvCurTemp.setTextColor(getResources().getColor(R.color.color_c2185b));
+            } else {
+                binding.tvCurTemp.setTextColor(getResources().getColor(R.color.color_171717));
             }
-            else {
-                binding.tvCurHumi.setTextColor(getResources().getColor(R.color.color_171717));
-            }
-            binding.tvCurHumi.setText(String.valueOf(humi) + "%");
         }
-    }
 
-    //현재 데이터 업데이트
-    public void updateCurrentData(double temp, int humi) {
         binding.tvCurTemp.setText(String.valueOf(temp) + "°C");
-        binding.tvCurHumi.setText(String.valueOf(humi) + "%");
+
+        if(sensorInfo.getIsDisconnected() == true) {
+            binding.tvCurHumi.setTextColor(getResources().getColor(R.color.gray));
+        }
+        else {
+            if (sensorInfo.getType().equals(Common.SENSOR_TYPE_TH)) {
+                if (humi > maxHumi || humi < minHumi) {
+                    binding.tvCurHumi.setTextColor(getResources().getColor(R.color.color_c2185b));
+                } else {
+                    binding.tvCurHumi.setTextColor(getResources().getColor(R.color.color_171717));
+                }
+                binding.tvCurHumi.setText(String.valueOf(humi) + "%");
+            }
+        }
+
+        binding.tvSensorAddress.setText(sensorInfo.getAddress());
+        binding.tvSensingTime.setText(sensorInfo.getDate());
+
     }
 
     private void startTimer() {
@@ -168,8 +182,7 @@ public class ChartFragment extends Fragment {
 
             @Override
             public void run() {
-
-                getActivity().runOnUiThread(new Runnable() {
+                ((DetailActivity) getActivity()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         loadLayout();
@@ -178,6 +191,8 @@ public class ChartFragment extends Fragment {
             }
 
         }, 0, 1000 * 60);
+
+        isStarted = true;
     }
 
     private void loadLayout() {
@@ -188,7 +203,7 @@ public class ChartFragment extends Fragment {
 
         String device = ((DetailActivity) getActivity()).deviceID;
 
-        long currentTime = System.currentTimeMillis();
+        long currentTime = Calendar.getInstance().getTime().getTime();
         SensorDataRepository repository = new SensorDataRepository(getActivity().getApplication());
         repository.getSensorDatas(device, currentTime - 86400000, currentTime)
                 .subscribeOn(Schedulers.io())
@@ -199,22 +214,90 @@ public class ChartFragment extends Fragment {
 
     private void drawChart(List<SensorData> sensorDatas) {
 
+        if(sensorDatas.size() == 0) {
+            return;
+        }
+
+        SensorData sensor = sensorDatas.get(sensorDatas.size()-1);
+
+        SensorInfo sensorInfo = Util.getSensorInfo(sensor.getAddr());
+
+        //Log.d("BrainyTemp", "draw chart: " + sensor.getAddr() + ", " + sensorInfo.getDate());
+
+        double temp = sensorInfo.getTemp();
+        double maxTemp = BrainyTempApp.getMaxTemp(sensor.getAddr());
+        double minTemp = BrainyTempApp.getMinTemp(sensor.getAddr());
+        int humi = 0;
+        int maxHumi = 0;
+        int minHumi = 0;
+
+        if(sensorInfo.getType().equals(Common.SENSOR_TYPE_TH)) {
+            humi = sensorInfo.getHumi();
+            maxHumi = BrainyTempApp.getMaxHumi(sensor.getAddr());
+            minHumi = BrainyTempApp.getMinHumi(sensor.getAddr());
+        }
+        else{
+            binding.tvCurHumi.setVisibility(View.GONE);
+            binding.humiLineChart.setVisibility(View.GONE);
+        }
+
+        if(sensorInfo.getIsDisconnected() == true) {
+            binding.tvSensorName.setTextColor(getResources().getColor(R.color.gray));
+        }
+        else {
+            if ((temp > maxTemp || temp < minTemp)
+                    || (sensorInfo.getType().equals(Common.SENSOR_TYPE_TH) && (humi > maxHumi || humi < minHumi))) {
+                binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_c2185b));
+            } else {
+                binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_171717));
+            }
+        }
+
+        binding.tvSensorName.setText(BrainyTempApp.getSensorName(sensor.getAddr()));
+
+        if(sensorInfo.getIsDisconnected() == true) {
+            binding.tvCurTemp.setTextColor(getResources().getColor(R.color.gray));
+        }
+        else {
+            if (temp > maxTemp || temp < minTemp) {
+                binding.tvCurTemp.setTextColor(getResources().getColor(R.color.color_c2185b));
+            } else {
+                binding.tvCurTemp.setTextColor(getResources().getColor(R.color.color_171717));
+            }
+        }
+        binding.tvCurTemp.setText(String.valueOf(temp) + "°C");
+
+        if(sensorInfo.getIsDisconnected() == true) {
+            binding.tvCurHumi.setTextColor(getResources().getColor(R.color.gray));
+        }
+        else {
+            if (sensorInfo.getType().equals(Common.SENSOR_TYPE_TH)) {
+                if (humi > maxHumi || humi < minHumi) {
+                    binding.tvCurTemp.setTextColor(getResources().getColor(R.color.color_c2185b));
+                } else {
+                    binding.tvCurHumi.setTextColor(getResources().getColor(R.color.color_171717));
+                }
+                binding.tvCurHumi.setText(String.valueOf(humi) + "%");
+            }
+        }
+
+        binding.tvSensorAddress.setText(sensorInfo.getAddress());
+        binding.tvSensingTime.setText(sensorInfo.getDate());
+
         if(arrDataList.size() >= sensorDatas.size()) {
             return;
         }
 
-        String device = ((DetailActivity) getActivity()).deviceID;
-
         for(int i = 0; i < sensorDatas.size(); i++) {
-            Log.d("BrainyTemp", i + ":" + sensorDatas.get(i).getAddr() + ", " + sensorDatas.get(i).getTemp() + ", " + sensorDatas.get(i).getHumi());
+           // Log.d("BrainyTemp", i + ":" + sensorDatas.get(i).getAddr() + ", " + sensorDatas.get(i).getTemp() + ", " + sensorDatas.get(i).getHumi());
             ValueListInfo value = new ValueListInfo(sensorDatas.get(i).getTime(), sensorDatas.get(i).getTemp(), sensorDatas.get(i).getHumi());
             arrDataList.add(value);
         }
 
-        drawTempChart(device);
+        drawTempChart(sensor.getAddr());
 
-        if(Util.getSensorInfo(device).getType().equals(Common.SENSOR_TYPE_TH)) {
-            drawHumiChart(device);
+        if(Util.getSensorInfo(sensor.getAddr()).getType().equals(Common.SENSOR_TYPE_TH)) {
+            drawHumiChart(sensor.getAddr());
         }
     }
 
@@ -227,19 +310,29 @@ public class ChartFragment extends Fragment {
             curTemp = arrDataList.get(arrDataList.size() - 1).getTemp();
         }
 
-        if(curTemp > maxTemp || curTemp < minTemp) {
-            binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_c2185b));
+        SensorInfo sensorInfo = Util.getSensorInfo(device);
+
+        if(sensorInfo.getIsDisconnected() == true) {
+            binding.tvSensorName.setTextColor(getResources().getColor(R.color.gray));
         }
         else {
-            binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_171717));
+            if (curTemp > maxTemp || curTemp < minTemp) {
+                binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_c2185b));
+            } else {
+                binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_171717));
+            }
         }
         binding.tvSensorName.setText(BrainyTempApp.getSensorName(device));
 
-        if(curTemp > maxTemp || curTemp < minTemp) {
-            binding.tvCurTemp.setTextColor(getResources().getColor(R.color.color_c2185b));
+        if(sensorInfo.getIsDisconnected() == true) {
+            binding.tvCurTemp.setTextColor(getResources().getColor(R.color.gray));
         }
         else {
-            binding.tvCurTemp.setTextColor(getResources().getColor(R.color.color_171717));
+            if (curTemp > maxTemp || curTemp < minTemp) {
+                binding.tvCurTemp.setTextColor(getResources().getColor(R.color.color_c2185b));
+            } else {
+                binding.tvCurTemp.setTextColor(getResources().getColor(R.color.color_171717));
+            }
         }
         binding.tvCurTemp.setText(String.valueOf(curTemp) + "°C");
 
@@ -340,19 +433,27 @@ public class ChartFragment extends Fragment {
             curHumi = arrDataList.get(arrDataList.size() - 1).getHumi();
         }
 
-        if(curHumi > maxHumi || curHumi < minHumi) {
-            binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_c2185b));
+        SensorInfo sensorInfo = Util.getSensorInfo(device);
+        if(sensorInfo.getIsDisconnected() == true) {
+            binding.tvSensorName.setTextColor(getResources().getColor(R.color.gray));
         }
         else {
-            binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_171717));
+            if (curHumi > maxHumi || curHumi < minHumi) {
+                binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_c2185b));
+            } else {
+                binding.tvSensorName.setTextColor(getResources().getColor(R.color.color_171717));
+            }
         }
         binding.tvSensorName.setText(BrainyTempApp.getSensorName(device));
-
-        if(curHumi > maxHumi || curHumi < minHumi) {
-            binding.tvCurHumi.setTextColor(getResources().getColor(R.color.color_c2185b));
+        if(sensorInfo.getIsDisconnected() == true) {
+            binding.tvCurHumi.setTextColor(getResources().getColor(R.color.gray));
         }
         else {
-            binding.tvCurHumi.setTextColor(getResources().getColor(R.color.color_171717));
+            if (curHumi > maxHumi || curHumi < minHumi) {
+                binding.tvCurHumi.setTextColor(getResources().getColor(R.color.color_c2185b));
+            } else {
+                binding.tvCurHumi.setTextColor(getResources().getColor(R.color.color_171717));
+            }
         }
         binding.tvCurHumi.setText(String.valueOf(curHumi) + "%");
 

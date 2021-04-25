@@ -8,19 +8,6 @@ import java.util.ArrayList;
 
 public class PreferenceMgr {
 
-    /**
-     * 유저정보
-     */
-    public static final String PREF_schedule_time = "PREF_schedule_time";
-    public static final String PREF_ALLOW_PERMISSION = "PREF_ALLOW_PERMISSION";
-    public static final String PREF_LATITUDE = "PREF_LATITUDE";
-    public static final String PREF_LONGITUDE = "PREF_LONGITUDE";
-    public static final String PREF_SENSOR_LIST = "PREF_SENSOR_LIST";
-    public static final String PREF_ALARM_LIST = "PREF_ALARM_LIST";
-    public static final String PREF_ALARM_REPEAT_CYCLE = "PREF_ALARM_REPEAT_CYCLE"; //경보음 반복주기
-    public static final String PREF_ALERT_REPEAT_CYCLE = "PREF_ALERT_REPEAT_CYCLE"; //알림 반복주기
-    public static final String PREF_SENSING_REPEAT_CYCLE = "PREF_SENSING_REPEAT_CYCLE"; //알림 반복주기
-
     //센서, 온도 갱신 시간 차
     public static final String PREF_UPDATE_SENSOR_TIME = "PREF_UPDATE_SENSOR_TIME";
 

@@ -7,6 +7,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,8 +26,10 @@ import okio.Buffer;
 public class HttpService {
     public static final MediaType CONTENT_TYPE
             = MediaType.parse("application/json; charset=utf-8");
+
     public static String HTP_DOMAIN() {
         return "https://brainytemp.appspot.com/t1/";
+        //return "https://jerry-firestore.du.r.appspot.com/t1/";
     }
 
     private Context mContext;
@@ -138,6 +142,26 @@ public class HttpService {
         postenc(url, body, resListner);
     }
 
+    public void uploadData(String device, JsonArray data, int rssi, ResponseListener resListner) {
+        String url = "tempV2";
+
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("mac", device);
+        hashMap.put("rssi", String.valueOf(rssi));
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("mac", device);
+        jsonObject.addProperty("rssi", rssi);
+        jsonObject.add("arrVal", data);
+
+        String postBody = jsonObject.toString();
+        RequestBody body = RequestBody.create(CONTENT_TYPE, postBody);
+
+        Log.d("BrainyTemp", "tempV2 POST body: " + postBody);
+
+        postenc(url, body, resListner);
+    }
+
     /**
      * 이벤트 알림
      */
@@ -153,12 +177,15 @@ public class HttpService {
         hashMap.put("lowVal", String.valueOf(lowVal));
         hashMap.put("highVal", String.valueOf(highVal));
 
-        RequestBody body = RequestBody.create(CONTENT_TYPE, new Gson().toJson(hashMap)); // new
+        String postBody = new Gson().toJson(hashMap);
+        RequestBody body = RequestBody.create(CONTENT_TYPE, postBody); // new
+
+        Log.d("BrainyTemp", "Event Alarm POST body: " + postBody);
         postenc(url, body, resListner);
     }
 
     public void requestReport(String device, String name, String mail, String startDate, String endDate, ResponseListener resListner) {
-        String url = "event";
+        String url = "report";
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("mac", device);
         hashMap.put("nm", name);
@@ -166,7 +193,10 @@ public class HttpService {
         hashMap.put("end", endDate);
         hashMap.put("mail", mail);
 
-        RequestBody body = RequestBody.create(CONTENT_TYPE, new Gson().toJson(hashMap)); // new
+        String postBody = new Gson().toJson(hashMap);
+        RequestBody body = RequestBody.create(CONTENT_TYPE, postBody); // new
+
+        Log.d("BrainyTemp", "Request Report POST body: " + postBody);
         postenc(url, body, resListner);
     }
 

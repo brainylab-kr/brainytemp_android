@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import androidx.databinding.DataBindingUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
@@ -103,7 +104,7 @@ public class AlertActivity extends BaseActivity implements View.OnClickListener 
     private void finishAlert() {
         for (int i = 0; i < arrSensorList.size(); i++) {
             RingtoneListInfo info = arrSensorList.get(i);
-            BrainyTempApp.setAlarmTime(info.getDevice(), "" + System.currentTimeMillis());
+            BrainyTempApp.setAlarmTime(info.getDevice(), "" + Calendar.getInstance().getTime().getTime());
         }
 
         instance = null;

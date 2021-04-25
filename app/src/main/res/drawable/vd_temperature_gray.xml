@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:height="35dp" android:width="35dp" android:viewportWidth="90" android:viewportHeight="90">
+    <path android:pathData="M 52 60 C 54.444 61.908 56.126 64.629 56.742 67.668 C 57.357 70.707 56.865 73.868 55.355 76.576 C 53.846 79.284 51.416 81.365 48.508 82.44 C 45.6 83.516 42.4 83.516 39.492 82.44 C 36.584 81.365 34.154 79.284 32.645 76.576 C 31.135 73.868 30.643 70.707 31.258 67.668 C 31.874 64.629 33.556 61.908 36 60 L 36 10 C 36 2 52 2 52 10 Z" android:strokeColor="@color/dark_gray" android:strokeWidth="2"/>
+    <path android:pathData="M49,13 h-10z" android:strokeColor="@color/dark_gray" android:strokeWidth="1.5"/>
+    <path android:pathData="M49,16 h-5z" android:strokeColor="@color/dark_gray" android:strokeWidth="1.5"/>
+    <path android:pathData="M49,19 h-10z" android:strokeColor="@color/dark_gray" android:strokeWidth="1.5"/>
+    <path android:pathData="M49,22 h-5z" android:strokeColor="@color/dark_gray" android:strokeWidth="1.5"/>
+    <path android:pathData="M49,25 h-10z" android:strokeColor="@color/dark_gray" android:strokeWidth="1.5"/>
+    <path android:pathData="M49,28 h-5z" android:strokeColor="@color/dark_gray" android:strokeWidth="1.5"/>
+    <path android:pathData="M49,31 h-10z" android:strokeColor="@color/dark_gray" android:strokeWidth="1.5"/>
+    <path android:pathData="M49,34 h-5z" android:strokeColor="@color/dark_gray" android:strokeWidth="1.5"/>
+    <path android:pathData="M49,37 h-10z" android:strokeColor="@color/dark_gray" android:strokeWidth="1.5"/>
+    <path android:pathData="M49,40 h-5z" android:strokeColor="@color/dark_gray" android:strokeWidth="1.5"/>
+    <path android:pathData="M49,43 h-10z" android:strokeColor="@color/dark_gray" android:strokeWidth="1.5"/>
+    <path android:fillColor="@color/dark_gray" android:pathData="M 49 62 L 49 66 L 48 66 C 47.205 66 46.441 66.316 45.879 66.879 C 45.316 67.441 45 68.205 45 69 C 45 69.795 45.316 70.559 45.879 71.121 C 46.441 71.684 47.205 72 48 72 C 48.795 72 49.559 71.684 50.121 71.121 C 50.684 70.559 51 69.795 51 69 C 51 68.205 50.684 67.441 50.121 66.879 C 49.559 66.316 48.795 66 48 66 L 49 66 L 49 62 C 51.013 63.246 52.489 65.2 53.137 67.477 C 53.785 69.754 53.559 72.193 52.504 74.312 C 51.449 76.431 49.639 78.081 47.432 78.936 C 45.225 79.791 42.775 79.791 40.568 78.936 C 38.361 78.081 36.551 76.431 35.496 74.312 C 34.441 72.193 34.215 69.754 34.863 67.477 C 35.511 65.2 36.987 63.246 39 62 L 39 47 C 44 44 44 50 49 47 L 49 62 Z"/>
+</vector>

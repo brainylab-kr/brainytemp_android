@@ -16,6 +16,7 @@ import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -44,11 +45,11 @@ public class MyWorkWithData extends Worker {
     @Override
     public ListenableWorker.Result doWork() {
         long storeTime = (long) Double.parseDouble(BrainyTempApp.getScheduleTime());
-        long currentTime = System.currentTimeMillis();
+        long currentTime = Calendar.getInstance().getTime().getTime();
         int dicSec = (int) ((currentTime - storeTime) / 1000);
         int sesingCycle = Integer.valueOf(BrainyTempApp.getSensingRepeatCycle ()) * 60;
 
-        BrainyTempApp.setScheduleTime("" + System.currentTimeMillis());
+        BrainyTempApp.setScheduleTime("" + Calendar.getInstance().getTime().getTime());
 
         Intent sendIntent = new Intent(Common.ACT_SENSOR_RESCAN);
         LocalBroadcastManager.getInstance(context).sendBroadcast(sendIntent);

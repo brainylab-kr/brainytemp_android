@@ -146,8 +146,8 @@ public class SearchFragment extends Fragment {
             return;
         }
 
-        Device info = arrSearchList.get(postion);
-        reqDeviceAuth(info);
+        Device device = arrSearchList.get(postion);
+        reqDeviceAuth(device);
     }
 
     private void showMaxSensor() {
@@ -249,7 +249,7 @@ public class SearchFragment extends Fragment {
                         }
 
                     } catch (JSONException e) {
-                        Log.d("BrainyTemp", "err.. : " + e.toString());
+                        Log.d("BrainyTemp", "err.. : " + e.toString() +", " + res);
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 Util.showToast(getActivity(), e.getMessage());

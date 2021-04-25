@@ -27,11 +27,14 @@ public class SensorInfo {
     private Set<Device.Feature> mFeatures;
     private Device.ConnectivityStatus mConnectivityStatus;
     private SoftwareVersion mSoftwareVersion;
+    private boolean mIsDisconnected;
+    private Date mDisconnectedTime;
 
     public SensorInfo(String type, String name, String address, String date, double temp, int humi,
                       int rssi, Device.BatteryStatus batteryStatus, Date calibrationDate, int counter,
                       Device.EncryptionStatus encryptionStatus, int period, Set<Device.Feature> features,
-                      Device.ConnectivityStatus connectivityStatus, SoftwareVersion softwareVersion) {
+                      Device.ConnectivityStatus connectivityStatus, SoftwareVersion softwareVersion,
+                      boolean isDisconnected, Date disconnectedTime) {
         mType = type;
         mName = name;
         mAddress = address;
@@ -47,6 +50,8 @@ public class SensorInfo {
         mFeatures = features;
         mConnectivityStatus = connectivityStatus;
         mSoftwareVersion = softwareVersion;
+        mIsDisconnected = isDisconnected;
+        mDisconnectedTime = disconnectedTime;
     }
 
     public String getType() {
@@ -103,6 +108,14 @@ public class SensorInfo {
 
     public SoftwareVersion getSoftwareVersion() {
         return mSoftwareVersion;
+    }
+
+    public boolean getIsDisconnected() {
+        return mIsDisconnected;
+    }
+
+    public Date getDisconnectedTime() {
+        return mDisconnectedTime;
     }
 
     public Device.ConnectivityStatus getConnectivityStatus() {
@@ -167,6 +180,14 @@ public class SensorInfo {
 
     public void setConnectivityStatus(Device.ConnectivityStatus connectivityStatus) {
         this.mConnectivityStatus = connectivityStatus;
+    }
+
+    public void setIsDisconnected(boolean isDisconnected) {
+        mIsDisconnected = isDisconnected;
+    }
+
+    public void setDisconnectedTime(Date disconnectedTime) {
+        mDisconnectedTime = disconnectedTime;
     }
 
 }

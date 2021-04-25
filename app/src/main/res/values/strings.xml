@@ -106,6 +106,10 @@
     <string name="out">내보내기</string>
     <string name="request_report">리포트 전송</string>
     <string name="send_report">입력하신 메일주소로 리포트를 전송하였습니다.\n메일함을 확인하세요.</string>
+    <string name="fail_report">리포트 전송에 실패하였습니다.다시 시도해주세요.</string>
+    <string name="input_mail">메일 주소를 입력해주세요.</string>
+    <string name="not_vaild_mail">올바른 메일 주소가 아닙니다. 다시 입력해주세요.</string>
+    <string name="over_max_date">한 번에 최대 31일의 리포트를 요청할 수 있습니다.\n31일을 초과하는 리포트는 나누어 요청해주세요.</string>
     <string name="alert_music">경보음</string>
     <string name="alert_music_delete">눌러서 경보음 해제</string>
     <string name="gps_off">위치서비스가 꺼져있습니다.\n위치서비스를 활성화하겠습니까?</string>

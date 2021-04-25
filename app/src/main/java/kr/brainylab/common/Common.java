@@ -52,4 +52,15 @@ public class Common {
      */
     public static AlarmListInfo gAlarmInfo = null;
 
+    public static final String PREF_schedule_time = "PREF_schedule_time";
+    public static final String PREF_ALLOW_PERMISSION = "PREF_ALLOW_PERMISSION";
+    public static final String PREF_LATITUDE = "PREF_LATITUDE";
+    public static final String PREF_LONGITUDE = "PREF_LONGITUDE";
+    public static final String PREF_SENSOR_LIST = "PREF_SENSOR_LIST";
+    public static final String PREF_ALARM_LIST = "PREF_ALARM_LIST";
+    public static final String PREF_ALARM_REPEAT_CYCLE = "PREF_ALARM_REPEAT_CYCLE"; //경보음 반복주기
+    public static final String PREF_ALERT_REPEAT_CYCLE = "PREF_ALERT_REPEAT_CYCLE"; //알림 반복주기
+    public static final String PREF_SENSING_REPEAT_CYCLE = "PREF_SENSING_REPEAT_CYCLE"; //알림 반복주기
+    public static final String PREF_REPORT_ADDRESS = "PREF_REPORT_ADDRESS";
+
 }

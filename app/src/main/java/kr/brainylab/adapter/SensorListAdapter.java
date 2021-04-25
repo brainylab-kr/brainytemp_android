@@ -64,41 +64,53 @@ public class SensorListAdapter extends ArrayAdapter<SensorInfo> {
             holder = (Holder) convertView.getTag();
         }
 
-        final SensorInfo info = getItem(position);
+        final SensorInfo sensor = getItem(position);
 
-        String name = BrainyTempApp.getSensorName(info.getAddress());
+        String name = BrainyTempApp.getSensorName(sensor.getAddress());
 
         holder.tvName.setText(name);
-        holder.tvDevice.setText(info.getAddress());
-        holder.tvDate.setText(info.getDate());
-        holder.tvTemp.setText(Double.toString(info.getTemp()) + "°C");
-        holder.tvHumi.setText(Integer.toString(info.getHumi()) + "%");
+        holder.tvDevice.setText(sensor.getAddress());
+        holder.tvDate.setText(sensor.getDate());
+        holder.tvTemp.setText(Double.toString(sensor.getTemp()) + "°C");
+        holder.tvHumi.setText(Integer.toString(sensor.getHumi()) + "%");
 
-        double maxTemp = BrainyTempApp.getMaxTemp(info.getAddress());
-        double minTemp = BrainyTempApp.getMinTemp(info.getAddress());
-        if (info.getTemp() < minTemp || info.getTemp() > maxTemp) {
-            holder.ivTemperature.setBackground(mContext.getDrawable(R.drawable.vd_temperature_red));
-            holder.tvTemp.setTextColor(mContext.getResources().getColor(R.color.color_c2185b));
+        if(sensor.getIsDisconnected() == true) {
+            holder.ivTemperature.setBackground(mContext.getDrawable(R.drawable.vd_temperature_gray));
+            holder.tvTemp.setTextColor(mContext.getResources().getColor(R.color.gray));
+        }
+        else {
+            double maxTemp = BrainyTempApp.getMaxTemp(sensor.getAddress());
+            double minTemp = BrainyTempApp.getMinTemp(sensor.getAddress());
+            if (sensor.getTemp() < minTemp || sensor.getTemp() > maxTemp) {
+                holder.ivTemperature.setBackground(mContext.getDrawable(R.drawable.vd_temperature_red));
+                holder.tvTemp.setTextColor(mContext.getResources().getColor(R.color.color_c2185b));
 
-        } else {
-            holder.ivTemperature.setBackground(mContext.getDrawable(R.drawable.vd_temperature));
-            holder.tvTemp.setTextColor(mContext.getResources().getColor(R.color.color_171717));
+            } else {
+                holder.ivTemperature.setBackground(mContext.getDrawable(R.drawable.vd_temperature));
+                holder.tvTemp.setTextColor(mContext.getResources().getColor(R.color.color_171717));
+            }
         }
 
-        if(info.getType().equals(Common.SENSOR_TYPE_TH)) {
+        if(sensor.getType().equals(Common.SENSOR_TYPE_TH)) {
             holder.rlyHumi.setVisibility(View.VISIBLE);
             holder.ivHumi.setVisibility(View.VISIBLE);
             holder.tvHumi.setVisibility(View.VISIBLE);
 
-            int maxHumi = BrainyTempApp.getMaxHumi(info.getAddress());
-            int minHumi = BrainyTempApp.getMinHumi(info.getAddress());
+            if(sensor.getIsDisconnected() == true) {
+                holder.ivHumi.setBackground(mContext.getDrawable(R.drawable.vd_humidity_gray));
+                holder.tvHumi.setTextColor(mContext.getResources().getColor(R.color.gray));
+            }
+            else {
+                int maxHumi = BrainyTempApp.getMaxHumi(sensor.getAddress());
+                int minHumi = BrainyTempApp.getMinHumi(sensor.getAddress());
 
-            if (info.getHumi() < minHumi || info.getHumi() > maxHumi) {
-                holder.ivHumi.setBackground(mContext.getDrawable(R.drawable.vd_humidity_red));
-                holder.tvHumi.setTextColor(mContext.getResources().getColor(R.color.color_c2185b));
-            } else {
-                holder.ivHumi.setBackground(mContext.getDrawable(R.drawable.vd_humidity));
-                holder.tvHumi.setTextColor(mContext.getResources().getColor(R.color.color_171717));
+                if (sensor.getHumi() < minHumi || sensor.getHumi() > maxHumi) {
+                    holder.ivHumi.setBackground(mContext.getDrawable(R.drawable.vd_humidity_red));
+                    holder.tvHumi.setTextColor(mContext.getResources().getColor(R.color.color_c2185b));
+                } else {
+                    holder.ivHumi.setBackground(mContext.getDrawable(R.drawable.vd_humidity));
+                    holder.tvHumi.setTextColor(mContext.getResources().getColor(R.color.color_171717));
+                }
             }
         }
         else {
@@ -107,7 +119,7 @@ public class SensorListAdapter extends ArrayAdapter<SensorInfo> {
             holder.tvHumi.setVisibility(View.GONE);
         }
 
-        int nRssi =  info.getRssi();
+        int nRssi =  sensor.getRssi();
         if (nRssi > -50) {
             holder.ivWifiSignal.setImageResource(R.drawable.vd_signal_wifi_4);
         } else if (nRssi <= -50 && nRssi > -70) {
@@ -123,7 +135,7 @@ public class SensorListAdapter extends ArrayAdapter<SensorInfo> {
         holder.rlyBackground.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Common.gSelDevice = info.getAddress();
+                Common.gSelDevice = sensor.getAddress();
                 MainActivity mainActivity = (MainActivity) mContext;
                 mainActivity.bEdit = true;
                 mainActivity.changeTitle();
@@ -135,9 +147,9 @@ public class SensorListAdapter extends ArrayAdapter<SensorInfo> {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, DetailActivity.class);
-                intent.putExtra("device", info.getAddress());
-                intent.putExtra("temp", info.getTemp());
-                intent.putExtra("humi", info.getHumi());
+                intent.putExtra("device", sensor.getAddress());
+                intent.putExtra("temp", sensor.getTemp());
+                intent.putExtra("humi", sensor.getHumi());
                 mContext.startActivity(intent);
             }
         });

@@ -44,9 +44,6 @@ import kr.brainylab.model.ValueListInfo;
 import pl.efento.sdk.api.measurement.Measurement;
 import pl.efento.sdk.api.scan.Device;
 
-import static kr.brainylab.utils.PreferenceMgr.PREF_ALARM_LIST;
-import static kr.brainylab.utils.PreferenceMgr.PREF_SENSOR_LIST;
-
 public class Util {
     private static ProgressDialog _progressDlg = null;
 
@@ -194,7 +191,7 @@ public class Util {
      * 센서 추가
      */
     public static void addSensor(Device device) {
-        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(Common.PREF_SENSOR_LIST, ""),
                 new TypeToken<ArrayList<SensorInfo>>() {
                 }.getType());
         if (list == null) {
@@ -203,7 +200,7 @@ public class Util {
         String type = "";
 
         Map<Integer, Measurement> map = device.getMeasurements();
-        double temperature = Double.valueOf(map.get(1).get().toString());
+        double curTemp = Double.parseDouble(String.format("%.1f",Double.parseDouble(map.get(1).get().toString())));
 
         int humidity = 0;
         if(map.get(2) != null && map.get(2).isValid()) {
@@ -214,11 +211,11 @@ public class Util {
             type = Common.SENSOR_TYPE_T1;
         }
 
-        SensorInfo item = new SensorInfo(type, device.getName(), device.getAddress(), getCurDate(), temperature, humidity, device.getRssi(),
+        SensorInfo item = new SensorInfo(type, device.getName(), device.getAddress(), getCurDate(), curTemp, humidity, device.getRssi(),
                 device.getBatteryStatus(), device.getCalibrationDate(), device.getCounter(), device.getEncryptionStatus(), device.getPeriod(),
-                device.getFeatures(), device.getConnectivityStatus(), device.getSoftwareVersion());
+                device.getFeatures(), device.getConnectivityStatus(), device.getSoftwareVersion(), false, Calendar.getInstance().getTime());
         list.add(item);
-        BrainyTempApp.mPref.put(PREF_SENSOR_LIST, new Gson().toJson(list));
+        BrainyTempApp.mPref.put(Common.PREF_SENSOR_LIST, new Gson().toJson(list));
 
         BrainyTempApp.setSensorName(device.getAddress(), device.getName());
         BrainyTempApp.setMaxTemp(device.getAddress(), 8.0);
@@ -231,7 +228,7 @@ public class Util {
      * 센서 삭제
      */
     public static boolean deleteSensor(String idx) {
-        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(Common.PREF_SENSOR_LIST, ""),
                 new TypeToken<ArrayList<SensorInfo>>() {
                 }.getType());
 
@@ -249,7 +246,7 @@ public class Util {
             return false;
         }
         list.remove(index);
-        BrainyTempApp.mPref.put(PREF_SENSOR_LIST, new Gson().toJson(list));
+        BrainyTempApp.mPref.put(Common.PREF_SENSOR_LIST, new Gson().toJson(list));
         return true;
     }
 
@@ -257,7 +254,7 @@ public class Util {
      * 등록된 센서인지 체크
      */
     public static boolean isExistSensor(String idx) {
-        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(Common.PREF_SENSOR_LIST, ""),
                 new TypeToken<ArrayList<SensorInfo>>() {
                 }.getType());
         if (list == null) {
@@ -277,7 +274,7 @@ public class Util {
      * 센서목록 얻기
      */
     public static ArrayList<SensorInfo> getSensorList() {
-        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(Common.PREF_SENSOR_LIST, ""),
                 new TypeToken<ArrayList<SensorInfo>>() {
                 }.getType());
         if (list == null) {
@@ -288,7 +285,7 @@ public class Util {
     }
 
     public static SensorInfo getSensorInfo(String address) {
-        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(Common.PREF_SENSOR_LIST, ""),
                 new TypeToken<ArrayList<SensorInfo>>() {
                 }.getType());
 
@@ -306,7 +303,7 @@ public class Util {
     }
 
     public static SensorInfo getSensorInfo(int index) {
-        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(Common.PREF_SENSOR_LIST, ""),
                 new TypeToken<ArrayList<SensorInfo>>() {
                 }.getType());
 
@@ -315,7 +312,7 @@ public class Util {
 
     public static int getSensorIndex(String address) {
 
-        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_SENSOR_LIST, ""),
+        ArrayList<SensorInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(Common.PREF_SENSOR_LIST, ""),
                 new TypeToken<ArrayList<SensorInfo>>() {
                 }.getType());
         if (list == null) {
@@ -338,7 +335,7 @@ public class Util {
      * 알림 추가
      */
     public static boolean addAlarm(AlarmListInfo info) {
-        ArrayList<AlarmListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_ALARM_LIST, ""),
+        ArrayList<AlarmListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(Common.PREF_ALARM_LIST, ""),
                 new TypeToken<ArrayList<AlarmListInfo>>() {
                 }.getType());
         if (list == null) {
@@ -346,7 +343,7 @@ public class Util {
         }
 
         list.add(info);
-        BrainyTempApp.mPref.put(PREF_ALARM_LIST, new Gson().toJson(list));
+        BrainyTempApp.mPref.put(Common.PREF_ALARM_LIST, new Gson().toJson(list));
         return true;
     }
 
@@ -354,7 +351,7 @@ public class Util {
      * 알림 삭제
      */
     public static boolean deleteAlarm(String phone) {
-        ArrayList<AlarmListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_ALARM_LIST, ""),
+        ArrayList<AlarmListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(Common.PREF_ALARM_LIST, ""),
                 new TypeToken<ArrayList<AlarmListInfo>>() {
                 }.getType());
 
@@ -372,7 +369,7 @@ public class Util {
             return false;
         }
         list.remove(index);
-        BrainyTempApp.mPref.put(PREF_ALARM_LIST, new Gson().toJson(list));
+        BrainyTempApp.mPref.put(Common.PREF_ALARM_LIST, new Gson().toJson(list));
         return true;
     }
 
@@ -380,7 +377,7 @@ public class Util {
      * 등록된 전화번호인지 체크
      */
     public static boolean isExistAlarm(String phone) {
-        ArrayList<AlarmListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_ALARM_LIST, ""),
+        ArrayList<AlarmListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(Common.PREF_ALARM_LIST, ""),
                 new TypeToken<ArrayList<AlarmListInfo>>() {
                 }.getType());
         if (list == null) {
@@ -400,7 +397,7 @@ public class Util {
      * 알림목록 얻기
      */
     public static ArrayList<AlarmListInfo> getAlarmList() {
-        ArrayList<AlarmListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_ALARM_LIST, ""),
+        ArrayList<AlarmListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(Common.PREF_ALARM_LIST, ""),
                 new TypeToken<ArrayList<AlarmListInfo>>() {
                 }.getType());
         if (list == null) {
@@ -415,7 +412,7 @@ public class Util {
      */
     public static void updateAlarm(Context context, String oldPhone, AlarmListInfo info) {
 
-        ArrayList<AlarmListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(PREF_ALARM_LIST, ""),
+        ArrayList<AlarmListInfo> list = new Gson().fromJson(BrainyTempApp.mPref.getValue(Common.PREF_ALARM_LIST, ""),
                 new TypeToken<ArrayList<AlarmListInfo>>() {
                 }.getType());
 
@@ -437,7 +434,7 @@ public class Util {
         }
         list.remove(index);
         list.add(index, info);
-        BrainyTempApp.mPref.put(PREF_ALARM_LIST, new Gson().toJson(list));
+        BrainyTempApp.mPref.put(Common.PREF_ALARM_LIST, new Gson().toJson(list));
 
         Intent sendIntent = new Intent(Common.ACT_ALARM_LIST_UPDATE);
         context.sendBroadcast(sendIntent);

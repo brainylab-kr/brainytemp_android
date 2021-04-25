@@ -1,6 +1,3 @@
-/**
- * 홈
- */
 package kr.brainylab.view.fragment;
 
 import android.os.Bundle;
@@ -13,32 +10,33 @@ import android.widget.Toast;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
 import kr.brainylab.common.Common;
 import kr.brainylab.common.HttpService;
 import kr.brainylab.databinding.FragmentOutBinding;
-import kr.brainylab.model.AlarmListInfo;
 import kr.brainylab.utils.Util;
 import kr.brainylab.view.activity.DetailActivity;
 import kr.brainylab.view.dailog.Calendar1Dialog;
-import kr.brainylab.view.dailog.NameEditDialog;
-import kr.brainylab.view.dailog.TempLimitDialog;
+import kr.brainylab.view.dailog.OneBtnDialog;
 
-/**
- * 센서 상세에서 내보내기
- */
-public class OutFragment extends Fragment implements View.OnClickListener {
+import static android.provider.Settings.System.DATE_FORMAT;
+
+public class ReportFragment extends Fragment implements View.OnClickListener {
 
     View rootView;
     FragmentOutBinding binding;
@@ -49,7 +47,7 @@ public class OutFragment extends Fragment implements View.OnClickListener {
     private int mType = 0;
     private int mForm = 0;
 
-    public OutFragment() {
+    public ReportFragment() {
         // Required empty public constructor
     }
 
@@ -127,13 +125,20 @@ public class OutFragment extends Fragment implements View.OnClickListener {
 
     private void initData() {
 
+        String address = BrainyTempApp.mPref.getValue(Common.PREF_REPORT_ADDRESS, "");
+
+        if(address.length() != 0) {
+            binding.edtEmail.setText(address);
+        }
+
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         endDate = df.format(date);
 
-        cal.add(Calendar.MONTH, -1);
-        startDate = df.format(cal.getTime());
+        //cal.add(Calendar.MONTH, -1);
+        //startDate = df.format(cal.getTime());
+        startDate = endDate;
 
         binding.edtStartDate.setText(startDate);
         binding.edtEndDate.setText(endDate);
@@ -150,6 +155,34 @@ public class OutFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.tv_out: //리포트 전송
+                String mail = binding.edtEmail.getText().toString();
+                if(mail.length() == 0) {
+                    Toast.makeText(getContext(), R.string.input_mail, Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
+                if(isValidEmail(mail) != true) {
+                    showAlert(getResources().getString(R.string.not_vaild_mail));
+                    break;
+                }
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date start = Calendar.getInstance().getTime();
+                Date end = Calendar.getInstance().getTime();
+                try {
+                    start = dateFormat.parse(startDate);
+                    end = dateFormat.parse(endDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                long dateCounter = (end.getTime() - start.getTime()) / (24*60*60*1000);
+                if(dateCounter >= 31) {
+                    showAlert(getResources().getString(R.string.over_max_date));
+                    break;
+                }
+
                 requestReport();
                 break;
             case R.id.edt_start_date: //시작날짜
@@ -206,24 +239,52 @@ public class OutFragment extends Fragment implements View.OnClickListener {
         String start = startDate + " 00:00:00";
         String end = endDate + " 23:59:59";
 
+        BrainyTempApp.mPref.put(Common.PREF_REPORT_ADDRESS, mail);
+
         httpService = new HttpService(BrainyTempApp.getInstance());
         httpService.requestReport(device, name, mail, start, end, new HttpService.ResponseListener() {
             @Override
             public void onResponseResult(Boolean bSuccess, String res) {
                 if (bSuccess) {
+                    Log.d("BrainyTemp", "onResponseResult:" + res);
                     try {
                         JSONObject jObj = new JSONObject(res);
                         String result = jObj.getString("ret");
                         if (result.equals("ok")) {
                             successUpload();
-                            Toast.makeText(getContext(), R.string.send_report, Toast.LENGTH_SHORT).show();
+                            showAlert(getResources().getString(R.string.send_report));
                         }
                     } catch (JSONException e) {
                         Log.d("BrainyTemp", "err.. : " + e.toString());
+                        showToast(BrainyTempApp.getInstance().getResources().getString(R.string.fail_report));
                     }
                 } else {
                     Log.d("BrainyTemp", "err.. : " + BrainyTempApp.getInstance().getResources().getString(R.string.connect_fail));
+                    showToast(BrainyTempApp.getInstance().getResources().getString(R.string.connect_fail));
+
                 }
+            }
+        });
+    }
+
+    public void showAlert(String message) {
+
+        getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                String button = getResources().getString(R.string.confirm);
+                OneBtnDialog.init(getActivity(), message, button, new OneBtnDialog.OnClickListener() {
+                    @Override
+                    public void onConfirm() {
+                    }
+                }).show();
+            }
+        });
+    }
+
+    private void showToast(String message) {
+        getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -231,4 +292,16 @@ public class OutFragment extends Fragment implements View.OnClickListener {
     private void successUpload() {
         httpService = null;
     }
+
+    public boolean isValidEmail(String email) {
+        boolean err = false;
+        String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(email);
+        if(m.matches()) {
+            err = true;
+        }
+        return err;
+    }
+
 }

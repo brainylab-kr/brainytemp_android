@@ -11,13 +11,15 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
                 <TextView
                     android:id="@+id/tv_sensor_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
@@ -25,21 +27,23 @@
                     android:fontFamily="@font/notosanskrbold"
                     android:text="백신냉장고"
                     android:textColor="@color/color_171717"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    android:layout_weight="1"/>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp">
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/tv_cur_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/notosanskrbold"
+                        android:gravity="right"
                         android:text="3.0°C"
                         android:textColor="@color/color_171717"
                         android:textSize="30sp" />
@@ -50,12 +54,44 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:fontFamily="@font/notosanskrbold"
+                        android:gravity="right"
                         android:text="30%"
                         android:textColor="@color/color_171717"
                         android:textSize="30sp" />
-
                 </LinearLayout>
-            </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/tv_sensor_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:fontFamily="@font/notosanskrregular"
+                    android:text="12:34:56:78:90"
+                    android:textColor="@color/color_171717"
+                    android:textSize="15sp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_sensing_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="right"
+                    android:fontFamily="@font/notosanskrregular"
+                    android:text="12:34:56:78:90"
+                    android:textColor="@color/color_171717"
+                    android:textSize="15sp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

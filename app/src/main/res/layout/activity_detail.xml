@@ -44,36 +44,6 @@
             android:weightSum="3">
 
             <RelativeLayout
-                android:id="@+id/rly_alarm"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/iv_alarm"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/vd_alarm_white" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rly_out"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/iv_out"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/vd_export_white" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/rly_chart"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -85,6 +55,34 @@
                     android:layout_height="32dp"
                     android:layout_centerInParent="true"
                     android:background="@drawable/vd_chart_white" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rly_report"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/iv_out"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/vd_export_white" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rly_setting"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/iv_alarm"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/vd_alarm_white" />
             </RelativeLayout>
 
         </LinearLayout>

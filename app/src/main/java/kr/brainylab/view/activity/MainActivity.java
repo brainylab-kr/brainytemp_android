@@ -31,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import kr.brainylab.BuildConfig;
 import kr.brainylab.BrainyTempApp;
@@ -560,7 +561,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
 
         long storeTime = (long) Double.parseDouble(BrainyTempApp.getAlarmTime(device));
-        long currentTime = System.currentTimeMillis();
+        long currentTime = Calendar.getInstance().getTime().getTime();
         int dicSec = (int) ((currentTime - storeTime) / 1000);
 
 

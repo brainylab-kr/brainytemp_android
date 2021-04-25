@@ -5,16 +5,9 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import kr.brainylab.common.Common;
 import kr.brainylab.utils.PreferenceMgr;
 import pl.efento.sdk.Efento;
-
-import static kr.brainylab.utils.PreferenceMgr.PREF_ALARM_REPEAT_CYCLE;
-import static kr.brainylab.utils.PreferenceMgr.PREF_ALERT_REPEAT_CYCLE;
-import static kr.brainylab.utils.PreferenceMgr.PREF_SENSING_REPEAT_CYCLE;
-import static kr.brainylab.utils.PreferenceMgr.PREF_ALLOW_PERMISSION;
-import static kr.brainylab.utils.PreferenceMgr.PREF_LATITUDE;
-import static kr.brainylab.utils.PreferenceMgr.PREF_LONGITUDE;
-import static kr.brainylab.utils.PreferenceMgr.PREF_schedule_time;
 
 public class BrainyTempApp extends Application {
 
@@ -46,52 +39,52 @@ public class BrainyTempApp extends Application {
     /************************************** 아래는 유저 정보**********************************************************/
 
     public static void setScheduleTime(String value) {
-        mPref.put(PREF_schedule_time, value);
+        mPref.put(Common.PREF_schedule_time, value);
     }
 
     public static String getScheduleTime() {
-        return mPref.getValue(PREF_schedule_time, "5");
+        return mPref.getValue(Common.PREF_schedule_time, "5");
     }
     /**
      * 퍼미션 허용하기
      */
     public static void setAllowPermission() {
-        mPref.put(PREF_ALLOW_PERMISSION, true);
+        mPref.put(Common.PREF_ALLOW_PERMISSION, true);
     }
 
     /**
      * 퍼미션 허용하기
      */
     public static boolean getAllowPermission() {
-        return mPref.getValue(PREF_ALLOW_PERMISSION, false);
+        return mPref.getValue(Common.PREF_ALLOW_PERMISSION, false);
     }
 
     /**
      * 유저 위도
      */
     public static void setLatitude(float value) {
-        mPref.put(PREF_LATITUDE, value);
+        mPref.put(Common.PREF_LATITUDE, value);
     }
 
     /**
      * 유저 위도
      */
     public static float getLatitude() {
-        return mPref.getValue(PREF_LATITUDE, 0.0f);
+        return mPref.getValue(Common.PREF_LATITUDE, 0.0f);
     }
 
     /**
      * 유저 경도
      */
     public static void setLongitude(float value) {
-        mPref.put(PREF_LONGITUDE, value);
+        mPref.put(Common.PREF_LONGITUDE, value);
     }
 
     /**
      * 유저 경도
      */
     public static float getLongitude() {
-        return mPref.getValue(PREF_LONGITUDE, 0.0f);
+        return mPref.getValue(Common.PREF_LONGITUDE, 0.0f);
     }
 
     /**
@@ -182,42 +175,42 @@ public class BrainyTempApp extends Application {
      * 경보음 반복 주기
      */
     public static void setAlarmRepeatCycle(int value) {
-        mPref.put(PREF_ALARM_REPEAT_CYCLE, value);
+        mPref.put(Common.PREF_ALARM_REPEAT_CYCLE, value);
     }
 
     /**
      * 경보음 반복 주기
      */
     public static int getAlarmRepeatCycle() {
-        return mPref.getValue(PREF_ALARM_REPEAT_CYCLE, 5);
+        return mPref.getValue(Common.PREF_ALARM_REPEAT_CYCLE, 5);
     }
 
     /**
      * SMS 알림 반복 주기
      */
     public static void setAlertRepeatCycle(int value) {
-        mPref.put(PREF_ALERT_REPEAT_CYCLE, value);
+        mPref.put(Common.PREF_ALERT_REPEAT_CYCLE, value);
     }
 
     /**
      * SMS 알림 반복 주기
      */
     public static int getAlertRepeatCycle() {
-        return mPref.getValue(PREF_ALERT_REPEAT_CYCLE, 15);
+        return mPref.getValue(Common.PREF_ALERT_REPEAT_CYCLE, 15);
     }
 
     /**
      * 센싱 반복 주기
      */
     public static void setSensingRepeatCycle(int value) {
-        mPref.put(PREF_SENSING_REPEAT_CYCLE, value);
+        mPref.put(Common.PREF_SENSING_REPEAT_CYCLE, value);
     }
 
     /**
      * 센싱 반복 주기
      */
     public static int getSensingRepeatCycle() {
-        return mPref.getValue(PREF_SENSING_REPEAT_CYCLE, 5);
+        return mPref.getValue(Common.PREF_SENSING_REPEAT_CYCLE, 5);
     }
 
 
