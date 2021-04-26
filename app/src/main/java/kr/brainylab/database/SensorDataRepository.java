@@ -41,14 +41,13 @@ public class SensorDataRepository {
         });
     }
 
-    public void deleteSensorData(String addr, Date startTime, Date endTime) {
-        SimpleDateFormat formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+    public void deleteSensorData(String addr, long startTime, long endTime) {
 
         Log.d("BrainyTemp", "deleteSensorData " + addr
-                +", startTime: " + formattedDate.format(startTime)
-                +", endTime: " + formattedDate.format(endTime));
+                +", startTime: " + startTime
+                +", endTime: " + endTime);
         SensorDataRoomDatabase.databaseWriteExecutor.execute(() -> {
-            mSensorDataDao.deleteSensorData(addr, startTime.getTime(), endTime.getTime());
+            mSensorDataDao.deleteSensorData(addr, startTime, endTime);
         });
     }
 }

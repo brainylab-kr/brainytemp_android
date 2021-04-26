@@ -186,10 +186,12 @@ public class SensorHandleService extends Service {
                         }
 
                         if(isExisted == false) {
-                            Log.d("BrainyTemp", sensor.getAddress() + " disconnected" );
                             if(sensor.getIsDisconnected() == false) {
+                                long disconnectedTime = Calendar.getInstance().getTime().getTime();
+                                disconnectedTime = disconnectedTime - (Integer.valueOf(BrainyTempApp.getSensingRepeatCycle ()) - 1) * 60 * 1000;
+                                Log.d("BrainyTemp", sensor.getAddress() + " disconnected time: " + disconnectedTime );
                                 sensor.setIsDisconnected(true);
-                                sensor.setDisconnectedTime(Calendar.getInstance().getTime());
+                                sensor.setDisconnectedTime(disconnectedTime);
                                 prepareEventAlarm(sensor.getAddress(), Common.EVENT_CONNECT_ERROR, 0);
                             }
                             sensor.setRssi(-100);
@@ -197,7 +199,7 @@ public class SensorHandleService extends Service {
                             sensor.setHumi(0);
 
                             updateSensor(sensor);
-                            addSensorValue(sensor);
+                            addSensorValue(sensor.getAddress(), Calendar.getInstance().getTime().getTime(), 0, 0, -100);
 
                             Intent screenUpdateIntent = new Intent(Common.ACT_SENSOR_VALUE_UPDATE);
                             LocalBroadcastManager.getInstance(BrainyTempApp.getInstance()).sendBroadcast(screenUpdateIntent);
@@ -226,11 +228,10 @@ public class SensorHandleService extends Service {
                     SensorInfo sensor = Util.getSensorInfo(device.getAddress());
 
                     if(sensor.getIsDisconnected() == true) {
-                        Log.d("BrainyTemp", device.getAddress() + "is disconnected sensor");
+                        Log.d("BrainyTemp", device.getAddress() + "is disconnected sensor. recovery now!");
 
                         recoveryDisconnectedTime(device);
                         sensor.setIsDisconnected(false);
-                        sensor.setDisconnectedTime(Calendar.getInstance().getTime());
                     }
                     else {
                         uploadData(device);        //서버에 온도 전송
@@ -259,13 +260,13 @@ public class SensorHandleService extends Service {
                         curHumi = Integer.valueOf(map.get(2).get().toString());
                     }
 
-                    Date currentTiem = Calendar.getInstance().getTime();
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    long currentTime = Calendar.getInstance().getTime().getTime();
+
                     currentSensingList.add(new SensorInfo(
                             Util.getSensorInfo(device.getAddress()).getType(),
                             device.getName(),
                             device.getAddress(),
-                            df.format(currentTiem),
+                            currentTime,
                             curTemp,
                             curHumi,
                             device.getRssi(),
@@ -278,7 +279,7 @@ public class SensorHandleService extends Service {
                             device.getConnectivityStatus(),
                             device.getSoftwareVersion(),
                             false,
-                            currentTiem
+                            currentTime
                     ));
 
                     if(currentSensingList.size() ==  Util.getSensorList().size()){
@@ -388,16 +389,14 @@ public class SensorHandleService extends Service {
             connectionBuilder.executeDownload(new OnDownloadResultCallback() {
                 @Override
                 public void onComplete(@NonNull DeviceDetails deviceDetails, @NonNull List<Record> lists) {
-                    mRepository.deleteSensorData(deviceDetails.getAddress(), sensor.getDisconnectedTime(), Calendar.getInstance().getTime());
+                    mRepository.deleteSensorData(deviceDetails.getAddress(), sensor.getDisconnectedTime(), Calendar.getInstance().getTime().getTime());
 
                     JsonArray dataArray = new JsonArray();
 
                     for(int i = 0; i < lists.size(); i++) {
                         Record record = lists.get(i);
-                        Date date = new Date(record.getTimestamp());
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
-                        if(date.before(sensor.getDisconnectedTime())) {
+                        if(record.getTimestamp() < sensor.getDisconnectedTime()) {
                             break;
                         }
 
@@ -415,6 +414,9 @@ public class SensorHandleService extends Service {
                         }
 
                         addSensorValue(sensor.getAddress(), record.getTimestamp(), curTemp, curHumi, 0);
+
+                        Date date = new Date(record.getTimestamp());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
                         JsonObject dataObject = new JsonObject();
                         dataObject.addProperty("dt", dateFormat.format(date));
@@ -455,13 +457,9 @@ public class SensorHandleService extends Service {
             curHumi = Integer.valueOf(map.get(2).get().toString());
         }
 
-        String date = "";
-        Date currentTime = Calendar.getInstance().getTime();
-        SimpleDateFormat formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        date = formattedDate.format(currentTime);
-
+        long currentTime = Calendar.getInstance().getTime().getTime();
         sensorList.remove(index);
-        SensorInfo dic = new SensorInfo(sensorInfo.getType(), device.getName(), device.getAddress(), date, curTemp, curHumi, device.getRssi(),
+        SensorInfo dic = new SensorInfo(sensorInfo.getType(), device.getName(), device.getAddress(), currentTime, curTemp, curHumi, device.getRssi(),
                 device.getBatteryStatus(), device.getCalibrationDate(), device.getCounter(), device.getEncryptionStatus(), device.getPeriod(),
                 device.getFeatures(), device.getConnectivityStatus(), device.getSoftwareVersion(), false, currentTime);
         sensorList.add(index, dic);

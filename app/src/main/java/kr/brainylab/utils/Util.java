@@ -180,7 +180,6 @@ public class Util {
         String result = "";
 
         Date c = Calendar.getInstance().getTime();
-
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         result = df.format(c);
 
@@ -211,9 +210,10 @@ public class Util {
             type = Common.SENSOR_TYPE_T1;
         }
 
-        SensorInfo item = new SensorInfo(type, device.getName(), device.getAddress(), getCurDate(), curTemp, humidity, device.getRssi(),
+        long currentTime = Calendar.getInstance().getTime().getTime();
+        SensorInfo item = new SensorInfo(type, device.getName(), device.getAddress(), currentTime, curTemp, humidity, device.getRssi(),
                 device.getBatteryStatus(), device.getCalibrationDate(), device.getCounter(), device.getEncryptionStatus(), device.getPeriod(),
-                device.getFeatures(), device.getConnectivityStatus(), device.getSoftwareVersion(), false, Calendar.getInstance().getTime());
+                device.getFeatures(), device.getConnectivityStatus(), device.getSoftwareVersion(), false, currentTime);
         list.add(item);
         BrainyTempApp.mPref.put(Common.PREF_SENSOR_LIST, new Gson().toJson(list));
 

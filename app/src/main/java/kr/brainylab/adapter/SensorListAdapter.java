@@ -2,7 +2,6 @@ package kr.brainylab.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
@@ -68,9 +70,12 @@ public class SensorListAdapter extends ArrayAdapter<SensorInfo> {
 
         String name = BrainyTempApp.getSensorName(sensor.getAddress());
 
+        Date date = new Date(sensor.getTimestamp());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
         holder.tvName.setText(name);
         holder.tvDevice.setText(sensor.getAddress());
-        holder.tvDate.setText(sensor.getDate());
+        holder.tvDate.setText(dateFormat.format(date));
         holder.tvTemp.setText(Double.toString(sensor.getTemp()) + "°C");
         holder.tvHumi.setText(Integer.toString(sensor.getHumi()) + "%");
 

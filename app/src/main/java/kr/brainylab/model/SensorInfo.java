@@ -15,7 +15,7 @@ public class SensorInfo {
     private String mType;
     private String mName;
     private String mAddress;
-    private String mDate;
+    private long mTimestamp;
     private double mTemp;
     private int mHumi;
     private int mRssi;
@@ -28,17 +28,17 @@ public class SensorInfo {
     private Device.ConnectivityStatus mConnectivityStatus;
     private SoftwareVersion mSoftwareVersion;
     private boolean mIsDisconnected;
-    private Date mDisconnectedTime;
+    private long mDisconnectedTime;
 
-    public SensorInfo(String type, String name, String address, String date, double temp, int humi,
+    public SensorInfo(String type, String name, String address, long timestamp, double temp, int humi,
                       int rssi, Device.BatteryStatus batteryStatus, Date calibrationDate, int counter,
                       Device.EncryptionStatus encryptionStatus, int period, Set<Device.Feature> features,
                       Device.ConnectivityStatus connectivityStatus, SoftwareVersion softwareVersion,
-                      boolean isDisconnected, Date disconnectedTime) {
+                      boolean isDisconnected, long disconnectedTime) {
         mType = type;
         mName = name;
         mAddress = address;
-        mDate = date;
+        mTimestamp = timestamp;
         mTemp = temp;
         mHumi = humi;
         mRssi = rssi;
@@ -66,8 +66,8 @@ public class SensorInfo {
         return mAddress;
     }
 
-    public String getDate() {
-        return mDate;
+    public long getTimestamp() {
+        return mTimestamp;
     }
 
     public double getTemp() {
@@ -114,7 +114,7 @@ public class SensorInfo {
         return mIsDisconnected;
     }
 
-    public Date getDisconnectedTime() {
+    public long getDisconnectedTime() {
         return mDisconnectedTime;
     }
 
@@ -134,8 +134,8 @@ public class SensorInfo {
         mAddress = address;
     }
 
-    public void setDate(String date) {
-        mDate = date;
+    public void setTimestamp(long timestamp) {
+        mTimestamp = timestamp;
     }
 
     public void setTemp(double temp) {
@@ -186,7 +186,7 @@ public class SensorInfo {
         mIsDisconnected = isDisconnected;
     }
 
-    public void setDisconnectedTime(Date disconnectedTime) {
+    public void setDisconnectedTime(long disconnectedTime) {
         mDisconnectedTime = disconnectedTime;
     }
 

@@ -182,8 +182,11 @@ public class ChartFragment extends Fragment {
             }
         }
 
+        Date date = new Date(sensorInfo.getTimestamp());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
         binding.tvSensorAddress.setText(sensorInfo.getAddress());
-        binding.tvSensingTime.setText(sensorInfo.getDate());
+        binding.tvSensingTime.setText(dateFormat.format(date));
 
     }
 
@@ -295,9 +298,11 @@ public class ChartFragment extends Fragment {
                 binding.tvCurHumi.setText(String.valueOf(humi) + "%");
             }
         }
+        Date date = new Date(sensorInfo.getTimestamp());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
         binding.tvSensorAddress.setText(sensorInfo.getAddress());
-        binding.tvSensingTime.setText(sensorInfo.getDate());
+        binding.tvSensingTime.setText(dateFormat.format(date));
 
         if(arrDataList.size() >= sensorDatas.size()) {
             return;
