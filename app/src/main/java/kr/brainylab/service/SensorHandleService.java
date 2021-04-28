@@ -12,6 +12,8 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -77,6 +79,28 @@ public class SensorHandleService extends Service {
 
     private HttpService httpService;
 
+    private IntentFilter intentFilter;
+    private WindowManager mWindowManager;
+    private WindowManager.LayoutParams params;
+
+    BroadcastReceiver powerConnectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(Intent.ACTION_POWER_CONNECTED)) {
+                Toast.makeText(context, "충전기가 연결되었습니다", Toast.LENGTH_LONG).show();
+                android.provider.Settings.System.putInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS, 255);
+            }else if(intent.getAction().equals(Intent.ACTION_POWER_DISCONNECTED)) {
+                Toast.makeText(context, "충전기가 분리되었습니다", Toast.LENGTH_LONG).show();
+                android.provider.Settings.System.putInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS, 0);
+
+                ArrayList<SensorInfo> sensorInfoList = Util.getSensorList();
+                if(sensorInfoList.size() > 0) {
+                    prepareEventAlarm(sensorInfoList.get(0).getAddress(), Common.EVENT_CHARGER_DISCONNECTED, 0);
+                }
+            }
+        }
+    };
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -90,6 +114,8 @@ public class SensorHandleService extends Service {
         initializeNotification();
 
         registerReceiver();
+
+        registerPowerConnectionReceiver();
 
         initRepository();
 
@@ -130,6 +156,7 @@ public class SensorHandleService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(powerConnectionReceiver);
     }
     @Override
     public void onTaskRemoved(Intent rootIntent) {
@@ -192,7 +219,8 @@ public class SensorHandleService extends Service {
                                 Log.d("BrainyTemp", sensor.getAddress() + " disconnected time: " + disconnectedTime );
                                 sensor.setIsDisconnected(true);
                                 sensor.setDisconnectedTime(disconnectedTime);
-                                prepareEventAlarm(sensor.getAddress(), Common.EVENT_CONNECT_ERROR, 0);
+                                //prepareEventAlarm(sensor.getAddress(), Common.EVENT_CONNECT_ERROR, 0);
+                                prepareEventAlarm(sensor.getAddress(), Common.EVENT_APP_ERR, 0);
                             }
                             sensor.setRssi(-100);
                             sensor.setTemp(0);
@@ -723,4 +751,10 @@ public class SensorHandleService extends Service {
         }
     };
 
+    private void registerPowerConnectionReceiver() {
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_POWER_CONNECTED);
+        intentFilter.addAction(Intent.ACTION_POWER_DISCONNECTED);
+        registerReceiver(powerConnectionReceiver, intentFilter);
+    }
 }

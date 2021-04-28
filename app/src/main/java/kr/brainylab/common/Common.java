@@ -28,6 +28,7 @@ public class Common {
     public static final String EVENT_LOW_BT = "LOW_BT";
     public static final String EVENT_APP_ERR = "APP_ERR";
     public static final String EVENT_CONNECT_ERROR = "SS_OUT";
+    public static final String EVENT_CHARGER_DISCONNECTED = "CHR_OUT";
 
     /**
      * 알림 타입
