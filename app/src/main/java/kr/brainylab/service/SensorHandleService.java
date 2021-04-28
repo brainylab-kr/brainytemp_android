@@ -88,7 +88,7 @@ public class SensorHandleService extends Service {
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(Intent.ACTION_POWER_CONNECTED)) {
                 Toast.makeText(context, "충전기가 연결되었습니다", Toast.LENGTH_LONG).show();
-                android.provider.Settings.System.putInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS, 255);
+                android.provider.Settings.System.putInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS, 200);
             }else if(intent.getAction().equals(Intent.ACTION_POWER_DISCONNECTED)) {
                 Toast.makeText(context, "충전기가 분리되었습니다", Toast.LENGTH_LONG).show();
                 android.provider.Settings.System.putInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS, 0);
