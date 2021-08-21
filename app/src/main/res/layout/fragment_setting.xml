@@ -51,7 +51,8 @@
                 <RelativeLayout
                     android:id="@+id/rly_info"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp">
+                    android:layout_height="70dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -67,6 +68,35 @@
                         android:layout_marginLeft="56dp"
                         android:fontFamily="@font/notosanskrregular"
                         android:text="@string/info"
+                        android:textColor="@color/color_171717"
+                        android:textSize="24sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/color_caccd0" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rly_report"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:background="@drawable/vd_export_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="56dp"
+                        android:fontFamily="@font/notosanskrregular"
+                        android:text="@string/report_setting"
                         android:textColor="@color/color_171717"
                         android:textSize="24sp" />
 

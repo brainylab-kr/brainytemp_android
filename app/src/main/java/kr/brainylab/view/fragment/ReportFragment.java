@@ -10,8 +10,6 @@ import android.widget.Toast;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import com.google.gson.Gson;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,18 +25,16 @@ import kr.brainylab.BrainyTempApp;
 import kr.brainylab.R;
 import kr.brainylab.common.Common;
 import kr.brainylab.common.HttpService;
-import kr.brainylab.databinding.FragmentOutBinding;
+import kr.brainylab.databinding.FragmentReportBinding;
 import kr.brainylab.utils.Util;
 import kr.brainylab.view.activity.DetailActivity;
 import kr.brainylab.view.dailog.Calendar1Dialog;
 import kr.brainylab.view.dailog.OneBtnDialog;
 
-import static android.provider.Settings.System.DATE_FORMAT;
-
 public class ReportFragment extends Fragment implements View.OnClickListener {
 
     View rootView;
-    FragmentOutBinding binding;
+    FragmentReportBinding binding;
 
     String startDate = "";
     String endDate = "";
@@ -62,7 +57,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_out, container, false);
+        rootView = inflater.inflate(R.layout.fragment_report, container, false);
         binding = DataBindingUtil.bind(rootView);
         loadLayout();
         changeType();
@@ -157,7 +152,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
             case R.id.tv_out: //리포트 전송
                 String mail = binding.edtEmail.getText().toString();
                 if(mail.length() == 0) {
-                    Toast.makeText(getContext(), R.string.input_mail, Toast.LENGTH_SHORT).show();
+                    showAlert(getResources().getString(R.string.input_mail));
                     break;
                 }
 
@@ -238,11 +233,18 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
         String mail = binding.edtEmail.getText().toString();
         String start = startDate + " 00:00:00";
         String end = endDate + " 23:59:59";
+        String reportType = "";
+        if(Util.getSensorInfo(device).getType().equals(Common.SENSOR_TYPE_TH)) {
+            reportType = "TH";
+        }
+        else {
+            reportType = "T";
+        }
 
         BrainyTempApp.mPref.put(Common.PREF_REPORT_ADDRESS, mail);
 
         httpService = new HttpService(BrainyTempApp.getInstance());
-        httpService.requestReport(device, name, mail, start, end, new HttpService.ResponseListener() {
+        httpService.requestReport(device, name, mail, start, end, reportType, new HttpService.ResponseListener() {
             @Override
             public void onResponseResult(Boolean bSuccess, String res) {
                 if (bSuccess) {

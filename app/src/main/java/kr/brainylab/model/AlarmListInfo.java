@@ -12,8 +12,9 @@ public class AlarmListInfo {
     private boolean mBattery; //배터리 부족알림
     private boolean mConnect; //센서 연결없음 알림
     private boolean mError; //S/W 오류알림
+    private boolean mDisconnectCharger;
 
-    public AlarmListInfo(String phone, String type, boolean temp, boolean humi, boolean battery, boolean connect, boolean error) {
+    public AlarmListInfo(String phone, String type, boolean temp, boolean humi, boolean battery, boolean connect, boolean error, boolean disconnectCharger) {
         mPhone = phone;
         mType = type;
         mTemp = temp;
@@ -21,6 +22,7 @@ public class AlarmListInfo {
         mBattery = battery;
         mConnect = connect;
         mError = error;
+        mDisconnectCharger = disconnectCharger;
     }
 
     public String getPhone() {
@@ -51,6 +53,10 @@ public class AlarmListInfo {
         return mError;
     }
 
+    public boolean getDisconnectCharger() {
+        return mDisconnectCharger;
+    }
+
 
     public void setTemp(boolean status) {
         mTemp = status;
@@ -72,5 +78,8 @@ public class AlarmListInfo {
         mError = status;
     }
 
+    public void setDisconnectCharger(boolean status) {
+        mDisconnectCharger = status;
+    }
 
 }

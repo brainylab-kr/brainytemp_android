@@ -1,5 +1,6 @@
 package kr.brainylab.service;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -95,7 +96,18 @@ public class SensorHandleService extends Service {
 
                 ArrayList<SensorInfo> sensorInfoList = Util.getSensorList();
                 if(sensorInfoList.size() > 0) {
-                    prepareEventAlarm(sensorInfoList.get(0).getAddress(), Common.EVENT_CHARGER_DISCONNECTED, 0);
+
+                    ArrayList<AlarmListInfo> list = Util.getAlarmList();
+
+                    for (int i = 0; i < list.size(); i++) {
+                        AlarmListInfo info = list.get(i);
+                        if (info.getDisconnectCharger() == true) {
+                            prepareEventAlarm(sensorInfoList.get(0).getAddress(), Common.EVENT_CHARGER_DISCONNECTED, 0);
+                            //prepareEventAlarm(sensorInfoList.get(0).getAddress(), Common.EVENT_LOW_BT, 0);
+                            //prepareEventAlarm(sensorInfoList.get(0).getAddress(), Common.EVENT_APP_ERR, 0);
+                            //prepareEventAlarm(sensorInfoList.get(0).getAddress(), Common.EVENT_CONNECT_ERROR, 0);
+                        }
+                    }
                 }
             }
         }
@@ -120,6 +132,7 @@ public class SensorHandleService extends Service {
         initRepository();
 
         loadService();
+
 
         return START_STICKY;
     }
@@ -220,7 +233,6 @@ public class SensorHandleService extends Service {
                                 sensor.setIsDisconnected(true);
                                 sensor.setDisconnectedTime(disconnectedTime);
                                 //prepareEventAlarm(sensor.getAddress(), Common.EVENT_CONNECT_ERROR, 0);
-                                prepareEventAlarm(sensor.getAddress(), Common.EVENT_APP_ERR, 0);
                             }
                             sensor.setRssi(-100);
                             sensor.setTemp(0);
@@ -337,36 +349,56 @@ public class SensorHandleService extends Service {
             curTemp = Double.parseDouble(String.format("%.1f",Double.parseDouble(map.get(1).get().toString())));
         }
 
-        if((Util.getSensorInfo(device.getAddress()).getType().equals(Common.SENSOR_TYPE_TH))
-                && (map.get(2) != null && map.get(2).isValid())) {
-            curHumi = Integer.valueOf(map.get(2).get().toString());
-        }
-
         double maxTemp = BrainyTempApp.getMaxTemp(device.getAddress());
         double minTemp = BrainyTempApp.getMinTemp(device.getAddress());
 
-        if (curTemp < minTemp || curTemp > maxTemp) {
-            if (curTemp < minTemp) {
-                prepareEventAlarm(device.getAddress(), Common.EVENT_LOW_TEMP, curTemp);
-            } else {
-                prepareEventAlarm(device.getAddress(), Common.EVENT_HIGH_TEMP, curTemp);
-            }
+        if(Util.getSensorInfo(device.getAddress()).getType().equals(Common.SENSOR_TYPE_T1) == true) {
+            if (curTemp < minTemp || curTemp > maxTemp) {
+                if (curTemp < minTemp) {
+                    prepareEventAlarm(device.getAddress(), Common.EVENT_LOW_TEMP, curTemp);
+                } else {
+                    prepareEventAlarm(device.getAddress(), Common.EVENT_HIGH_TEMP, curTemp);
+                }
 
-            showAlarm(device.getAddress(), curTemp, curHumi);
+                showAlarm(device.getAddress(), curTemp, curHumi);
+            }
         }
+        else if (Util.getSensorInfo(device.getAddress()).getType().equals(Common.SENSOR_TYPE_TH) == true) {
+            /*
+            JsonArray eventArray = new JsonArray();
+            String eventType = "";
 
-        int maxHumi = BrainyTempApp.getMaxHumi(device.getAddress());
-        int minHumi = BrainyTempApp.getMinHumi(device.getAddress());
+            JsonObject eventObject = new JsonObject();
+            eventObject.addProperty("evTp", eventType);
+            eventObject.addProperty("curVal", String.valueOf(curTemp));
+            eventObject.addProperty("lowVal", String.valueOf(curHumi));
+            eventObject.addProperty("highVal", String.valueOf(curHumi));
 
-        if (Util.getSensorInfo(device.getAddress()).getType().equals(Common.SENSOR_TYPE_TH)
-                && (curHumi < minHumi || curHumi > maxHumi)) {
-            if (curHumi < minHumi) {
-                prepareEventAlarm(device.getAddress(), Common.EVENT_LOW_HUMI, curHumi);
-            } else {
-                prepareEventAlarm(device.getAddress(), Common.EVENT_HIGH_HUMI, curHumi);
+            eventArray.add(eventObject);
+            */
+            if (curTemp < minTemp || curTemp > maxTemp) {
+                if (curTemp < minTemp) {
+                    prepareEventAlarm(device.getAddress(), Common.EVENT_LOW_TEMP, curTemp);
+                } else {
+                    prepareEventAlarm(device.getAddress(), Common.EVENT_HIGH_TEMP, curTemp);
+                }
             }
 
-            showAlarm(device.getAddress(), curTemp, curHumi);
+            if((map.get(2) != null && map.get(2).isValid())) {
+                curHumi = Integer.valueOf(map.get(2).get().toString());
+            }
+
+            int maxHumi = BrainyTempApp.getMaxHumi(device.getAddress());
+            int minHumi = BrainyTempApp.getMinHumi(device.getAddress());
+
+            if ((curHumi < minHumi || curHumi > maxHumi)) {
+                if (curHumi < minHumi) {
+                    prepareEventAlarm(device.getAddress(), Common.EVENT_LOW_HUMI, curHumi);
+                } else {
+                    prepareEventAlarm(device.getAddress(), Common.EVENT_HIGH_HUMI, curHumi);
+                }
+                showAlarm(device.getAddress(), curTemp, curHumi);
+            }
         }
 
         if (device.getBatteryStatus() == Device.BatteryStatus.LOW) {
@@ -632,12 +664,19 @@ public class SensorHandleService extends Service {
             return;
 
         String key = device + eventType;
-        long storeTime = (long) Double.parseDouble(BrainyTempApp.getAlertTime(key));
-        long currentTime = Calendar.getInstance().getTime().getTime();
-        int dicSec = (int) ((currentTime - storeTime) / 1000);
 
-        if (dicSec < (alertCycle * 60)-30) //알림 울리는 시간차가 알림반복주기시간보다 작으면 리턴
-            return;
+        if (eventType.equals(Common.EVENT_LOW_TEMP)
+            || eventType.equals(Common.EVENT_HIGH_TEMP)
+            || eventType.equals(Common.EVENT_LOW_HUMI)
+            || eventType.equals(Common.EVENT_HIGH_HUMI)) {
+
+            long storeTime = (long) Double.parseDouble(BrainyTempApp.getAlertTime(key));
+            long currentTime = Calendar.getInstance().getTime().getTime();
+            int dicSec = (int) ((currentTime - storeTime) / 1000);
+
+            if (dicSec < (alertCycle * 60) - 30) //알림 울리는 시간차가 알림반복주기시간보다 작으면 리턴
+                return;
+        }
 
         BrainyTempApp.setAlertTime(key, "" + Calendar.getInstance().getTime().getTime());
 
@@ -757,4 +796,5 @@ public class SensorHandleService extends Service {
         intentFilter.addAction(Intent.ACTION_POWER_DISCONNECTED);
         registerReceiver(powerConnectionReceiver, intentFilter);
     }
+
 }

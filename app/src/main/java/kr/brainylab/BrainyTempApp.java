@@ -255,4 +255,15 @@ public class BrainyTempApp extends Application {
     public static String getAlarmTime(String key) {
         return mPref.getValue(key + "alarmtime", "5");
     }
+
+    public static String getDailyReportAddress() {
+        return mPref.getValue(Common.PREF_DAILY_REPORT_ADDRESS, "");
+    }
+    public static boolean getDailyReport() {
+        return mPref.getValue(Common.PREF_DAILY_REPORT, true);
+    }
+
+    public static boolean getWeeklyReport() {
+        return mPref.getValue(Common.PREF_WEEKLY_REPORT, false);
+    }
 }

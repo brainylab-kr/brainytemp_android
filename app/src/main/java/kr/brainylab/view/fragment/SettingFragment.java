@@ -21,6 +21,7 @@ import static kr.brainylab.view.activity.MainActivity.PAGE_ABOUT;
 import static kr.brainylab.view.activity.MainActivity.PAGE_REPEAT_SETTING;
 import static kr.brainylab.view.activity.MainActivity.PAGE_INFO;
 import static kr.brainylab.view.activity.MainActivity.PAGE_SEARCH;
+import static kr.brainylab.view.activity.MainActivity.PAGE_REPORT_SETTING;
 
 public class SettingFragment extends Fragment {
 
@@ -83,6 +84,16 @@ public class SettingFragment extends Fragment {
                 mainActivity.changePage();
             }
         });
+
+        binding.rlyReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.nTabIndex = PAGE_REPORT_SETTING;
+                mainActivity.changePage();
+            }
+        });
+
         binding.rlyHomepage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

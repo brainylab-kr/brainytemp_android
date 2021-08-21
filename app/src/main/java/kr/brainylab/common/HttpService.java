@@ -184,7 +184,7 @@ public class HttpService {
         postenc(url, body, resListner);
     }
 
-    public void requestReport(String device, String name, String mail, String startDate, String endDate, ResponseListener resListner) {
+    public void requestReport(String device, String name, String mail, String startDate, String endDate, String reportType, ResponseListener resListner) {
         String url = "report";
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("mac", device);
@@ -192,6 +192,7 @@ public class HttpService {
         hashMap.put("start", startDate);
         hashMap.put("end", endDate);
         hashMap.put("mail", mail);
+        hashMap.put("rt", reportType);
 
         String postBody = new Gson().toJson(hashMap);
         RequestBody body = RequestBody.create(CONTENT_TYPE, postBody); // new

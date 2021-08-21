@@ -54,6 +54,7 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
             holder.llyCheckCommunication = convertView.findViewById(R.id.lly_check_communication);
             holder.llyCheckSW = convertView.findViewById(R.id.lly_check_sw);
             holder.llyCheckHumi = convertView.findViewById(R.id.lly_check_humi);
+            holder.llyCheckCharger = convertView.findViewById(R.id.lly_disconnect_charger);
 
             holder.tvTitle = convertView.findViewById(R.id.tv_title);
             holder.tvContent = convertView.findViewById(R.id.tv_content);
@@ -62,6 +63,7 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
             holder.ivCheckBattery = convertView.findViewById(R.id.iv_check_battery);
             holder.ivCheckCommunication = convertView.findViewById(R.id.iv_check_communication);
             holder.ivCheckSW = convertView.findViewById(R.id.iv_check_sw);
+            holder.ivCheckCharger = convertView.findViewById(R.id.iv_disconnect_charger);
             holder.ivCheckHumi = convertView.findViewById(R.id.iv_check_humi);
 
             convertView.setTag(holder);
@@ -92,6 +94,10 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
 
         if (info.getError()) {
             content = content + "," + "S/W 오류";
+        }
+
+        if (info.getDisconnectCharger()) {
+            content = content + "," + "베이스스테이션 전원 공급 차단";
         }
 
         if (!content.isEmpty()) {
@@ -139,6 +145,12 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
             holder.ivCheckSW.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_off));
         }
 
+        if (info.getDisconnectCharger()) {
+            holder.ivCheckCharger.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_on));
+        } else {
+            holder.ivCheckCharger.setBackground(mContext.getDrawable(R.drawable.ic_checkbox_off));
+        }
+
         holder.llyContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,7 +178,7 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
         holder.llyCheckTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), !info.getTemp(), info.getHumi(), info.getBattery(), info.getConnect(), info.getError());
+                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), !info.getTemp(), info.getHumi(), info.getBattery(), info.getConnect(), info.getError(), info.getDisconnectCharger());
                 Util.updateAlarm(mContext, info.getPhone(), item);
             }
         });
@@ -174,7 +186,7 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
         holder.llyCheckHumi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), !info.getHumi(), info.getBattery(), info.getConnect(), info.getError());
+                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), !info.getHumi(), info.getBattery(), info.getConnect(), info.getError(), info.getDisconnectCharger());
                 Util.updateAlarm(mContext, info.getPhone(), item);
             }
         });
@@ -182,7 +194,7 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
         holder.llyCheckBattery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), info.getHumi(), !info.getBattery(), info.getConnect(), info.getError());
+                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), info.getHumi(), !info.getBattery(), info.getConnect(), info.getError(), info.getDisconnectCharger());
                 Util.updateAlarm(mContext, info.getPhone(), item);
             }
         });
@@ -190,7 +202,7 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
         holder.llyCheckCommunication.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), info.getHumi(), info.getBattery(), !info.getConnect(), info.getError());
+                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), info.getHumi(), info.getBattery(), !info.getConnect(), info.getError(), info.getDisconnectCharger());
                 Util.updateAlarm(mContext, info.getPhone(), item);
             }
         });
@@ -198,7 +210,15 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
         holder.llyCheckSW.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), info.getHumi(), info.getBattery(), info.getConnect(), !info.getError());
+                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), info.getHumi(), info.getBattery(), info.getConnect(), !info.getError(), info.getDisconnectCharger());
+                Util.updateAlarm(mContext, info.getPhone(), item);
+            }
+        });
+
+        holder.llyCheckCharger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlarmListInfo item = new AlarmListInfo(info.getPhone(), info.getType(), info.getTemp(), info.getHumi(), info.getBattery(), info.getConnect(), info.getError(), !info.getDisconnectCharger());
                 Util.updateAlarm(mContext, info.getPhone(), item);
             }
         });
@@ -210,8 +230,8 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmListInfo> {
      * View holder for the views we need access to
      */
     private class Holder {
-        private LinearLayout llyDetail, llyContent, llyCheckTemp, llyCheckBattery, llyCheckCommunication, llyCheckSW, llyCheckHumi;
+        private LinearLayout llyDetail, llyContent, llyCheckTemp, llyCheckBattery, llyCheckCommunication, llyCheckSW, llyCheckHumi, llyCheckCharger;
         private TextView tvTitle, tvContent;
-        private ImageView ivArrow, ivCheckTemp, ivCheckBattery, ivCheckCommunication, ivCheckSW, ivCheckHumi;
+        private ImageView ivArrow, ivCheckTemp, ivCheckBattery, ivCheckCommunication, ivCheckSW, ivCheckHumi, ivCheckCharger;
     }
 }

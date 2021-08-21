@@ -71,7 +71,7 @@
                 android:fontFamily="@font/notosanskrregular"
                 android:text="@string/temp_limit_hint_min"
                 android:textColor="@color/color_171717"
-                android:textSize="10sp" />
+                android:textSize="12sp" />
 
             <ImageView
                 android:layout_width="match_parent"

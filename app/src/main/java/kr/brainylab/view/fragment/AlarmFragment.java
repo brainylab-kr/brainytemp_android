@@ -81,7 +81,7 @@ public class AlarmFragment extends Fragment {
                 ReceiveUserDialog.init(getActivity(), null, new ReceiveUserDialog.OnClickListener() {
                     @Override
                     public void onConfirm(String type, String content) {
-                        AlarmListInfo info = new AlarmListInfo(content, type, true, true,true, true, true);
+                        AlarmListInfo info = new AlarmListInfo(content, type, true, true,true, true, true, true);
                         if (Util.addAlarm(info)) {
                             loadData();
                         }
@@ -106,7 +106,7 @@ public class AlarmFragment extends Fragment {
                 ReceiveUserDialog.init(getActivity(), null, new ReceiveUserDialog.OnClickListener() {
                     @Override
                     public void onConfirm(String type, String content) {
-                        AlarmListInfo info = new AlarmListInfo(content, type, true, true, true, true, true);
+                        AlarmListInfo info = new AlarmListInfo(content, type, true, true, true, true, true, true);
                         if (Util.addAlarm(info)) {
                             loadData();
                         }

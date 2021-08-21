@@ -63,5 +63,9 @@ public class Common {
     public static final String PREF_ALERT_REPEAT_CYCLE = "PREF_ALERT_REPEAT_CYCLE"; //알림 반복주기
     public static final String PREF_SENSING_REPEAT_CYCLE = "PREF_SENSING_REPEAT_CYCLE"; //알림 반복주기
     public static final String PREF_REPORT_ADDRESS = "PREF_REPORT_ADDRESS";
+    public static final String PREF_DAILY_REPORT_ADDRESS = "PREF_DAILY_REPORT_ADDRESS";
+    public static final String PREF_DAILY_REPORT = "PREF_DAILY_REPORT";
+    public static final String PREF_WEEKLY_REPORT = "PREF_WEEKLY_REPORT";
+    public static final String PREF_MONTHLY_REPORT = "PREF_MONTHLY_REPORT";
 
 }

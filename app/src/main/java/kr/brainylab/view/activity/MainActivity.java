@@ -1,5 +1,7 @@
 package kr.brainylab.view.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -39,6 +42,7 @@ import kr.brainylab.R;
 import kr.brainylab.common.Common;
 import kr.brainylab.database.SensorDataRepository;
 import kr.brainylab.model.AlarmListInfo;
+import kr.brainylab.service.AlarmReceiver;
 import kr.brainylab.service.SensorHandleService;
 import kr.brainylab.utils.GPSTracker;
 import kr.brainylab.utils.Util;
@@ -58,6 +62,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public static final int PAGE_REPEAT_SETTING = 4;  //경보음 및 알림
     public static final int PAGE_INFO = 5;  //정보
     public static final int PAGE_ABOUT = 6;  //About
+    public static final int PAGE_REPORT_SETTING = 7;  //Report
 
     private DrawerLayout drawerLayout;
     private View drawerView;
@@ -98,6 +103,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         changePage();
         loadSensorHandleService();
         registerReceiver();
+        registerDailyReport();
+
     }
 
     @Override
@@ -130,6 +137,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             stopService(foregroundServiceIntent);
             foregroundServiceIntent = null;
         }
+        unregisterDailyReport();
     }
 
     private void LoadLayout() {
@@ -216,7 +224,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         bEdit = false;
         changeTitle();
 
-        if ((nTabIndex == PAGE_SENSOR || nTabIndex == PAGE_SEARCH || nTabIndex == PAGE_ALARM || nTabIndex == PAGE_SETTING)) {
+        if ((nTabIndex == PAGE_SENSOR || nTabIndex == PAGE_SEARCH || nTabIndex == PAGE_ALARM || nTabIndex == PAGE_SETTING || nTabIndex == PAGE_ABOUT)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 rlySensor.setBackgroundColor(getColor(R.color.white));
                 rlySearch.setBackgroundColor(getColor(R.color.white));
@@ -300,6 +308,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
 
             navController.navigate(R.id.aboutFragment);
+        } else if (nTabIndex == PAGE_REPORT_SETTING) {
+            txvTitle.setText(getResources().getString(R.string.setting));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                rlySetting.setBackgroundColor(getColor(R.color.color_156aee));
+                txvSetting.setTextColor(getColor(R.color.white));
+                ivSetting.setBackground(getDrawable(R.drawable.vd_settings_menu_white));
+            }
+
+            navController.navigate(R.id.reportSettingFragment);
         }
     }
 
@@ -439,7 +456,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         public void onConfirm(String type, String content) {
                             bEdit = false;
                             changeTitle();
-                            AlarmListInfo item = new AlarmListInfo(content, type, Common.gAlarmInfo.getTemp(), Common.gAlarmInfo.getHumi(), Common.gAlarmInfo.getBattery(), Common.gAlarmInfo.getConnect(), Common.gAlarmInfo.getError());
+                            AlarmListInfo item = new AlarmListInfo(content, type, Common.gAlarmInfo.getTemp(), Common.gAlarmInfo.getHumi(), Common.gAlarmInfo.getBattery(), Common.gAlarmInfo.getConnect(), Common.gAlarmInfo.getError(), Common.gAlarmInfo.getDisconnectCharger());
                             Util.updateAlarm(MainActivity.this, Common.gAlarmInfo.getPhone(), item);
                         }
 
@@ -621,4 +638,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     };
 
+    private AlarmManager alarmManager;
+    private PendingIntent alarmIntent;
+    public void registerDailyReport() {
+        alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 1);
+        calendar.set(Calendar.SECOND, 0);
+
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),  AlarmManager.INTERVAL_DAY, alarmIntent);
+    }
+
+    public void unregisterDailyReport() {
+        if (alarmManager!= null) {
+            alarmManager.cancel(alarmIntent);
+        }
+    }
 }

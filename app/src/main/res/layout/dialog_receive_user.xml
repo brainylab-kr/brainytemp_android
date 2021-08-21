@@ -41,7 +41,8 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                android:weightSum="3">
+                android:weightSum="3"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:id="@+id/rly_web"
@@ -112,7 +113,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/notosanskrregular"
-                android:text="@string/receive_user"
+                android:text="@string/input_receive_user"
                 android:textColor="@color/color_002060"
                 android:textSize="14sp" />
 

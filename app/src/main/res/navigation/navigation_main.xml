@@ -23,13 +23,17 @@
     <fragment
         android:id="@+id/alarmrsettingFragment"
         android:name="kr.brainylab.view.fragment.AlarmSettingFragment"
-        android:label="SensorFragment" />
+        android:label="SettingFragment" />
     <fragment
         android:id="@+id/infomationFragment"
         android:name="kr.brainylab.view.fragment.InfomarionFragment"
-        android:label="SensorFragment" />
+        android:label="SettingFragment" />
     <fragment
         android:id="@+id/aboutFragment"
         android:name="kr.brainylab.view.fragment.AboutFragment"
-        android:label="SensorFragment" />
+        android:label="SettingFragment" />
+    <fragment
+        android:id="@+id/reportSettingFragment"
+        android:name="kr.brainylab.view.fragment.ReprotSettingFragment"
+        android:label="SettingFragment" />
 </navigation>
